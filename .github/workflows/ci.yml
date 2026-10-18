@@ -80,3 +80,23 @@ jobs:
       # Explicit registry: the advisories endpoint isn't served by every mirror.
       # Dev-only advisories (vitest/puppeteer, semver-major to fix) are out of scope here.
       - run: npm audit --registry=https://registry.npmjs.org --omit=dev --audit-level=high
+
+  # Caching and routing are decided by nginx.conf / nginx.k8s.conf, which no browser test
+  # sees. These tests start a real nginx on the repository's configs. They are skipped
+  # when nginx is missing (the vitest job), so this job requires it.
+  nginx-config:
+    name: nginx config (real nginx)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+      REQUIRE_NGINX: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends nginx
+      - run: npm ci
+      - run: npx vitest run src/__tests__/nginx-*.test.ts
