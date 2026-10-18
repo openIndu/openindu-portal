@@ -28,7 +28,7 @@ describe("API authentication interceptors", () => {
   });
   afterEach(() => {
     vi.restoreAllMocks();
-    delete (navigator as Navigator & { locks?: unknown }).locks;
+    delete (navigator as unknown as { locks?: unknown }).locks;
   });
 
   it("attaches the client ID and current access token to requests", async () => {
