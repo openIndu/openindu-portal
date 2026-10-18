@@ -33,7 +33,7 @@ openindu-portal/
 
 ### 环境要求
 
-- Node.js 20+
+- Node.js 22+
 - npm 或 pnpm
 
 ### 安装依赖
