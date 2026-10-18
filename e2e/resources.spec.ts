@@ -64,10 +64,11 @@ for (const { locale, prefix, label } of LOCALES) {
 /**
  * Answers the list API with one item titled after the keyword it was asked for,
  * so the page shows which request's response it is rendering. Returns the
- * keywords of every /documents request, in the order they were made.
+ * keyword and page of every /documents request, in the order they were made.
  */
 async function mockResourceList(page: Page, delayFor: (keyword: string) => number) {
   const keywords: string[] = [];
+  const pages: number[] = [];
   await page.route("**/api/v1/**", async (route) => {
     const url = new URL(route.request().url());
     const path = url.pathname.replace(/^\/api\/v1/, "");
@@ -75,9 +76,11 @@ async function mockResourceList(page: Page, delayFor: (keyword: string) => numbe
     if (path === "/documents") {
       const keyword = url.searchParams.get("keyword") ?? "";
       keywords.push(keyword);
+      const pageNumber = Number(url.searchParams.get("page") ?? 1);
+      pages.push(pageNumber);
       await new Promise((resolve) => setTimeout(resolve, delayFor(keyword)));
       const title = `RESULT-FOR-${keyword || "(none)"}`;
-      data = { items: [{ id: 1, title }], total: 1, page: 1, page_size: 10 };
+      data = { items: [{ id: 1, title }], total: 35, page: pageNumber, page_size: 10 };
     }
     // The page may already have given up on this request (aborted); fulfilling it
     // then throws, which is not what these tests are about.
@@ -89,14 +92,14 @@ async function mockResourceList(page: Page, delayFor: (keyword: string) => numbe
       })
       .catch(() => {});
   });
-  return keywords;
+  return { keywords, pages };
 }
 
 test.describe("Resources search requests", () => {
   const placeholder = GOLDEN.searchPlaceholder.zh;
 
   test("typing queries once, after a pause, instead of once per keystroke", async ({ page }) => {
-    const keywords = await mockResourceList(page, () => 20);
+    const { keywords } = await mockResourceList(page, () => 20);
     await page.goto("/resources");
     await expect(page.getByText("RESULT-FOR-(none)")).toBeVisible();
     const before = keywords.length;
@@ -111,7 +114,7 @@ test.describe("Resources search requests", () => {
     page,
   }) => {
     // The answer for "p" arrives long after the one for "plc".
-    const keywords = await mockResourceList(page, (keyword) => (keyword === "p" ? 1500 : 20));
+    const { keywords } = await mockResourceList(page, (keyword) => (keyword === "p" ? 1500 : 20));
     await page.goto("/resources");
     await expect(page.getByText("RESULT-FOR-(none)")).toBeVisible();
 
@@ -129,7 +132,7 @@ test.describe("Resources search requests", () => {
   test("Enter searches at once without a second request, and Search refreshes an unchanged query", async ({
     page,
   }) => {
-    const keywords = await mockResourceList(page, () => 20);
+    const { keywords } = await mockResourceList(page, () => 20);
     await page.goto("/resources");
     await expect(page.getByText("RESULT-FOR-(none)")).toBeVisible();
 
@@ -144,5 +147,18 @@ test.describe("Resources search requests", () => {
     const before = keywords.length;
     await page.getByRole("button", { name: GOLDEN.searchButton.zh }).click();
     await expect.poll(() => keywords.length).toBe(before + 1);
+  });
+
+  test("a new query goes back to the first page", async ({ page }) => {
+    const { pages } = await mockResourceList(page, () => 20);
+    await page.goto("/resources");
+    await expect(page.getByText("RESULT-FOR-(none)")).toBeVisible();
+
+    await page.getByRole("button", { name: "下一页" }).click();
+    await expect.poll(() => pages[pages.length - 1]).toBe(2);
+
+    await page.getByPlaceholder(placeholder).fill("modbus");
+    await expect(page.getByText("RESULT-FOR-modbus")).toBeVisible();
+    expect(pages[pages.length - 1]).toBe(1);
   });
 });
