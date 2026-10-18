@@ -6,6 +6,10 @@ export default defineConfig({
   // (playwright.prerender.config.ts) -- it asserts on prerendered titles/
   // canonicals that don't exist on this dev-server-backed run.
   testIgnore: "prerender.spec.ts",
+  // On CI a stray test.only must fail the run, and one retry turns a one-off blip into a
+  // visible "flaky" entry (with a trace, see `use.trace`) instead of a red build.
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 1 : 0,
   timeout: 30_000,
   expect: {
     timeout: 10_000,
