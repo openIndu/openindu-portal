@@ -41,6 +41,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # Fails if the entry bundle grows past the budget in scripts/check-bundle-size.mjs.
+      - run: npm run check:bundle
 
   test:
     name: Unit Tests + Coverage (vitest)
