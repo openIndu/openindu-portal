@@ -15,7 +15,7 @@ OpenIndu 门户前端应用，基于 React + Vite + Tailwind CSS 构建，容器
 ## 项目结构
 
 ```
-openIndu-portal/
+openindu-portal/
 ├── src/
 │   ├── app/           # 应用组件
 │   │   ├── components/

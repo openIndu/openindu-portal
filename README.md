@@ -15,7 +15,7 @@ The openIndu community website frontend, built with React + Vite + Tailwind CSS,
 ## Project Structure
 
 ```
-openIndu-portal/
+openindu-portal/
 ├── src/
 │   ├── app/           # Application components
 │   │   ├── components/
