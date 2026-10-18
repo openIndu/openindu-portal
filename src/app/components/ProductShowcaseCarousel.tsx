@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { productScreenshots } from "@/assets/product-images";
 
 const AUTOPLAY_MS = 5000;
 
@@ -9,7 +10,7 @@ const SLIDES = [
   {
     key: "workbench",
     ns: "iiot",
-    src: "/assets/iiot/workbench.png",
+    image: productScreenshots.workbench,
     titleKey: "features.workbench.title",
     altKey: "features.workbench.screenshotAlt",
     to: "/iiot-platform",
@@ -17,7 +18,7 @@ const SLIDES = [
   {
     key: "dashboard",
     ns: "iiot",
-    src: "/assets/iiot/dashboard.png",
+    image: productScreenshots.dashboard,
     titleKey: "features.dashboard.title",
     altKey: "features.dashboard.screenshotAlt",
     to: "/iiot-platform",
@@ -25,7 +26,7 @@ const SLIDES = [
   {
     key: "deviceManagement",
     ns: "iiot",
-    src: "/assets/iiot/device-mgmt.png",
+    image: productScreenshots.deviceMgmt,
     titleKey: "features.deviceManagement.title",
     altKey: "features.deviceManagement.screenshotAlt",
     to: "/iiot-platform",
@@ -33,7 +34,7 @@ const SLIDES = [
   {
     key: "traceability",
     ns: "iiot",
-    src: "/assets/iiot/traceability.png",
+    image: productScreenshots.traceability,
     titleKey: "features.traceability.title",
     altKey: "features.traceability.screenshotAlt",
     to: "/iiot-platform",
@@ -41,7 +42,7 @@ const SLIDES = [
   {
     key: "stationOverview",
     ns: "station",
-    src: "/assets/vision/station-overview.png",
+    image: productScreenshots.stationOverview,
     titleKey: "screenshots.overviewCaption",
     altKey: "screenshots.overviewAlt",
     to: "/vision/station",
@@ -49,7 +50,7 @@ const SLIDES = [
   {
     key: "stationVision",
     ns: "station",
-    src: "/assets/vision/station-vision.png",
+    image: productScreenshots.stationVision,
     titleKey: "screenshots.visionCaption",
     altKey: "screenshots.visionAlt",
     to: "/vision/station",
@@ -107,7 +108,9 @@ export function ProductShowcaseCarousel() {
               >
                 <div className="max-w-6xl mx-auto aspect-video p-3 sm:p-6 lg:p-8 flex items-center justify-center">
                   <img
-                    src={slide.src}
+                    src={slide.image.src}
+                    width={slide.image.width}
+                    height={slide.image.height}
                     alt={t(`${slide.ns}:${slide.altKey}`)}
                     className="block w-auto h-auto max-w-full max-h-full rounded-xl transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:transform-none motion-reduce:transition-none"
                     loading="lazy"

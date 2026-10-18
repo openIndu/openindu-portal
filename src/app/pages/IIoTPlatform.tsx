@@ -4,17 +4,55 @@ import {
   Database, Smartphone, Users, Layers, Server, CheckCircle,
   Network, Zap, BarChart3
 } from "lucide-react";
+import { productScreenshots, type Screenshot } from "@/assets/product-images";
 import { SEO } from "../components/SEO";
 
 const featureKeys = [
   // Subtitles come from i18n: they are prose captions, and leaving them in
   // English put English sentences on every Chinese screenshot card.
-  { key: "smartLogin", icon: Shield, iconColor: "text-sky-700", iconBg: "bg-sky-100", screenshotSrc: "/assets/iiot/login.png" },
-  { key: "workbench", icon: LayoutDashboard, iconColor: "text-cyan-600", iconBg: "bg-cyan-100", screenshotSrc: "/assets/iiot/workbench.png" },
-  { key: "dashboard", icon: Monitor, iconColor: "text-purple-600", iconBg: "bg-purple-100", screenshotSrc: "/assets/iiot/dashboard.png" },
-  { key: "deviceManagement", icon: Database, iconColor: "text-green-600", iconBg: "bg-green-100", screenshotSrc: "/assets/iiot/device-mgmt.png" },
-  { key: "traceability", icon: BarChart3, iconColor: "text-orange-600", iconBg: "bg-orange-100", screenshotSrc: "/assets/iiot/traceability.png" },
-  { key: "miniProgram", icon: Smartphone, iconColor: "text-pink-600", iconBg: "bg-pink-100", screenshotSrc: "/assets/iiot/mini-program.png", isTall: true },
+  {
+    key: "smartLogin",
+    icon: Shield,
+    iconColor: "text-sky-700",
+    iconBg: "bg-sky-100",
+    screenshot: productScreenshots.login,
+  },
+  {
+    key: "workbench",
+    icon: LayoutDashboard,
+    iconColor: "text-cyan-600",
+    iconBg: "bg-cyan-100",
+    screenshot: productScreenshots.workbench,
+  },
+  {
+    key: "dashboard",
+    icon: Monitor,
+    iconColor: "text-purple-600",
+    iconBg: "bg-purple-100",
+    screenshot: productScreenshots.dashboard,
+  },
+  {
+    key: "deviceManagement",
+    icon: Database,
+    iconColor: "text-green-600",
+    iconBg: "bg-green-100",
+    screenshot: productScreenshots.deviceMgmt,
+  },
+  {
+    key: "traceability",
+    icon: BarChart3,
+    iconColor: "text-orange-600",
+    iconBg: "bg-orange-100",
+    screenshot: productScreenshots.traceability,
+  },
+  {
+    key: "miniProgram",
+    icon: Smartphone,
+    iconColor: "text-pink-600",
+    iconBg: "bg-pink-100",
+    screenshot: productScreenshots.miniProgram,
+    isTall: true,
+  },
 ] as const;
 
 const advantageKeys = [
@@ -46,7 +84,7 @@ type Feature = {
   icon: typeof Shield;
   iconColor: string;
   iconBg: string;
-  screenshotSrc: string;
+  screenshot: Screenshot;
   isTall?: boolean;
 };
 
@@ -61,7 +99,9 @@ function FeatureRow({ feature, reversed, t }: { feature: Feature; reversed: bool
       <div className={`w-full lg:w-3/5 ${feature.isTall ? "flex justify-center" : ""}`}>
         <div className={`rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-white ${feature.isTall ? "max-w-[220px]" : ""}`}>
           <img
-            src={feature.screenshotSrc}
+            src={feature.screenshot.src}
+            width={feature.screenshot.width}
+            height={feature.screenshot.height}
             alt={t(`features.${feature.key}.screenshotAlt`)}
             className="w-full h-auto"
             loading="lazy"
