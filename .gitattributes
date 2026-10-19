@@ -1,0 +1,3 @@
+# Check out text files with LF on every platform, so `prettier --check` (which wants LF,
+# like .editorconfig) gives the same answer in a Windows clone as in CI.
+* text=auto eol=lf

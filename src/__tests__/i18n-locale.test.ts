@@ -1,10 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {
-  detectLocale,
-  basenameFor,
-  stripLocalePrefix,
-  alternatePath,
-} from "@/i18n/locale";
+import { detectLocale, basenameFor, stripLocalePrefix, alternatePath } from "@/i18n/locale";
 
 function setPathname(pathname: string) {
   Object.defineProperty(window, "location", {
@@ -34,12 +29,12 @@ describe("detectLocale", () => {
     expect(detectLocale()).toBe("zh");
   });
 
-  it('does NOT match /enigma as en', () => {
+  it("does NOT match /enigma as en", () => {
     setPathname("/enigma");
     expect(detectLocale()).toBe("zh");
   });
 
-  it('does NOT match /energy as en', () => {
+  it("does NOT match /energy as en", () => {
     setPathname("/energy");
     expect(detectLocale()).toBe("zh");
   });
@@ -60,7 +55,7 @@ describe("stripLocalePrefix", () => {
     expect(stripLocalePrefix("/en/vision")).toBe("/vision");
   });
 
-  it('turns /en into /', () => {
+  it("turns /en into /", () => {
     expect(stripLocalePrefix("/en")).toBe("/");
   });
 
@@ -72,10 +67,8 @@ describe("stripLocalePrefix", () => {
     expect(stripLocalePrefix("/")).toBe("/");
   });
 
-  it('preserves nested sub-paths after /en/', () => {
-    expect(stripLocalePrefix("/en/motion-control/studio")).toBe(
-      "/motion-control/studio",
-    );
+  it("preserves nested sub-paths after /en/", () => {
+    expect(stripLocalePrefix("/en/motion-control/studio")).toBe("/motion-control/studio");
   });
 });
 

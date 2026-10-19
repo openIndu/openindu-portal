@@ -33,7 +33,9 @@ vi.mock("class-variance-authority", () => ({
 
 // Mock @radix-ui/react-slot
 vi.mock("@radix-ui/react-slot", () => ({
-  Slot: ({ children, ...props }: Record<string, unknown>) => <span {...props}>{children as React.ReactNode}</span>,
+  Slot: ({ children, ...props }: Record<string, unknown>) => (
+    <span {...props}>{children as React.ReactNode}</span>
+  ),
 }));
 
 describe("Button", () => {
@@ -58,7 +60,7 @@ describe("Button", () => {
     render(
       <Button asChild>
         <a href="/test">Link Button</a>
-      </Button>
+      </Button>,
     );
     expect(screen.getByText("Link Button")).toBeInTheDocument();
   });
@@ -168,7 +170,7 @@ describe("Card components", () => {
           </CardHeader>
           <CardContent>Main content goes here</CardContent>
           <CardFooter>Footer actions</CardFooter>
-        </Card>
+        </Card>,
       );
 
       expect(screen.getByText("Test Card")).toBeInTheDocument();
@@ -219,7 +221,7 @@ describe("Select", () => {
       <Select>
         <option value="1">Option 1</option>
         <option value="2">Option 2</option>
-      </Select>
+      </Select>,
     );
     expect(screen.getByText("Option 1")).toBeInTheDocument();
     expect(screen.getByText("Option 2")).toBeInTheDocument();
@@ -236,7 +238,7 @@ describe("Select", () => {
       <Select onChange={handleChange}>
         <option value="1">Option 1</option>
         <option value="2">Option 2</option>
-      </Select>
+      </Select>,
     );
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "2" } });
     expect(handleChange).toHaveBeenCalledTimes(1);
@@ -335,7 +337,7 @@ describe("Tabs components", () => {
             <TabsTrigger active>Tab 1</TabsTrigger>
             <TabsTrigger>Tab 2</TabsTrigger>
           </TabsList>
-        </Tabs>
+        </Tabs>,
       );
 
       expect(screen.getByText("Tab 1")).toBeInTheDocument();

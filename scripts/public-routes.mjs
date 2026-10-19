@@ -18,4 +18,3 @@ export const SHARED_ROUTES = [
 ];
 
 export const ZH_ONLY_ROUTES = ["/privacy", "/legal", "/cookies", "/legal-center"];
-

@@ -14,21 +14,36 @@
     "onPremises": {
       "name": "Self-Hosted",
       "description": "Full control on your own infrastructure — for manufacturers with strict data-security requirements",
-      "features": ["On-premise deployment path", "openEuler and domestic-silicon exploration", "PLC mappings require target validation", "Licenses are defined per repository"],
+      "features": [
+        "On-premise deployment path",
+        "openEuler and domestic-silicon exploration",
+        "PLC mappings require target validation",
+        "Licenses are defined per repository"
+      ],
       "price": "Free (open source) + deployment consulting",
       "cta": "Discuss deployment"
     },
     "edge": {
       "name": "Edge Appliance",
       "description": "An edge experimentation and integration path using domestic industrial SoCs, openEuler, and openIndu-cim",
-      "features": ["Hardware and OS assessment", "openIndu-cim + industrial protocols", "Latency, alarm, and stability validation", "Cloud-edge interface assessment"],
+      "features": [
+        "Hardware and OS assessment",
+        "openIndu-cim + industrial protocols",
+        "Latency, alarm, and stability validation",
+        "Cloud-edge interface assessment"
+      ],
       "price": "Assessed by hardware, validation scope, and integration effort",
       "cta": "Discuss validation"
     },
     "cloud": {
       "name": "Managed Cloud",
       "description": "A cloud deployment and operations collaboration path for openIndu-platform",
-      "features": ["Deployment architecture assessment", "Data dashboards and analytics", "Machine-vision interface assessment", "Availability targets defined by agreement"],
+      "features": [
+        "Deployment architecture assessment",
+        "Data dashboards and analytics",
+        "Machine-vision interface assessment",
+        "Availability targets defined by agreement"
+      ],
       "price": "Assessed by environment, scale, and support scope",
       "cta": "Discuss collaboration"
     }
@@ -36,9 +51,19 @@
   "license": {
     "heading": "Licensing & Support",
     "openSourceTitle": "Open Source",
-    "openSourceItems": ["Licenses defined by each repository LICENSE", "Public repositories and community content", "Community support", "Best for: R&D, startups, learning"],
+    "openSourceItems": [
+      "Licenses defined by each repository LICENSE",
+      "Public repositories and community content",
+      "Community support",
+      "Best for: R&D, startups, learning"
+    ],
     "enterpriseTitle": "Enterprise",
-    "enterpriseItems": ["Custom licensing", "Professional support (phone / email)", "Deployment and integration consulting", "Best for: production manufacturing, critical applications"]
+    "enterpriseItems": [
+      "Custom licensing",
+      "Professional support (phone / email)",
+      "Deployment and integration consulting",
+      "Best for: production manufacturing, critical applications"
+    ]
   },
   "cta": {
     "heading": "Ready to get started?",

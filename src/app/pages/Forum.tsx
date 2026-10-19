@@ -1,12 +1,25 @@
 import { useTranslation } from "react-i18next";
-import { ArrowRight, MessageCircle, Code, Cpu, Lightbulb, Building2, LifeBuoy, MessageSquare } from "lucide-react";
+import {
+  ArrowRight,
+  MessageCircle,
+  Code,
+  Cpu,
+  Lightbulb,
+  Building2,
+  LifeBuoy,
+  MessageSquare,
+} from "lucide-react";
 import { SEO } from "../components/SEO";
 
 export function Forum() {
   const { t } = useTranslation("common");
 
   const categoryKeys = [
-    { key: "industrialControl", icon: Code, href: "https://forum.openindu.com/c/industrial-control/5" },
+    {
+      key: "industrialControl",
+      icon: Code,
+      href: "https://forum.openindu.com/c/industrial-control/5",
+    },
     { key: "automation", icon: Cpu, href: "https://forum.openindu.com/c/automation/6" },
     { key: "process", icon: Lightbulb, href: "https://forum.openindu.com/c/process/7" },
     { key: "insights", icon: Building2, href: "https://forum.openindu.com/c/9" },
@@ -95,14 +108,17 @@ export function Forum() {
                     {category.title}
                   </h3>
                 </div>
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  {category.description}
-                </p>
+                <p className="text-gray-600 mb-4 leading-relaxed">{category.description}</p>
                 <div className="border-t border-gray-100 pt-4">
-                  <p className="text-xs font-semibold text-gray-500 uppercase mb-3">{t("forumPage.hotTopics")}</p>
+                  <p className="text-xs font-semibold text-gray-500 uppercase mb-3">
+                    {t("forumPage.hotTopics")}
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {category.topics.map((topic) => (
-                      <span key={topic} className="inline-block px-3 py-1 bg-sky-50 text-sky-800 rounded-full text-sm">
+                      <span
+                        key={topic}
+                        className="inline-block px-3 py-1 bg-sky-50 text-sky-800 rounded-full text-sm"
+                      >
                         {topic}
                       </span>
                     ))}
@@ -117,9 +133,7 @@ export function Forum() {
       {/* CTA Section */}
       <section className="py-16 sm:py-20 bg-[#085A90] text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-            {t("forumPage.ctaHeading")}
-          </h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-6">{t("forumPage.ctaHeading")}</h2>
           <p className="text-lg sm:text-xl mb-8 text-white/90 max-w-2xl mx-auto">
             {t("forumPage.ctaDescription")}
           </p>

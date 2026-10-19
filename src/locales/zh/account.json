@@ -1,13 +1,21 @@
 {
   "seo": { "title": "账号设置｜openIndu", "description": "管理 openIndu社区账号昵称与个人资料。" },
-  "header": { "badge": "个人中心", "title": "账号设置", "subtitle": "设置你的社区昵称、修改手机号或注销账号。" },
+  "header": {
+    "badge": "个人中心",
+    "title": "账号设置",
+    "subtitle": "设置你的社区昵称、修改手机号或注销账号。"
+  },
   "profile": {
     "cardTitle": "个人资料",
     "cardDescription": "昵称会显示在登录后的个人中心入口。",
     "nicknameLabel": "昵称",
     "nicknamePlaceholder": "请输入昵称",
     "saveButton": "保存昵称",
-    "errors": { "tooLong": "昵称不能超过 50 个字符", "saveFailed": "保存账号设置失败", "saved": "账号设置已保存" }
+    "errors": {
+      "tooLong": "昵称不能超过 50 个字符",
+      "saveFailed": "保存账号设置失败",
+      "saved": "账号设置已保存"
+    }
   },
   "role": {
     "cardTitle": "账号角色",

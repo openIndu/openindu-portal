@@ -35,9 +35,10 @@ export function Login() {
   // the basename itself, so an already-prefixed path here would double up
   // (e.g. /en/en/...) -- strip it unconditionally; a no-op when there was
   // never a prefix to begin with.
-  const redirectTo = typeof location.state === "object" && location.state && "from" in location.state
-    ? (location.state.from as { pathname?: string }).pathname ?? "/resources"
-    : stripLocalePrefix(new URLSearchParams(location.search).get("redirect") ?? "/resources");
+  const redirectTo =
+    typeof location.state === "object" && location.state && "from" in location.state
+      ? ((location.state.from as { pathname?: string }).pathname ?? "/resources")
+      : stripLocalePrefix(new URLSearchParams(location.search).get("redirect") ?? "/resources");
 
   useEffect(() => {
     if (isAuthenticated) navigate(redirectTo, { replace: true });
@@ -51,7 +52,8 @@ export function Login() {
 
   // 仅在倒计时/发送中禁用按钮；手机号格式校验放到点击时提示，避免按钮静默置灰让用户误以为"无法点击"。
   const canSendCode = cooldown === 0 && !sending;
-  const canSubmit = phonePattern.test(phone) && codePattern.test(code) && privacyAccepted && !submitting;
+  const canSubmit =
+    phonePattern.test(phone) && codePattern.test(code) && privacyAccepted && !submitting;
 
   async function handleSendCode() {
     setError("");
@@ -127,7 +129,9 @@ export function Login() {
         <CardContent>
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="space-y-2">
-              <label htmlFor="login-phone" className="text-sm font-medium text-gray-700">{t("phoneLabel")}</label>
+              <label htmlFor="login-phone" className="text-sm font-medium text-gray-700">
+                {t("phoneLabel")}
+              </label>
               <Input
                 id="login-phone"
                 value={phone}
@@ -138,7 +142,9 @@ export function Login() {
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="login-code" className="text-sm font-medium text-gray-700">{t("codeLabel")}</label>
+              <label htmlFor="login-code" className="text-sm font-medium text-gray-700">
+                {t("codeLabel")}
+              </label>
               <div className="flex gap-2">
                 <Input
                   id="login-code"
@@ -148,8 +154,20 @@ export function Login() {
                   autoComplete="one-time-code"
                   placeholder={t("codePlaceholder")}
                 />
-                <Button type="button" variant="outline" onClick={handleSendCode} disabled={!canSendCode} className="min-w-28">
-                  {sending ? <Loader2 className="animate-spin" /> : cooldown > 0 ? `${cooldown}s` : t("sendCode")}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleSendCode}
+                  disabled={!canSendCode}
+                  className="min-w-28"
+                >
+                  {sending ? (
+                    <Loader2 className="animate-spin" />
+                  ) : cooldown > 0 ? (
+                    `${cooldown}s`
+                  ) : (
+                    t("sendCode")
+                  )}
                 </Button>
               </div>
             </div>
@@ -161,12 +179,24 @@ export function Login() {
                 className="mt-1 h-5 w-5 shrink-0"
               />
               <span>
-                {t("privacyPrefix")}<Link to="/privacy" className="font-medium text-sky-700 hover:text-sky-800">{t("privacyLinkText")}</Link>{t("privacySuffix")}
+                {t("privacyPrefix")}
+                <Link to="/privacy" className="font-medium text-sky-700 hover:text-sky-800">
+                  {t("privacyLinkText")}
+                </Link>
+                {t("privacySuffix")}
               </span>
             </label>
-            {message && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{message}</p>}
-            {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
-            <Button type="submit" disabled={!canSubmit} className="w-full bg-sky-700 hover:bg-[#085A90]">
+            {message && (
+              <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{message}</p>
+            )}
+            {error && (
+              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+            )}
+            <Button
+              type="submit"
+              disabled={!canSubmit}
+              className="w-full bg-sky-700 hover:bg-[#085A90]"
+            >
               {submitting ? <Loader2 className="animate-spin" /> : t("submit")}
             </Button>
           </form>

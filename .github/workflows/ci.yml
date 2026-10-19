@@ -69,6 +69,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - name: Formatting (prettier)
+        run: npm run format:check
 
   # Caching and routing are decided by nginx.conf / nginx.k8s.conf, which no browser test
   # sees. These tests start a real nginx on the repository's configs. They are skipped

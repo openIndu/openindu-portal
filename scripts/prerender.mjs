@@ -114,8 +114,8 @@ function startPreviewServer() {
       clearTimeout(timeout);
       reject(
         new Error(
-          `vite preview exited before becoming ready (code=${code ?? "null"}, signal=${signal ?? "null"})`
-        )
+          `vite preview exited before becoming ready (code=${code ?? "null"}, signal=${signal ?? "null"})`,
+        ),
       );
     });
   });
@@ -321,9 +321,7 @@ async function main() {
   try {
     puppeteer = (await import("puppeteer")).default;
   } catch {
-    console.error(
-      "❌ puppeteer is not installed. Run: npm install --save-dev puppeteer"
-    );
+    console.error("❌ puppeteer is not installed. Run: npm install --save-dev puppeteer");
     process.exit(1);
   }
 
@@ -345,7 +343,7 @@ async function main() {
   } catch (err) {
     console.error(
       `Could not launch Chromium for required prerendering: ${err.message}\n` +
-        "Install Chromium before running the production build.\n"
+        "Install Chromium before running the production build.\n",
     );
     await stopServer(server);
     process.exit(1);

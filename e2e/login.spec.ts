@@ -43,7 +43,9 @@ for (const { locale, prefix, label } of LOCALES) {
       await expect(submitButton).toBeDisabled();
     });
 
-    test("should enable submit when valid phone, code, and privacy consent are given", async ({ page }) => {
+    test("should enable submit when valid phone, code, and privacy consent are given", async ({
+      page,
+    }) => {
       await page.goto(prefix + "/login");
       await page.fill("#login-phone", "13800138000");
       await page.fill("#login-code", "123456");

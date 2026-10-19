@@ -8,53 +8,54 @@
    * Tailwind's sky-600 (#0284C7) is the prettier hue but only manages
    * 4.10:1 with white, so it is reserved for large display text and
    * graphics — never for body copy or button labels. */
-  --color-primary: #0B72B5;          /* 天蓝 - 主色，填充与链接 */
-  --color-primary-dark: #085A90;     /* 天蓝加深 - hover */
-  --color-primary-light: #EFF8FE;    /* 天蓝浅 - 背景洗色 */
+  --color-primary: #0b72b5; /* 天蓝 - 主色，填充与链接 */
+  --color-primary-dark: #085a90; /* 天蓝加深 - hover */
+  --color-primary-light: #eff8fe; /* 天蓝浅 - 背景洗色 */
 
   /* Secondary Colors */
-  --color-secondary: #0B72B5;        /* 链接色，与主色同值以保证 AA */
-  --color-secondary-dark: #085A90;
-  --color-secondary-light: #E0F2FE;  /* sky-100 */
+  --color-secondary: #0b72b5; /* 链接色，与主色同值以保证 AA */
+  --color-secondary-dark: #085a90;
+  --color-secondary-light: #e0f2fe; /* sky-100 */
 
   /* Accent Colors */
-  --color-accent: #FFA816;           /* 橙色 - 重点、警告 */
-  --color-accent-dark: #e69500;      /* 橙加深 */
-  --color-accent-light: #fff5e6;     /* 橙浅 */
+  --color-accent: #ffa816; /* 橙色 - 重点、警告 */
+  --color-accent-dark: #e69500; /* 橙加深 */
+  --color-accent-light: #fff5e6; /* 橙浅 */
 
   /* Neutral Colors */
-  --color-white: #FFFFFF;
-  --color-gray-50: #F5F7FA;
-  --color-gray-100: #F0F0F0;
-  --color-gray-200: #E8EEF5;
-  --color-gray-300: #D8E0EB;
-  --color-gray-400: #C0C8D8;
+  --color-white: #ffffff;
+  --color-gray-50: #f5f7fa;
+  --color-gray-100: #f0f0f0;
+  --color-gray-200: #e8eef5;
+  --color-gray-300: #d8e0eb;
+  --color-gray-400: #c0c8d8;
   /* #999999 here hijacked Tailwind's own `text-gray-500` utility app-wide
    * (Tailwind v4 reads --color-* as theme tokens), and #999 on white is only
    * 2.85:1 — every `text-gray-500` label silently failed WCAG AA. Restored to
    * Tailwind's stock gray-500 (4.83:1). For disabled text use
    * --color-text-disabled instead. */
-  --color-gray-500: #6B7280;
+  --color-gray-500: #6b7280;
   --color-gray-600: #666666;
   --color-gray-700: #333333;
   --color-gray-900: #111111;
 
   /* Status Colors */
-  --color-success: #48BB78;
-  --color-warning: #ECC94B;
-  --color-error: #E53E3E;
-  --color-info: #3182CE;
+  --color-success: #48bb78;
+  --color-warning: #ecc94b;
+  --color-error: #e53e3e;
+  --color-info: #3182ce;
 
   /* Semantic Colors */
-  --color-text-primary: #333333;     /* 正文 */
-  --color-text-secondary: #666666;   /* 辅助文本 */
-  --color-text-disabled: #999999;    /* 禁用文本 */
-  --color-border: #E8EEF5;           /* 边框 */
-  --color-background: #FFFFFF;       /* 页面背景 */
-  --color-background-secondary: #F5F7FA;  /* 次级背景 */
+  --color-text-primary: #333333; /* 正文 */
+  --color-text-secondary: #666666; /* 辅助文本 */
+  --color-text-disabled: #999999; /* 禁用文本 */
+  --color-border: #e8eef5; /* 边框 */
+  --color-background: #ffffff; /* 页面背景 */
+  --color-background-secondary: #f5f7fa; /* 次级背景 */
 
   /* Typography */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  --font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
   --font-size-h1: 42px;
   --font-size-h2: 30px;
   --font-size-h3: 24px;
@@ -135,7 +136,9 @@
     line-height: var(--line-height-normal);
   }
 
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     font-weight: var(--font-weight-semibold);
   }
 
@@ -165,111 +168,115 @@
  * input/textarea/select selectors below live in `@layer components` so any
  * Tailwind utility can still override them. */
 @layer components {
-.btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  border: none;
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-body);
-  cursor: pointer;
-}
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-body);
+    cursor: pointer;
+  }
 
-.btn-primary:hover {
-  background-color: var(--color-primary-dark);
-  box-shadow: var(--shadow-sm);
-}
+  .btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-sm);
+  }
 
-.btn-primary:active {
-  transform: scale(0.98);
-}
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
 
-.btn-secondary {
-  background-color: var(--color-white);
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-body);
-  cursor: pointer;
-}
+  .btn-secondary {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-body);
+    cursor: pointer;
+  }
 
-.btn-secondary:hover {
-  background-color: var(--color-primary-light);
-}
+  .btn-secondary:hover {
+    background-color: var(--color-primary-light);
+  }
 
-.btn-ghost {
-  background-color: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm) var(--spacing-md);
-  cursor: pointer;
-}
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    cursor: pointer;
+  }
 
-.btn-ghost:hover {
-  background-color: var(--color-gray-50);
-}
+  .btn-ghost:hover {
+    background-color: var(--color-gray-50);
+  }
 
-/* Card Styles */
-.card {
-  background-color: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-base);
-}
+  /* Card Styles */
+  .card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+  }
 
-.card:hover {
-  box-shadow: var(--shadow-md);
-}
+  .card:hover {
+    box-shadow: var(--shadow-md);
+  }
 
-/* Input Styles */
-input, textarea, select {
-  font-family: var(--font-family);
-  font-size: var(--font-size-body);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm) var(--spacing-md);
-  transition: border-color var(--transition-fast);
-}
+  /* Input Styles */
+  input,
+  textarea,
+  select {
+    font-family: var(--font-family);
+    font-size: var(--font-size-body);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    transition: border-color var(--transition-fast);
+  }
 
-input:focus, textarea:focus, select:focus {
-  outline: none;
-  border-color: var(--color-secondary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
-}
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+  }
 
-/* Badge */
-.badge {
-  display: inline-block;
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: 12px;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  background-color: var(--color-gray-50);
-  color: var(--color-text-secondary);
-}
+  /* Badge */
+  .badge {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: 12px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    background-color: var(--color-gray-50);
+    color: var(--color-text-secondary);
+  }
 
-.badge-primary {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
-}
+  .badge-primary {
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+  }
 
-.badge-success {
-  background-color: #e6ffed;
-  color: var(--color-success);
-}
+  .badge-success {
+    background-color: #e6ffed;
+    color: var(--color-success);
+  }
 
-.badge-warning {
-  background-color: #fffaeb;
-  color: var(--color-warning);
-}
+  .badge-warning {
+    background-color: #fffaeb;
+    color: var(--color-warning);
+  }
 
-.badge-error {
-  background-color: #fee;
-  color: var(--color-error);
-}
+  .badge-error {
+    background-color: #fee;
+    color: var(--color-error);
+  }
 }

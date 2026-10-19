@@ -15,13 +15,21 @@ test.describe("Navigation", () => {
   // Discriminators: active items carry `font-medium`, inactive ones `text-gray-700`.
   test("only the owning header item shows as current", async ({ page }) => {
     await page.goto("/architecture");
-    await expect(page.locator("header").getByTestId("nav-architecture")).toHaveAttribute("aria-current", "page");
+    await expect(page.locator("header").getByTestId("nav-architecture")).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
     await expect(page.locator("header").getByTestId("nav-architecture")).toHaveClass(/font-medium/);
     await expect(page.locator("header").getByTestId("nav-products")).toHaveClass(/text-gray-700/);
 
     await page.goto("/vision");
-    await expect(page.locator("header").getByTestId("nav-architecture")).not.toHaveAttribute("aria-current", "page");
-    await expect(page.locator("header").getByTestId("nav-architecture")).toHaveClass(/text-gray-700/);
+    await expect(page.locator("header").getByTestId("nav-architecture")).not.toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await expect(page.locator("header").getByTestId("nav-architecture")).toHaveClass(
+      /text-gray-700/,
+    );
     await expect(page.locator("header").getByTestId("nav-products")).toHaveClass(/font-medium/);
   });
 

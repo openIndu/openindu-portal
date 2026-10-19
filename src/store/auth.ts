@@ -1,4 +1,14 @@
-import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  createElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { authApi, clearAuthStorage, type AuthResponse, type User, type UserRole } from "@/api";
 
 const STORAGE_KEYS = {
@@ -55,7 +65,9 @@ const roleRank: Record<UserRole, number> = {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem(STORAGE_KEYS.token));
-  const [refreshTokenValue, setRefreshTokenValue] = useState<string | null>(() => localStorage.getItem(STORAGE_KEYS.refreshToken));
+  const [refreshTokenValue, setRefreshTokenValue] = useState<string | null>(() =>
+    localStorage.getItem(STORAGE_KEYS.refreshToken),
+  );
   const [user, setUserState] = useState<User | null>(() => readUser());
   const [isLoading, setIsLoading] = useState(true);
 
@@ -124,24 +136,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     else localStorage.removeItem(STORAGE_KEYS.user);
   }, []);
 
-  const login = useCallback(async (payload: AuthResponse) => {
-    const nextToken = payload.access_token;
-    const nextRefreshToken = payload.refresh_token;
-    let nextUser = payload.user ?? null;
+  const login = useCallback(
+    async (payload: AuthResponse) => {
+      const nextToken = payload.access_token;
+      const nextRefreshToken = payload.refresh_token;
+      let nextUser = payload.user ?? null;
 
-    persistAuth(nextToken, nextRefreshToken, nextUser);
-    setToken(nextToken);
-    setRefreshTokenValue(nextRefreshToken);
+      persistAuth(nextToken, nextRefreshToken, nextUser);
+      setToken(nextToken);
+      setRefreshTokenValue(nextRefreshToken);
 
-    if (!nextUser) {
-      try {
-        nextUser = await authApi.me();
-      } catch {
-        nextUser = null;
+      if (!nextUser) {
+        try {
+          nextUser = await authApi.me();
+        } catch {
+          nextUser = null;
+        }
       }
-    }
-    setUser(nextUser);
-  }, [setUser]);
+      setUser(nextUser);
+    },
+    [setUser],
+  );
 
   const logout = useCallback(async () => {
     try {
@@ -171,33 +186,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return nextToken;
   }, [refreshTokenValue, user]);
 
-  const updateProfile = useCallback(async (payload: { nickname?: string | null }) => {
-    const updatedUser = await authApi.updateMe(payload);
-    setUser(updatedUser);
-    return updatedUser;
-  }, [setUser]);
+  const updateProfile = useCallback(
+    async (payload: { nickname?: string | null }) => {
+      const updatedUser = await authApi.updateMe(payload);
+      setUser(updatedUser);
+      return updatedUser;
+    },
+    [setUser],
+  );
 
-  const hasRole = useCallback((role?: UserRole) => {
-    if (!role) return Boolean(token);
-    if (!user) return false;
-    return roleRank[user.role] >= roleRank[role];
-  }, [token, user]);
+  const hasRole = useCallback(
+    (role?: UserRole) => {
+      if (!role) return Boolean(token);
+      if (!user) return false;
+      return roleRank[user.role] >= roleRank[role];
+    },
+    [token, user],
+  );
 
-  const value = useMemo<AuthContextValue>(() => ({
-    token,
-    refreshTokenValue,
-    user,
-    isAuthenticated: Boolean(token),
-    isAdmin: user?.role === "admin",
-    isMember: user?.role === "member" || user?.role === "admin",
-    isLoading,
-    login,
-    logout,
-    refreshToken,
-    updateProfile,
-    setUser,
-    hasRole,
-  }), [token, refreshTokenValue, user, isLoading, login, logout, refreshToken, updateProfile, setUser, hasRole]);
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      token,
+      refreshTokenValue,
+      user,
+      isAuthenticated: Boolean(token),
+      isAdmin: user?.role === "admin",
+      isMember: user?.role === "member" || user?.role === "admin",
+      isLoading,
+      login,
+      logout,
+      refreshToken,
+      updateProfile,
+      setUser,
+      hasRole,
+    }),
+    [
+      token,
+      refreshTokenValue,
+      user,
+      isLoading,
+      login,
+      logout,
+      refreshToken,
+      updateProfile,
+      setUser,
+      hasRole,
+    ],
+  );
 
   return createElement(AuthContext.Provider, { value }, children);
 }

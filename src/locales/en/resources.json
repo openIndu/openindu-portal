@@ -14,7 +14,13 @@
     "nonMember": "Your account can browse the list; online preview and download require Member role or above."
   },
   "tabs": { "documents": "Documents", "software": "Software" },
-  "labels": { "brand": "Brand:", "category": "Category:", "series": "Series:", "size": "Size:", "version": "Version:" },
+  "labels": {
+    "brand": "Brand:",
+    "category": "Category:",
+    "series": "Series:",
+    "size": "Size:",
+    "version": "Version:"
+  },
   "filters": {
     "allOption": "All",
     "allBrands": "All Brands",

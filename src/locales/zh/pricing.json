@@ -14,21 +14,36 @@
     "onPremises": {
       "name": "自建部署",
       "description": "完全自主控制，适合对数据安全有严格要求的制造企业",
-      "features": ["本地部署路径", "openEuler 与国产芯片探索", "PLC 映射需在目标环境验证", "许可证以各仓库 LICENSE 为准"],
+      "features": [
+        "本地部署路径",
+        "openEuler 与国产芯片探索",
+        "PLC 映射需在目标环境验证",
+        "许可证以各仓库 LICENSE 为准"
+      ],
       "price": "免费（开源）+ 部署咨询",
       "cta": "咨询部署"
     },
     "edge": {
       "name": "边缘端侧",
       "description": "国产工控芯片 + openEuler + openIndu-cim 的边缘实验与集成路径",
-      "features": ["硬件与系统选型评估", "openIndu-cim + 工业协议", "延迟、告警与稳定性验证", "云边协同接口评估"],
+      "features": [
+        "硬件与系统选型评估",
+        "openIndu-cim + 工业协议",
+        "延迟、告警与稳定性验证",
+        "云边协同接口评估"
+      ],
       "price": "按硬件、验证范围与集成工作量评估",
       "cta": "讨论验证"
     },
     "cloud": {
       "name": "云平台服务",
       "description": "openIndu-platform 的云端部署与运维合作路径",
-      "features": ["部署架构评估", "数据看板与分析", "工业视觉接口评估", "可用性目标按合作条款约定"],
+      "features": [
+        "部署架构评估",
+        "数据看板与分析",
+        "工业视觉接口评估",
+        "可用性目标按合作条款约定"
+      ],
       "price": "按环境、规模与支持范围评估",
       "cta": "讨论合作"
     }
@@ -36,9 +51,19 @@
   "license": {
     "heading": "许可与支持",
     "openSourceTitle": "开源版本",
-    "openSourceItems": ["许可证以各仓库 LICENSE 为准", "公开仓库与社区内容", "社区支持", "适合：研发、创业、学习"],
+    "openSourceItems": [
+      "许可证以各仓库 LICENSE 为准",
+      "公开仓库与社区内容",
+      "社区支持",
+      "适合：研发、创业、学习"
+    ],
     "enterpriseTitle": "企业版本",
-    "enterpriseItems": ["自定义许可模式", "专业技术支持（电话 / 邮件）", "部署与集成咨询", "适合：生产制造、关键应用"]
+    "enterpriseItems": [
+      "自定义许可模式",
+      "专业技术支持（电话 / 邮件）",
+      "部署与集成咨询",
+      "适合：生产制造、关键应用"
+    ]
   },
   "cta": {
     "heading": "准备好开始了吗？",

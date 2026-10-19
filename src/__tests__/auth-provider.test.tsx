@@ -44,13 +44,44 @@ function Consumer() {
       <span data-testid="phone">{auth.user?.phone ?? "none"}</span>
       <span data-testid="has-member">{String(auth.hasRole("member"))}</span>
       <span data-testid="has-any">{String(auth.hasRole())}</span>
-      <button type="button" onClick={() => void auth.login({ access_token: "login-token", refresh_token: "login-refresh", user: { id: 1, phone: "13800000000", role: "admin" } })}>login-user</button>
-      <button type="button" onClick={() => void auth.login({ access_token: "login-token", refresh_token: "login-refresh" })}>login-me</button>
-      <button type="button" onClick={() => void auth.refreshToken()}>refresh</button>
-      <button type="button" onClick={() => auth.setUser({ id: 2, phone: "13900000000", role: "member" })}>set-user</button>
-      <button type="button" onClick={() => void auth.updateProfile({ nickname: "Tom" })}>update-profile</button>
-      <button type="button" onClick={() => auth.setUser(null)}>clear-user</button>
-      <button type="button" onClick={() => void auth.logout()}>logout</button>
+      <button
+        type="button"
+        onClick={() =>
+          void auth.login({
+            access_token: "login-token",
+            refresh_token: "login-refresh",
+            user: { id: 1, phone: "13800000000", role: "admin" },
+          })
+        }
+      >
+        login-user
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          void auth.login({ access_token: "login-token", refresh_token: "login-refresh" })
+        }
+      >
+        login-me
+      </button>
+      <button type="button" onClick={() => void auth.refreshToken()}>
+        refresh
+      </button>
+      <button
+        type="button"
+        onClick={() => auth.setUser({ id: 2, phone: "13900000000", role: "member" })}
+      >
+        set-user
+      </button>
+      <button type="button" onClick={() => void auth.updateProfile({ nickname: "Tom" })}>
+        update-profile
+      </button>
+      <button type="button" onClick={() => auth.setUser(null)}>
+        clear-user
+      </button>
+      <button type="button" onClick={() => void auth.logout()}>
+        logout
+      </button>
     </div>
   );
 }
@@ -71,7 +102,11 @@ describe("AuthProvider", () => {
   });
 
   it("starts logged out without a refresh token", async () => {
-    render(<AuthProvider><Consumer /></AuthProvider>);
+    render(
+      <AuthProvider>
+        <Consumer />
+      </AuthProvider>,
+    );
 
     await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("false"));
     expect(screen.getByTestId("authed").textContent).toBe("false");
@@ -84,7 +119,11 @@ describe("AuthProvider", () => {
     storage.set("openindu_portal_refresh_token", "old-refresh");
     authApiMock.me.mockResolvedValue({ id: 1, phone: "13800000000", role: "member" });
 
-    render(<AuthProvider><Consumer /></AuthProvider>);
+    render(
+      <AuthProvider>
+        <Consumer />
+      </AuthProvider>,
+    );
 
     await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("false"));
     expect(authApiMock.me).toHaveBeenCalled();
@@ -98,14 +137,22 @@ describe("AuthProvider", () => {
     storage.set("openindu_portal_refresh_token", "bad-refresh");
     authApiMock.me.mockRejectedValue(new Error("unauthorized"));
 
-    render(<AuthProvider><Consumer /></AuthProvider>);
+    render(
+      <AuthProvider>
+        <Consumer />
+      </AuthProvider>,
+    );
 
     await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("false"));
     expect(screen.getByTestId("authed").textContent).toBe("false");
   });
 
   it("logs in with provided user and persists auth", async () => {
-    render(<AuthProvider><Consumer /></AuthProvider>);
+    render(
+      <AuthProvider>
+        <Consumer />
+      </AuthProvider>,
+    );
     await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("false"));
 
     await act(async () => screen.getByText("login-user").click());
@@ -117,7 +164,11 @@ describe("AuthProvider", () => {
 
   it("loads current user after login when response omits user", async () => {
     authApiMock.me.mockResolvedValue({ id: 3, phone: "13700000000", role: "user" });
-    render(<AuthProvider><Consumer /></AuthProvider>);
+    render(
+      <AuthProvider>
+        <Consumer />
+      </AuthProvider>,
+    );
     await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("false"));
 
     await act(async () => screen.getByText("login-me").click());
@@ -131,16 +182,29 @@ describe("AuthProvider", () => {
     storage.set("openindu_portal_token", "initial");
     storage.set("openindu_portal_refresh_token", "refresh-token");
     authApiMock.me.mockResolvedValue({ id: 1, phone: "13800000000", role: "user" });
-    authApiMock.refresh.mockResolvedValue({ access_token: "refreshed", refresh_token: "refresh-token", user: { id: 1, phone: "13800000000", role: "admin" } });
+    authApiMock.refresh.mockResolvedValue({
+      access_token: "refreshed",
+      refresh_token: "refresh-token",
+      user: { id: 1, phone: "13800000000", role: "admin" },
+    });
     authApiMock.logout.mockResolvedValue({ success: true });
 
-    render(<AuthProvider><Consumer /></AuthProvider>);
+    render(
+      <AuthProvider>
+        <Consumer />
+      </AuthProvider>,
+    );
     await waitFor(() => expect(screen.getByTestId("loading").textContent).toBe("false"));
 
     await act(async () => screen.getByText("set-user").click());
     expect(screen.getByTestId("phone").textContent).toBe("13900000000");
 
-    authApiMock.updateMe.mockResolvedValue({ id: 2, phone: "13900000000", role: "member", nickname: "Tom" });
+    authApiMock.updateMe.mockResolvedValue({
+      id: 2,
+      phone: "13900000000",
+      role: "member",
+      nickname: "Tom",
+    });
     await act(async () => screen.getByText("update-profile").click());
     expect(authApiMock.updateMe).toHaveBeenCalledWith({ nickname: "Tom" });
 

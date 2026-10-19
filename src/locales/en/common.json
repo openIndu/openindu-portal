@@ -147,27 +147,22 @@
     "automation": {
       "title": "Automation",
       "description": "PLC programming, HMI development, machine vision and motion control. Equipment integration, engineering conventions and best practice.",
-      "topics": [
-        "PLC programming",
-        "HMI development",
-        "Machine vision",
-        "Motion control"
-      ]
+      "topics": ["PLC programming", "HMI development", "Machine vision", "Motion control"]
     },
     "process": {
       "title": "Craftsmanship",
       "description": "Process-flow optimisation, parameter setting, defect analysis and yield improvement. Building the craftsmanship knowledge base and the engineering method behind it.",
-      "topics": [
-        "Process flow",
-        "Parameter tuning",
-        "Yield analysis",
-        "Knowledge base"
-      ]
+      "topics": ["Process flow", "Parameter tuning", "Yield analysis", "Knowledge base"]
     },
     "insights": {
       "title": "Industry Insights",
       "description": "Companies, product portfolios, industrial software, and technology evolution — and what they mean for engineering decisions and delivery.",
-      "topics": ["Company observations", "Product direction", "Industrial software", "Technology evolution"]
+      "topics": [
+        "Company observations",
+        "Product direction",
+        "Industrial software",
+        "Technology evolution"
+      ]
     },
     "help": {
       "title": "Community Help",

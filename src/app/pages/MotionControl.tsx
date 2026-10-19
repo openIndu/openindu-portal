@@ -81,7 +81,9 @@ export function MotionControl() {
       {/* Features */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("features.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("features.heading")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featureKeys.map((feature) => (
               <div
@@ -91,7 +93,9 @@ export function MotionControl() {
                 <div className="flex items-center justify-center w-12 h-12 bg-sky-50 text-[#0B72B5] rounded-lg mb-4">
                   <feature.icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{t(`features.${feature.key}.title`)}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {t(`features.${feature.key}.title`)}
+                </h3>
                 <p className="text-sm text-gray-600">{t(`features.${feature.key}.description`)}</p>
               </div>
             ))}
@@ -102,11 +106,18 @@ export function MotionControl() {
       {/* Use Cases */}
       <section className="py-16 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">{t("plcBrands.heading")}</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">{t("plcBrands.subheading")}</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">
+            {t("plcBrands.heading")}
+          </h2>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            {t("plcBrands.subheading")}
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-6">
             {plcBrands.map((brand) => (
-              <div key={brand.key} className="flex flex-col bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-[#0B72B5] transition-all">
+              <div
+                key={brand.key}
+                className="flex flex-col bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-[#0B72B5] transition-all"
+              >
                 <div className="flex items-center justify-center w-12 h-12 bg-[#0B72B5] text-white rounded-lg mb-3 font-bold text-lg">
                   {brand.name.charAt(0)}
                 </div>
@@ -148,11 +159,18 @@ export function MotionControl() {
             </a>
           </div>
 
-          <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">{t("motionCardBrands.heading")}</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">{t("motionCardBrands.subheading")}</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">
+            {t("motionCardBrands.heading")}
+          </h2>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            {t("motionCardBrands.subheading")}
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {motionCardBrands.map((brand) => (
-              <div key={brand.key} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-[#0B72B5] transition-all">
+              <div
+                key={brand.key}
+                className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-[#0B72B5] transition-all"
+              >
                 <div className="flex items-center justify-center w-12 h-12 bg-[#0E86D4] text-white rounded-lg mb-3 font-bold text-lg">
                   {brand.name.charAt(0)}
                 </div>
@@ -167,11 +185,18 @@ export function MotionControl() {
       {/* Technology Stack */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">{t("industries.heading")}</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">{t("industries.subheading")}</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">
+            {t("industries.heading")}
+          </h2>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            {t("industries.subheading")}
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {industries.map((industry, index) => (
-              <div key={industry.key} className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-xl border border-gray-200 hover:border-[#0B72B5] hover:shadow-xl transition-all">
+              <div
+                key={industry.key}
+                className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-xl border border-gray-200 hover:border-[#0B72B5] hover:shadow-xl transition-all"
+              >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="flex items-center justify-center w-12 h-12 bg-[#0B72B5] text-white rounded-lg font-bold text-xl">
                     {index + 1}
@@ -194,14 +219,18 @@ export function MotionControl() {
             ))}
           </div>
 
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("hostDevSection.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("hostDevSection.heading")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="bg-sky-50 p-8 rounded-xl border border-sky-200">
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex items-center justify-center w-12 h-12 bg-sky-700 text-white rounded-lg">
                   <Code2 className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">{t("hostDevSection.csharp.title")}</h3>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  {t("hostDevSection.csharp.title")}
+                </h3>
               </div>
               <ul className="space-y-3 text-gray-700">
                 {csharpItems.map((item) => (
@@ -217,7 +246,9 @@ export function MotionControl() {
                 <div className="flex items-center justify-center w-12 h-12 bg-slate-700 text-white rounded-lg">
                   <Code2 className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">{t("hostDevSection.cpp.title")}</h3>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  {t("hostDevSection.cpp.title")}
+                </h3>
               </div>
               <ul className="space-y-3 text-gray-700">
                 {cppItems.map((item) => (

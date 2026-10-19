@@ -15,12 +15,20 @@
     "electrical": {
       "title": "Electrical Module Breakdown",
       "description": "Split electrical modules based on the equipment list and process requirements, defining each module's functional boundaries, actuators, and sensor needs.",
-      "deliverables": ["Module boundary list", "Initial action/signal table", "Safety & interlock constraints"]
+      "deliverables": [
+        "Module boundary list",
+        "Initial action/signal table",
+        "Safety & interlock constraints"
+      ]
     },
     "circuit": {
       "title": "Circuit Diagram Design",
       "description": "Generate circuit-diagram design recommendations around power, control, drive, safety, and communication circuits, and output preliminary I/O requirements.",
-      "deliverables": ["Power/control circuit sketch", "Drive & communication topology", "DXF/DWG render input"]
+      "deliverables": [
+        "Power/control circuit sketch",
+        "Drive & communication topology",
+        "DXF/DWG render input"
+      ]
     },
     "bom": {
       "title": "BOM List",
@@ -30,7 +38,11 @@
     "io": {
       "title": "I/O Address Planning",
       "description": "Generate an I/O address table from equipment actions, signal types, and brand addressing conventions, providing the basis for PLC variable definitions.",
-      "deliverables": ["I/O address table", "Variable naming convention", "Terminal/module allocation check"]
+      "deliverables": [
+        "I/O address table",
+        "Variable naming convention",
+        "Terminal/module allocation check"
+      ]
     },
     "plc": {
       "title": "PLC Programming",
@@ -46,7 +58,12 @@
   "artifactChain": {
     "heading": "End-to-End Deliverable Chain",
     "description": "Workflow output converges into a structured IR, which the converters engine then renders into real engineering files -- covering BOM, I/O tables, circuit diagrams, PLC/HMI middleware, and project reports.",
-    "items": ["Structured project.json", "BOM / I/O Excel", "DXF circuit diagrams", "ST + CSV program drafts"]
+    "items": [
+      "Structured project.json",
+      "BOM / I/O Excel",
+      "DXF circuit diagrams",
+      "ST + CSV program drafts"
+    ]
   },
   "roadmap": {
     "heading": "Roadmap",

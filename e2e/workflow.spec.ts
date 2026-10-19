@@ -27,7 +27,9 @@ const LOCALES = [
 
 for (const { locale, prefix, label } of LOCALES) {
   test.describe(`openIndu-studio Page (${label})`, () => {
-    test("should redirect /workflow to /motion-control/studio (page is public)", async ({ page }) => {
+    test("should redirect /workflow to /motion-control/studio (page is public)", async ({
+      page,
+    }) => {
       await page.goto(prefix + "/workflow");
       // /workflow redirects to the public studio path — no login required
       await expect(page).toHaveURL(prefix + "/motion-control/studio");

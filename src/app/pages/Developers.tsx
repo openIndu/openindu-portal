@@ -32,11 +32,7 @@ export function Developers() {
 
   return (
     <div>
-      <SEO
-        title={t("seo.title")}
-        description={t("seo.description")}
-        canonicalPath="/developers"
-      />
+      <SEO title={t("seo.title")} description={t("seo.description")} canonicalPath="/developers" />
 
       {/* Hero */}
       <section className="bg-gradient-to-b from-sky-50 via-white to-white pt-16 sm:pt-24 pb-10 sm:pb-14">
@@ -59,7 +55,9 @@ export function Developers() {
       {/* Quick Start */}
       <section className="py-16 sm:py-20 bg-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("quickStart.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("quickStart.heading")}
+          </h2>
           <div className="space-y-4">
             {quickStartKeys.map((step) => (
               <div key={step.num} className="flex gap-6">
@@ -69,7 +67,9 @@ export function Developers() {
                   </div>
                 </div>
                 <div className="flex-grow pt-1">
-                  <h3 className="text-lg font-semibold text-gray-900">{t(`quickStart.step${step.num}Title`)}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {t(`quickStart.step${step.num}Title`)}
+                  </h3>
                   <p className="text-gray-600 mt-1">{t(`quickStart.step${step.num}Desc`)}</p>
                   {step.link && (
                     <a
@@ -91,7 +91,9 @@ export function Developers() {
       {/* Resources */}
       <section className="py-16 sm:py-20 bg-gray-50">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("resources.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("resources.heading")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {resourceKeys.map((resource) => (
               <a
@@ -106,8 +108,12 @@ export function Developers() {
                     <resource.icon className="w-6 h-6" />
                   </div>
                   <div className="flex-grow">
-                    <h3 className="font-semibold text-gray-900">{t(`resources.${resource.key}Title`)}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{t(`resources.${resource.key}Desc`)}</p>
+                    <h3 className="font-semibold text-gray-900">
+                      {t(`resources.${resource.key}Title`)}
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {t(`resources.${resource.key}Desc`)}
+                    </p>
                     <span className="text-[#0B72B5] text-sm mt-2 inline-flex items-center gap-1">
                       {t("resources.view")} <ArrowRight className="w-3 h-3" />
                     </span>
@@ -122,10 +128,15 @@ export function Developers() {
       {/* Three Core Projects */}
       <section className="py-16 sm:py-20 bg-white">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("projects.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("projects.heading")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {projectKeys.map((project) => (
-              <div key={project.key} className="rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+              <div
+                key={project.key}
+                className="rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow"
+              >
                 <h3 className="font-semibold text-gray-900 mb-2">{project.name}</h3>
                 <p className="text-sm text-gray-600 mb-4">{t(`projects.${project.key}Desc`)}</p>
                 <a

@@ -36,25 +36,62 @@
     "voiceService": {
       "title": "语音服务",
       "description": "支持语音合成、转录和翻译功能",
-      "items": ["/v1/audio/speech", "/v1/audio/transcriptions", "/v1/audio/translations", "多语言支持"]
+      "items": [
+        "/v1/audio/speech",
+        "/v1/audio/transcriptions",
+        "/v1/audio/translations",
+        "多语言支持"
+      ]
     }
   },
   "useCases": {
     "heading": "应用场景",
     "subheading": "为各种AI应用提供基础设施支持",
     "exampleLabel": "应用示例",
-    "motionControl": { "name": "AI+运动控制", "description": "为运动控制算法提供大模型推理能力，优化运动轨迹规划", "example": "实时路径规划、参数自适应调整" },
-    "visionInspection": { "name": "AI+视觉检测", "description": "支持视觉模型的推理服务，实现智能缺陷检测和分类", "example": "产品质量检测、异常识别" },
-    "dataAnalysis": { "name": "AI+数据分析", "description": "为工业互联网平台提供智能数据分析和预测服务", "example": "设备故障预测、生产优化建议" }
+    "motionControl": {
+      "name": "AI+运动控制",
+      "description": "为运动控制算法提供大模型推理能力，优化运动轨迹规划",
+      "example": "实时路径规划、参数自适应调整"
+    },
+    "visionInspection": {
+      "name": "AI+视觉检测",
+      "description": "支持视觉模型的推理服务，实现智能缺陷检测和分类",
+      "example": "产品质量检测、异常识别"
+    },
+    "dataAnalysis": {
+      "name": "AI+数据分析",
+      "description": "为工业互联网平台提供智能数据分析和预测服务",
+      "example": "设备故障预测、生产优化建议"
+    }
   },
   "architecture": {
     "heading": "服务架构",
     "subheading": "分层设计，易于扩展和维护",
-    "application": { "title": "应用层", "subtitle": "业务应用和客户端", "description": "接收客户端请求，进行身份验证、权限校验和流量控制" },
-    "gateway": { "title": "API 网关层", "subtitle": "请求路由和鉴权", "description": "智能路由和负载均衡，将请求转发到对应的大模型服务" },
-    "forwarding": { "title": "转发服务层", "subtitle": "核心业务逻辑", "description": "请求处理、响应转换、错误处理" },
-    "llmService": { "title": "大模型服务层", "subtitle": "大模型API对接", "description": "对接多种大模型API（OpenAI、Claude、国产大模型等）" },
-    "monitoring": { "title": "监控与日志", "subtitle": "安全与审计", "description": "实时监控API调用状态，记录详细的访问日志和使用统计" }
+    "application": {
+      "title": "应用层",
+      "subtitle": "业务应用和客户端",
+      "description": "接收客户端请求，进行身份验证、权限校验和流量控制"
+    },
+    "gateway": {
+      "title": "API 网关层",
+      "subtitle": "请求路由和鉴权",
+      "description": "智能路由和负载均衡，将请求转发到对应的大模型服务"
+    },
+    "forwarding": {
+      "title": "转发服务层",
+      "subtitle": "核心业务逻辑",
+      "description": "请求处理、响应转换、错误处理"
+    },
+    "llmService": {
+      "title": "大模型服务层",
+      "subtitle": "大模型API对接",
+      "description": "对接多种大模型API（OpenAI、Claude、国产大模型等）"
+    },
+    "monitoring": {
+      "title": "监控与日志",
+      "subtitle": "安全与审计",
+      "description": "实时监控API调用状态，记录详细的访问日志和使用统计"
+    }
   },
   "integration": {
     "heading": "快速集成",

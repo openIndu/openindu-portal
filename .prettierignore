@@ -6,3 +6,5 @@ public
 test-results
 playwright-report
 .version
+# Written-up status reports and design notes (several are completed artifacts): not reformatted
+docs

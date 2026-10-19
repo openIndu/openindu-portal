@@ -14,7 +14,13 @@
     "nonMember": "当前账号可浏览列表，在线预览和下载仅会员及以上角色可用。"
   },
   "tabs": { "documents": "文档", "software": "软件" },
-  "labels": { "brand": "品牌：", "category": "类型：", "series": "系列：", "size": "大小：", "version": "版本：" },
+  "labels": {
+    "brand": "品牌：",
+    "category": "类型：",
+    "series": "系列：",
+    "size": "大小：",
+    "version": "版本："
+  },
   "filters": {
     "allOption": "全部",
     "allBrands": "全部品牌",

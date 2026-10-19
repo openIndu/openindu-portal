@@ -6,10 +6,23 @@ function Tabs({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function TabsList({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="tabs-list" className={cn("inline-flex h-10 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground", className)} {...props} />;
+  return (
+    <div
+      data-slot="tabs-list"
+      className={cn(
+        "inline-flex h-10 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
-function TabsTrigger({ className, active, ...props }: React.ComponentProps<"button"> & { active?: boolean }) {
+function TabsTrigger({
+  className,
+  active,
+  ...props
+}: React.ComponentProps<"button"> & { active?: boolean }) {
   return (
     <button
       type="button"

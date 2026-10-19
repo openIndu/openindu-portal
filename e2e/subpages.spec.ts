@@ -42,7 +42,9 @@ for (const { locale, prefix, label } of LOCALES) {
 
     test("should display launched badge", async ({ page }) => {
       await page.goto(prefix + "/motion-control");
-      await expect(page.getByText(GOLDEN.motionControl.launchedBadge[locale], { exact: true }).first()).toBeVisible();
+      await expect(
+        page.getByText(GOLDEN.motionControl.launchedBadge[locale], { exact: true }).first(),
+      ).toBeVisible();
       await expect(page.getByText(GOLDEN.comingSoonBadge[locale], { exact: true })).toHaveCount(0);
     });
 
@@ -61,7 +63,9 @@ for (const { locale, prefix, label } of LOCALES) {
 
     test("should display 'coming soon' badge", async ({ page }) => {
       await page.goto(prefix + "/vision");
-      await expect(page.getByText(GOLDEN.comingSoonBadge[locale], { exact: true }).first()).toBeVisible();
+      await expect(
+        page.getByText(GOLDEN.comingSoonBadge[locale], { exact: true }).first(),
+      ).toBeVisible();
     });
   });
 
@@ -95,7 +99,9 @@ for (const { locale, prefix, label } of LOCALES) {
 
     test("should have access link to model platform", async ({ page }) => {
       await page.goto(prefix + "/infrastructure");
-      const link = page.getByRole("link", { name: GOLDEN.infrastructure.modelPlatformLink[locale] });
+      const link = page.getByRole("link", {
+        name: GOLDEN.infrastructure.modelPlatformLink[locale],
+      });
       await expect(link).toBeVisible();
     });
   });
