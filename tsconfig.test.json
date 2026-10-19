@@ -1,0 +1,16 @@
+{
+  // Type-checks what tsconfig.app.json leaves out: unit tests, e2e specs and the
+  // vitest/playwright configs. Same strictness as the app. Run: npm run typecheck:tests
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "types": ["vitest/globals", "node", "@testing-library/jest-dom"]
+  },
+  "include": [
+    "src",
+    "e2e",
+    "vitest.config.ts",
+    "playwright.config.ts",
+    "playwright.prerender.config.ts"
+  ],
+  "exclude": []
+}

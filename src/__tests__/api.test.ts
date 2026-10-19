@@ -23,7 +23,13 @@ vi.mock("axios", () => {
     },
     AxiosError: class AxiosError extends Error {
       response?: unknown;
-      constructor(message: string, code?: string, config?: unknown, request?: unknown, response?: unknown) {
+      constructor(
+        message: string,
+        _code?: string,
+        _config?: unknown,
+        _request?: unknown,
+        response?: unknown,
+      ) {
         super(message);
         this.response = response;
       }
@@ -185,7 +191,9 @@ describe("unwrapPortalList", () => {
   });
 
   it("should return empty array for malformed data", () => {
-    const result = unwrapPortalList({ items: null });
+    // Deliberately outside the declared type: the API can return null for an empty list.
+    const malformed = { items: null } as unknown as Parameters<typeof unwrapPortalList>[0];
+    const result = unwrapPortalList(malformed);
     expect(result).toEqual([]);
   });
 });
