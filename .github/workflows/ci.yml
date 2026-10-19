@@ -41,6 +41,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # Fails if the entry bundle grows past the budget in scripts/check-bundle-size.mjs.
+      - run: npm run check:bundle
 
   test:
     name: Unit Tests + Coverage (vitest)
@@ -100,3 +102,102 @@ jobs:
       # Explicit registry: the advisories endpoint isn't served by every mirror.
       # Dev-only advisories (vitest/puppeteer, semver-major to fix) are out of scope here.
       - run: npm audit --registry=https://registry.npmjs.org --omit=dev --audit-level=high
+
+  # --- Gates for code the jobs above never exercise -------------------------------
+  # tsconfig.app.json leaves tests and e2e out of `tsc -b`, and neither Playwright
+  # suite ran in CI, so type errors and UI/SEO regressions only showed up locally.
+
+  typecheck-tests:
+    name: Type-check (tests, e2e, configs)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: "true" # this job never launches a browser
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck:tests
+
+  e2e:
+    name: E2E (playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: "true" # Playwright installs its own browser below
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # The API is mocked per test (page.route); no backend is needed.
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-report
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  prerender-spec:
+    name: Prerender spec (playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      # Prerendering needs the production build; the spec then asserts on dist/.
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:prerender
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: prerender-report
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # docker.yml only builds after a merge, and only Dockerfile. Build both images on
+  # every PR (nothing is pushed) and let nginx parse the config each one bakes in.
+  docker-build:
+    name: Docker build (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: compose
+            file: Dockerfile
+          - name: k8s
+            file: Dockerfile.k8s
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ matrix.file }}
+          push: false
+          load: true
+          tags: portal-ci:${{ matrix.name }}
+          cache-from: type=gha,scope=portal-ci-${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=portal-ci-${{ matrix.name }}
+      # The compose config proxies to the web-api service; give it a resolvable name.
+      - run: docker run --rm --add-host web-api:127.0.0.1 portal-ci:${{ matrix.name }} nginx -t

@@ -3,6 +3,8 @@ import { defineConfig } from "vitest/config";
 import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
+  // Same JSX transform as the app (tsconfig "jsx": "react-jsx"): tests need no `import React`.
+  esbuild: { jsx: "automatic" },
   test: {
     globals: true,
     environment: "jsdom",
