@@ -293,3 +293,113 @@ test.describe("EN legal-page client-side fallback (ZhOnlyGuard)", () => {
     });
   }
 });
+
+// nginx answers a missing URL with dist/404.html (status 404) and a client-only route such as
+// /login with dist/app-shell.html; vite preview serves both as plain files, so these tests
+// check the files. How nginx picks them is covered by src/__tests__/nginx-routing.test.ts.
+test.describe("404 pages and the app shell", () => {
+  const errorPages = [
+    {
+      file: "/404.html",
+      lang: "zh-CN",
+      title: "页面未找到｜openIndu",
+      heading: "页面未找到",
+    },
+    {
+      file: "/404.en.html",
+      lang: "en",
+      title: "Page not found | openIndu",
+      heading: "Page not found",
+    },
+  ];
+
+  for (const { file, lang, title, heading } of errorPages) {
+    test(`${file} is the NotFound page, kept out of search indexes`, async ({ request }) => {
+      const response = await request.get(file);
+      expect(response.status()).toBe(200);
+      const html = await response.text();
+
+      expect(html).toContain(`<html lang="${lang}"`);
+      expect(html).toContain(`<title>${title}</title>`);
+      expect(html).toContain(`>${heading}</h1>`);
+      expect(html).toMatch(/<meta name="robots" content="noindex,follow"/);
+      // no URL for crawlers to treat as this page's address, and no page-level structured data
+      expect(html).not.toContain('rel="canonical"');
+      expect(html).not.toContain('property="og:url"');
+      expect(html).not.toContain('"@type":"WebPage"');
+    });
+  }
+
+  test("/app-shell.html is the bare shell, not a page snapshot", async ({ request }) => {
+    const response = await request.get("/app-shell.html");
+    expect(response.status()).toBe(200);
+    const html = await response.text();
+    expect(html).toContain('<div id="root"></div>');
+    expect(html).not.toMatch(/<h1[\s>]/);
+    expect(html).not.toContain("data-openindu-jsonld");
+  });
+
+  test("the home page is still a prerendered snapshot, unlike the shell", async ({ request }) => {
+    const html = await (await request.get("/")).text();
+    expect(html).not.toContain('<div id="root"></div>');
+    expect(html).toMatch(/<h1[\s>]/);
+  });
+
+  test("an unknown URL renders the 404 page, and leaving it restores the indexable head", async ({
+    page,
+  }) => {
+    await page.goto("/definitely-missing/");
+    await expect(page.locator("h1")).toHaveText("页面未找到");
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex,follow");
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+
+    // This is a single-page app: the head the 404 page wrote has to be undone on the way out.
+    await page.getByRole("link", { name: "返回首页" }).click();
+    await expect(page).toHaveURL("/");
+    await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://www.openindu.com/",
+    );
+  });
+
+  test("an unknown English URL renders the English 404 page", async ({ page }) => {
+    await page.goto("/en/definitely-missing/");
+    await expect(page.locator("h1")).toHaveText("Page not found");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex,follow");
+  });
+});
+
+test.describe("Cookie banner", () => {
+  // The prerender browser has a stored consent choice, so the banner is not part of the static
+  // HTML. A real first-time visitor still has to get it once the app has booted.
+  for (const path of ["/", "/en", "/about", "/en/resources", "/privacy"]) {
+    test(`the static HTML of ${path} carries no banner`, async ({ request }) => {
+      const html = await (await request.get(servePath(path))).text();
+      expect(html).not.toContain("cookie-consent-banner");
+    });
+  }
+
+  test("a first-time visitor gets the banner once the app has booted", async ({ page }) => {
+    await page.goto(servePath("/about"));
+    await expect(page.getByTestId("cookie-consent-banner")).toBeVisible();
+  });
+
+  test("a visitor who already chose does not see it", async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem(
+        "openindu_cookie_consent",
+        JSON.stringify({
+          version: 1,
+          necessary: true,
+          analytics: false,
+          updatedAt: "2000-01-01T00:00:00.000Z",
+        }),
+      );
+    });
+    await page.goto(servePath("/about"));
+    await expect(page.locator("h1").first()).toBeVisible();
+    await expect(page.getByTestId("cookie-consent-banner")).toHaveCount(0);
+  });
+});
