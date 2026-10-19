@@ -217,6 +217,70 @@ test.describe("Prerendered HTML", () => {
   });
 });
 
+test.describe("Lazy route chunks", () => {
+  test("a deep link keeps its prerendered content until the route chunk has loaded", async ({
+    page,
+  }) => {
+    // Hold the chunk back so that any gap between "prerendered DOM removed" and
+    // "route rendered" is long enough to be seen.
+    await page.route("**/assets/Architecture-*.js", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await route.continue();
+    });
+    // Runs before the page's own scripts. React replaces the prerendered markup in
+    // one commit, which is never observable as "empty"; rendering a placeholder
+    // first (what an uninitialised lazy router does) empties #root until the
+    // chunk arrives, and the observer's callback sees exactly that state.
+    await page.addInitScript(() => {
+      const w = window as unknown as { __rootWasEmpty: boolean };
+      w.__rootWasEmpty = false;
+      new MutationObserver(() => {
+        const root = document.getElementById("root");
+        if (root && root.childElementCount === 0) w.__rootWasEmpty = true;
+      }).observe(document, { childList: true, subtree: true });
+    });
+
+    await page.goto(servePath("/architecture"));
+    await page.waitForLoadState("networkidle");
+
+    // Guard against a vacuous pass: React must really have taken the page over
+    // (it tags the DOM nodes it creates; the prerendered markup has no such tag).
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const header = document.querySelector("#root header");
+          return !!header && Object.keys(header).some((key) => key.startsWith("__reactFiber"));
+        }),
+      )
+      .toBe(true);
+    const rootWasEmpty = await page.evaluate(
+      () => (window as unknown as { __rootWasEmpty: boolean }).__rootWasEmpty,
+    );
+    expect(rootWasEmpty).toBe(false);
+  });
+
+  test("a missing route chunk reloads once and then stops", async ({ page }) => {
+    // A deploy deletes the old hashed chunks, so a tab opened before it can 404
+    // on its next lazy import. Simulate that chunk being gone.
+    await page.route("**/assets/Architecture-*.js", (route) => route.abort());
+    // Count document requests for the page. `framenavigated` would also count the
+    // router's own history.replaceState, and the first document is replaced by the
+    // reload before its `load` event fires, so `load` undercounts.
+    let documentRequests = 0;
+    page.on("request", (request) => {
+      if (request.isNavigationRequest() && request.frame() === page.mainFrame()) {
+        documentRequests += 1;
+      }
+    });
+
+    await page.goto(servePath("/architecture"));
+    await page.waitForTimeout(2500);
+
+    // The initial load plus exactly one recovery reload -- never a reload loop.
+    expect(documentRequests).toBe(2);
+  });
+});
+
 test.describe("EN legal-page client-side fallback (ZhOnlyGuard)", () => {
   // Covers only the client-side fallback -- the authoritative redirect is
   // nginx's `return 302` (nginx.conf / nginx.k8s.conf), which needs the
