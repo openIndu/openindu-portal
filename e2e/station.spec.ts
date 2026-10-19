@@ -50,7 +50,9 @@ for (const { locale, prefix, label } of LOCALES) {
     test("should load both screenshots", async ({ page }) => {
       await page.goto(prefix + "/vision/station");
 
-      const images = page.locator('img[src^="/assets/vision/"]');
+      // The screenshots are the only <figure>s on the page; their URLs are content-hashed
+      // by the build, so select by structure rather than by path.
+      const images = page.locator("figure img");
       await expect(images).toHaveCount(2);
       for (let i = 0; i < 2; i++) {
         const image = images.nth(i);
