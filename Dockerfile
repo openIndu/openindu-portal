@@ -5,7 +5,7 @@
 # required production artifact. Puppeteer's bundled Chrome is a glibc build and
 # cannot run on Alpine's musl, so install Alpine's own Chromium and point
 # Puppeteer at it instead of downloading the (unusable, large) bundled one.
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 

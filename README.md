@@ -33,7 +33,7 @@ openindu-portal/
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 22+
 - npm or pnpm
 
 ### Install Dependencies
