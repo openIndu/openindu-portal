@@ -7,7 +7,11 @@ import { visitsApi } from "@/api";
 import { getDisplayName, maskPhone } from "../utils/user";
 import { isNavItemActive } from "../utils/nav";
 import { StructuredData } from "./StructuredData";
-import { LanguageSwitcher, LanguageSwitcherCompact, LanguageSwitcherMobile } from "./LanguageSwitcher";
+import {
+  LanguageSwitcher,
+  LanguageSwitcherCompact,
+  LanguageSwitcherMobile,
+} from "./LanguageSwitcher";
 import { CookieConsent, OPEN_COOKIE_SETTINGS_EVENT } from "./CookieConsent";
 import { analyticsAllowed, readCookieConsent } from "@/lib/cookieConsent";
 import logo from "/assets/logo-96.png";
@@ -146,7 +150,10 @@ export function Layout() {
 
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-        <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label={t("a11y.mainNavigation")}>
+        <nav
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+          aria-label={t("a11y.mainNavigation")}
+        >
           <div className="flex h-16 items-center justify-between gap-4">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 py-2 px-1 min-h-[44px]">
@@ -178,7 +185,10 @@ export function Layout() {
                       }`}
                     >
                       {item.name}
-                      <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" aria-hidden="true" />
+                      <ChevronDown
+                        className="h-3.5 w-3.5 transition-transform group-hover:rotate-180"
+                        aria-hidden="true"
+                      />
                     </button>
                     {/* Opens on hover/focus (CSS) or an explicit click (openMenu). pt-2 bridges the hover gap. */}
                     <div
@@ -215,7 +225,7 @@ export function Layout() {
                             >
                               {child.name}
                             </Link>
-                          )
+                          ),
                         )}
                       </div>
                     </div>
@@ -245,7 +255,7 @@ export function Layout() {
                   >
                     {item.name}
                   </Link>
-                )
+                ),
               )}
             </div>
 
@@ -254,10 +264,17 @@ export function Layout() {
               <LanguageSwitcherCompact />
               {isAuthenticated ? (
                 <>
-                  <Link to="/account" className="flex max-w-[240px] items-center gap-2 rounded-full bg-sky-50 px-3 py-1.5 text-sm text-sky-800 hover:bg-sky-100">
+                  <Link
+                    to="/account"
+                    className="flex max-w-[240px] items-center gap-2 rounded-full bg-sky-50 px-3 py-1.5 text-sm text-sky-800 hover:bg-sky-100"
+                  >
                     <UserRound className="h-4 w-4 shrink-0" />
                     <span className="truncate">{displayName}</span>
-                    {user?.role && <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-xs">{ROLE_LABELS[user.role] ?? user.role}</span>}
+                    {user?.role && (
+                      <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-xs">
+                        {ROLE_LABELS[user.role] ?? user.role}
+                      </span>
+                    )}
                   </Link>
                   <button
                     type="button"
@@ -270,7 +287,12 @@ export function Layout() {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="rounded-lg bg-sky-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-sky-800 min-h-[44px] inline-flex items-center">{t("auth.signIn")}</Link>
+                  <Link
+                    to="/login"
+                    className="rounded-lg bg-sky-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-sky-800 min-h-[44px] inline-flex items-center"
+                  >
+                    {t("auth.signIn")}
+                  </Link>
                 </>
               )}
             </div>
@@ -288,11 +310,7 @@ export function Layout() {
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
             >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </nav>
@@ -300,7 +318,13 @@ export function Layout() {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div ref={mobileMenuRef} id="mobile-menu" className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto border-t border-gray-200 bg-white xl:hidden" role="navigation" aria-label={t("a11y.mobileNavigation")}>
+        <div
+          ref={mobileMenuRef}
+          id="mobile-menu"
+          className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto border-t border-gray-200 bg-white xl:hidden"
+          role="navigation"
+          aria-label={t("a11y.mobileNavigation")}
+        >
           <div className="space-y-1 px-4 pb-3 pt-2">
             {navigation.map((item) => (
               <div key={item.name}>
@@ -375,7 +399,9 @@ export function Layout() {
                           </span>
                         )}
                       </div>
-                      <div className="mt-0.5 truncate text-xs text-gray-600">{maskPhone(user?.phone)}</div>
+                      <div className="mt-0.5 truncate text-xs text-gray-600">
+                        {maskPhone(user?.phone)}
+                      </div>
                     </div>
                     <ChevronRight className="h-5 w-5 shrink-0 text-sky-300" />
                   </Link>
@@ -417,7 +443,10 @@ export function Layout() {
       {/* Footer */}
       <footer className="bg-sky-900 text-white mt-20" role="contentinfo">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-          <nav aria-label="Footer navigation" className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-6">
+          <nav
+            aria-label="Footer navigation"
+            className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-6"
+          >
             {/* Logo and Description */}
             <div className="flex flex-col items-start md:col-span-2 lg:col-span-2">
               <div className="flex items-center gap-2 mb-4">
@@ -432,9 +461,7 @@ export function Layout() {
                 />
                 <span className="text-xl font-semibold text-white">openIndu Community</span>
               </div>
-              <p className="text-sky-100 max-w-md">
-                {t("footer.description")}
-              </p>
+              <p className="text-sky-100 max-w-md">{t("footer.description")}</p>
             </div>
 
             {/* Quick Links */}
@@ -442,22 +469,54 @@ export function Layout() {
               <h3 className="font-semibold text-white mb-4">{t("footer.quickLinks")}</h3>
               <ul data-testid="footer-quick-links" className="space-y-1 text-sky-100">
                 <li>
-                  <Link to="/" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.home")}</Link>
+                  <Link
+                    to="/"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("footer.home")}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/architecture" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("nav.architecture")}</Link>
+                  <Link
+                    to="/architecture"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("nav.architecture")}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/use-cases" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("nav.useCases")}</Link>
+                  <Link
+                    to="/use-cases"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("nav.useCases")}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/craftsmanship" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("nav.craftsmanship")}</Link>
+                  <Link
+                    to="/craftsmanship"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("nav.craftsmanship")}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/resources" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.downloads")}</Link>
+                  <Link
+                    to="/resources"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("footer.downloads")}
+                  </Link>
                 </li>
                 <li>
-                  <a href="https://forum.openindu.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.forum")}</a>
+                  <a
+                    href="https://forum.openindu.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("footer.forum")}
+                  </a>
                 </li>
               </ul>
             </div>
@@ -467,22 +526,52 @@ export function Layout() {
               <h3 className="font-semibold text-white mb-4">{t("footer.coreServices")}</h3>
               <ul className="space-y-1 text-sky-100">
                 <li>
-                  <Link to="/iiot-platform" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.iiotPlatform")}</Link>
+                  <Link
+                    to="/iiot-platform"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("footer.iiotPlatform")}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/motion-control/studio" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.studioPlatform")}</Link>
+                  <Link
+                    to="/motion-control/studio"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("footer.studioPlatform")}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/vision/station" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.station")}</Link>
+                  <Link
+                    to="/vision/station"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("footer.station")}
+                  </Link>
                 </li>
                 <li>
-                  <a href="https://github.com/openIndu" target="_blank" rel="noopener noreferrer" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.edgeComputing")}</a>
+                  <a
+                    href="https://github.com/openIndu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("footer.edgeComputing")}
+                  </a>
                 </li>
                 <li>
-                  <Link to="/chat" className="hover:text-white inline-flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5 pr-3 min-h-[44px]">
+                  <Link
+                    to="/chat"
+                    className="hover:text-white inline-flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5 pr-3 min-h-[44px]"
+                  >
                     <span>{t("footer.aiAssistantBot")}</span>
                     {locale === "en" && (
-                      <sup className="shrink-0 text-[10px] font-semibold tracking-wide text-sky-300" aria-label="Chinese only">ZH</sup>
+                      <sup
+                        className="shrink-0 text-[10px] font-semibold tracking-wide text-sky-300"
+                        aria-label="Chinese only"
+                      >
+                        ZH
+                      </sup>
                     )}
                   </Link>
                 </li>
@@ -494,17 +583,36 @@ export function Layout() {
               <h3 className="font-semibold text-white mb-4">{t("footer.relatedPlatforms")}</h3>
               <ul className="space-y-1 text-sky-100">
                 <li>
-                  <a href="https://monitor.openindu.com/status/service" target="_blank" rel="noopener noreferrer" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">
+                  <a
+                    href="https://monitor.openindu.com/status/service"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
                     {t("footer.serviceStatus")}
                   </a>
                 </li>
                 {/* Rehomed from the removed "Community & Developers" column so
                     the code-hosting links stay reachable from the footer. */}
                 <li>
-                  <a href="https://github.com/openIndu" target="_blank" rel="noopener noreferrer" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.github")}</a>
+                  <a
+                    href="https://github.com/openIndu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("footer.github")}
+                  </a>
                 </li>
                 <li>
-                  <a href="https://gitee.com/openIndu" target="_blank" rel="noopener noreferrer" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.gitee")}</a>
+                  <a
+                    href="https://gitee.com/openIndu"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                  >
+                    {t("footer.gitee")}
+                  </a>
                 </li>
               </ul>
             </div>
@@ -515,32 +623,71 @@ export function Layout() {
               <ul className="space-y-1 text-sky-100">
                 <li>
                   {locale === "en" ? (
-                    <a href="/privacy" className="hover:text-white inline-flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5 pr-3 min-h-[44px]">
+                    <a
+                      href="/privacy"
+                      className="hover:text-white inline-flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5 pr-3 min-h-[44px]"
+                    >
                       {t("footer.privacyStatement")}
-                      <sup className="shrink-0 text-[10px] font-semibold tracking-wide text-sky-300" aria-label="Chinese only">ZH</sup>
+                      <sup
+                        className="shrink-0 text-[10px] font-semibold tracking-wide text-sky-300"
+                        aria-label="Chinese only"
+                      >
+                        ZH
+                      </sup>
                     </a>
                   ) : (
-                    <Link to="/privacy" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.privacyStatement")}</Link>
+                    <Link
+                      to="/privacy"
+                      className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                    >
+                      {t("footer.privacyStatement")}
+                    </Link>
                   )}
                 </li>
                 <li>
                   {locale === "en" ? (
-                    <a href="/legal" className="hover:text-white inline-flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5 pr-3 min-h-[44px]">
+                    <a
+                      href="/legal"
+                      className="hover:text-white inline-flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5 pr-3 min-h-[44px]"
+                    >
                       {t("footer.legalNotice")}
-                      <sup className="shrink-0 text-[10px] font-semibold tracking-wide text-sky-300" aria-label="Chinese only">ZH</sup>
+                      <sup
+                        className="shrink-0 text-[10px] font-semibold tracking-wide text-sky-300"
+                        aria-label="Chinese only"
+                      >
+                        ZH
+                      </sup>
                     </a>
                   ) : (
-                    <Link to="/legal" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.legalNotice")}</Link>
+                    <Link
+                      to="/legal"
+                      className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                    >
+                      {t("footer.legalNotice")}
+                    </Link>
                   )}
                 </li>
                 <li>
                   {locale === "en" ? (
-                    <a href="/cookies" className="hover:text-white inline-flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5 pr-3 min-h-[44px]">
+                    <a
+                      href="/cookies"
+                      className="hover:text-white inline-flex flex-wrap items-center gap-x-2 gap-y-1 py-1.5 pr-3 min-h-[44px]"
+                    >
                       {t("footer.aboutCookies")}
-                      <sup className="shrink-0 text-[10px] font-semibold tracking-wide text-sky-300" aria-label="Chinese only">ZH</sup>
+                      <sup
+                        className="shrink-0 text-[10px] font-semibold tracking-wide text-sky-300"
+                        aria-label="Chinese only"
+                      >
+                        ZH
+                      </sup>
                     </a>
                   ) : (
-                    <Link to="/cookies" className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center">{t("footer.aboutCookies")}</Link>
+                    <Link
+                      to="/cookies"
+                      className="hover:text-white py-1.5 pr-3 min-w-[60px] min-h-[44px] inline-flex items-center"
+                    >
+                      {t("footer.aboutCookies")}
+                    </Link>
                   )}
                 </li>
                 <li>
@@ -555,7 +702,6 @@ export function Layout() {
                 </li>
               </ul>
             </div>
-
           </nav>
 
           {/* Copyright + language.
@@ -566,10 +712,19 @@ export function Layout() {
           <div className="border-t border-sky-800 mt-8 pt-8">
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
               <div className="order-2 text-center sm:order-1 sm:text-left">
-                <p className="text-sky-100 text-sm">{t("footer.copyright", { date: __BUILD_DATE__ })}</p>
+                <p className="text-sky-100 text-sm">
+                  {t("footer.copyright", { date: __BUILD_DATE__ })}
+                </p>
                 <p className="text-sky-100 text-sm mt-1">
                   {`${t("footer.icpFiling")}: `}
-                  <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors inline-flex items-center py-1.5 pr-2 min-h-[44px]">蜀ICP备2025160760号-1</a>
+                  <a
+                    href="https://beian.miit.gov.cn/#/Integrated/index"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors inline-flex items-center py-1.5 pr-2 min-h-[44px]"
+                  >
+                    蜀ICP备2025160760号-1
+                  </a>
                 </p>
               </div>
               <div className="order-1 sm:order-2">

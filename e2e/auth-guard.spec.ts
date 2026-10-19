@@ -31,7 +31,10 @@ for (const { locale, prefix, label } of LOCALES) {
     test("should show resources page when authenticated as member", async ({ page }) => {
       await page.addInitScript(() => {
         localStorage.setItem("openindu_portal_token", "test-token");
-        localStorage.setItem("openindu_portal_user", JSON.stringify({ id: 1, phone: "13800138000", role: "member" }));
+        localStorage.setItem(
+          "openindu_portal_user",
+          JSON.stringify({ id: 1, phone: "13800138000", role: "member" }),
+        );
       });
       await page.goto(prefix + "/resources");
 
@@ -43,7 +46,10 @@ for (const { locale, prefix, label } of LOCALES) {
     test("should show openIndu-studio page when navigating /workflow", async ({ page }) => {
       await page.addInitScript(() => {
         localStorage.setItem("openindu_portal_token", "test-token");
-        localStorage.setItem("openindu_portal_user", JSON.stringify({ id: 1, phone: "13800138000", role: "member" }));
+        localStorage.setItem(
+          "openindu_portal_user",
+          JSON.stringify({ id: 1, phone: "13800138000", role: "member" }),
+        );
       });
       await page.goto(prefix + "/workflow");
 

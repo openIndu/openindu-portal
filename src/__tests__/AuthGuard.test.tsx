@@ -32,7 +32,9 @@ vi.mock("react-router", async () => {
   const actual = await vi.importActual("react-router");
   return {
     ...actual,
-    Navigate: ({ to }: { to: string }) => <div data-testid="navigate" data-to={to}>{`Navigate to ${to}`}</div>,
+    Navigate: ({ to }: { to: string }) => (
+      <div data-testid="navigate" data-to={to}>{`Navigate to ${to}`}</div>
+    ),
     Outlet: () => <div data-testid="outlet">Protected Content</div>,
     useLocation: () => ({ pathname: "/protected" }),
   };
@@ -62,7 +64,7 @@ describe("AuthGuard", () => {
     render(
       <Wrapper>
         <AuthGuard />
-      </Wrapper>
+      </Wrapper>,
     );
 
     expect(screen.getByTestId("navigate")).toHaveAttribute("data-to", "/login");
@@ -71,26 +73,34 @@ describe("AuthGuard", () => {
   it("should show permission denied when authenticated but insufficient role", () => {
     // Set authenticated state
     storage.set("openindu_portal_token", "test-token");
-    storage.set("openindu_portal_user", JSON.stringify({ id: 1, phone: "13800000000", role: "user" }));
+    storage.set(
+      "openindu_portal_user",
+      JSON.stringify({ id: 1, phone: "13800000000", role: "user" }),
+    );
 
     render(
       <Wrapper>
         <AuthGuard role="admin" />
-      </Wrapper>
+      </Wrapper>,
     );
 
     expect(screen.getByText("权限不足")).toBeInTheDocument();
-    expect(screen.getByText("该页面仅面向成员及以上角色开放，请联系管理员升级账号权限。")).toBeInTheDocument();
+    expect(
+      screen.getByText("该页面仅面向成员及以上角色开放，请联系管理员升级账号权限。"),
+    ).toBeInTheDocument();
   });
 
   it("should show outlet when authenticated and has sufficient role", () => {
     storage.set("openindu_portal_token", "test-token");
-    storage.set("openindu_portal_user", JSON.stringify({ id: 1, phone: "13800000000", role: "admin" }));
+    storage.set(
+      "openindu_portal_user",
+      JSON.stringify({ id: 1, phone: "13800000000", role: "admin" }),
+    );
 
     render(
       <Wrapper>
         <AuthGuard role="admin" />
-      </Wrapper>
+      </Wrapper>,
     );
 
     expect(screen.getByTestId("outlet")).toHaveTextContent("Protected Content");
@@ -98,12 +108,15 @@ describe("AuthGuard", () => {
 
   it("should show outlet when authenticated and no role required", () => {
     storage.set("openindu_portal_token", "test-token");
-    storage.set("openindu_portal_user", JSON.stringify({ id: 1, phone: "13800000000", role: "user" }));
+    storage.set(
+      "openindu_portal_user",
+      JSON.stringify({ id: 1, phone: "13800000000", role: "user" }),
+    );
 
     render(
       <Wrapper>
         <AuthGuard />
-      </Wrapper>
+      </Wrapper>,
     );
 
     expect(screen.getByTestId("outlet")).toHaveTextContent("Protected Content");

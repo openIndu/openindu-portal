@@ -96,8 +96,8 @@ function startPreviewServer() {
       clearTimeout(timeout);
       reject(
         new Error(
-          `vite preview exited before becoming ready (code=${code ?? "null"}, signal=${signal ?? "null"})`
-        )
+          `vite preview exited before becoming ready (code=${code ?? "null"}, signal=${signal ?? "null"})`,
+        ),
       );
     });
   });
@@ -154,7 +154,7 @@ async function renderRoute(browser, route) {
 
     // Verify that JSON-LD structured data was injected
     const hasJsonLd = await page.evaluate(() => {
-      return document.head.querySelector('script[data-openindu-jsonld]') !== null;
+      return document.head.querySelector("script[data-openindu-jsonld]") !== null;
     });
     if (!hasJsonLd) {
       console.warn(`  ⚠ JSON-LD not injected for ${route} — waiting extra 2s...`);
@@ -195,9 +195,7 @@ async function main() {
   try {
     puppeteer = (await import("puppeteer")).default;
   } catch {
-    console.error(
-      "❌ puppeteer is not installed. Run: npm install --save-dev puppeteer"
-    );
+    console.error("❌ puppeteer is not installed. Run: npm install --save-dev puppeteer");
     process.exit(1);
   }
 
@@ -217,7 +215,7 @@ async function main() {
   } catch (err) {
     console.error(
       `Could not launch Chromium for required prerendering: ${err.message}\n` +
-        "Install Chromium before running the production build.\n"
+        "Install Chromium before running the production build.\n",
     );
     await stopServer(server);
     process.exit(1);
@@ -250,9 +248,7 @@ async function main() {
   }
 
   // 4. Summary
-  console.log(
-    `\n${successCount} prerendered, ${failCount} failed, ${ROUTES.length} total\n`
-  );
+  console.log(`\n${successCount} prerendered, ${failCount} failed, ${ROUTES.length} total\n`);
 
   // Exit explicitly — a stray handle left by the preview server would otherwise
   // keep this process alive, and a build step that never returns reads as a hang.

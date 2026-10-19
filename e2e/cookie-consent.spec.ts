@@ -88,7 +88,9 @@ for (const { width, path, label } of [
   { width: 320, path: "/en/resources", label: "Items per page" },
   { width: 390, path: "/en/resources", label: "Items per page" },
 ]) {
-  test(`consent notice does not cover resource pagination at ${width}px on ${path}`, async ({ page }) => {
+  test(`consent notice does not cover resource pagination at ${width}px on ${path}`, async ({
+    page,
+  }) => {
     await page.setViewportSize({ width, height: 844 });
     await page.goto(path);
 
@@ -101,7 +103,9 @@ for (const { width, path, label } of [
     const perPageBox = await perPage.boundingBox();
     expect(bannerBox).not.toBeNull();
     expect(perPageBox).not.toBeNull();
-    expect(Math.abs(bannerBox!.y + bannerBox!.height - (page.viewportSize()!.height - 16))).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(bannerBox!.y + bannerBox!.height - (page.viewportSize()!.height - 16)),
+    ).toBeLessThanOrEqual(1);
     for (const button of await page.getByTestId("cookie-actions").getByRole("button").all()) {
       await expect(button).toBeInViewport();
     }

@@ -21,11 +21,7 @@ export function About() {
 
   return (
     <div>
-      <SEO
-        title={t("seo.title")}
-        description={t("seo.description")}
-        canonicalPath="/about"
-      />
+      <SEO title={t("seo.title")} description={t("seo.description")} canonicalPath="/about" />
 
       {/* Hero */}
       <section className="bg-gradient-to-b from-sky-50 via-white to-white pt-16 sm:pt-24 pb-10 sm:pb-14">
@@ -84,7 +80,10 @@ export function About() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {domainProducts.map((item) => (
-              <div key={item.key} className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+              <div
+                key={item.key}
+                className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow"
+              >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center">
                     <item.icon className="w-5 h-5" />
@@ -93,7 +92,9 @@ export function About() {
                 </div>
                 <p className="text-sm text-gray-600 mb-4">{item.description}</p>
                 <div className="bg-sky-50 p-3 rounded border border-sky-200">
-                  <p className="text-xs font-semibold text-sky-800 uppercase tracking-wide">{t("domains.productLabel")}</p>
+                  <p className="text-xs font-semibold text-sky-800 uppercase tracking-wide">
+                    {t("domains.productLabel")}
+                  </p>
                   <p className="text-sm font-medium text-[#0B72B5] mt-1">{item.product}</p>
                 </div>
               </div>
@@ -105,7 +106,9 @@ export function About() {
       {/* Core Values */}
       <section className="py-16 sm:py-20 bg-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("principles.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("principles.heading")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { icon: Code, key: "openSource" },
@@ -114,7 +117,9 @@ export function About() {
             ].map(({ icon: Icon, key }) => (
               <div key={key} className="text-center">
                 <Icon className="w-12 h-12 text-sky-700 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{t(`principles.${key}Title`)}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {t(`principles.${key}Title`)}
+                </h3>
                 <p className="text-gray-600">{t(`principles.${key}Desc`)}</p>
               </div>
             ))}

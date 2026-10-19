@@ -71,10 +71,7 @@ export function CookieConsent({ preference, onChange }: Props) {
                 </Link>
               </p>
             </div>
-            <div
-              className="flex flex-row flex-wrap gap-1.5"
-              data-testid="cookie-actions"
-            >
+            <div className="flex flex-row flex-wrap gap-1.5" data-testid="cookie-actions">
               <button
                 className="min-h-11 rounded-full bg-sky-700 px-2.5 py-1.5 text-sm font-medium text-white transition-colors hover:bg-sky-800"
                 data-testid="cookie-accept"

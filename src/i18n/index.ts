@@ -5,15 +5,11 @@ import { detectLocale } from "./locale";
 // Auto-register every locale namespace under src/locales/{locale}/*.json.
 // Uses Vite's import.meta.glob so zero manual import list to maintain —
 // adding a new namespace file is enough to register it.
-const localeModules = import.meta.glob<{ default: Record<string, string> }>(
-  "../locales/*/*.json",
-  { eager: true },
-);
+const localeModules = import.meta.glob<{ default: Record<string, string> }>("../locales/*/*.json", {
+  eager: true,
+});
 
-const resources: Record<
-  string,
-  Record<string, Record<string, string>>
-> = {};
+const resources: Record<string, Record<string, Record<string, string>>> = {};
 
 for (const [filePath, mod] of Object.entries(localeModules)) {
   // filePath: "./locales/en/common.json"

@@ -26,7 +26,13 @@
       "vision": "openIndu-vision uses OpenCV for surface particles/scratches, pattern breaks and pinholes, and lit-panel appearance judgement.",
       "data": "Assess whether openIndu-cim + openIndu-platform can associate Glass ID, carrier ID, process route, and program versions.",
       "craftsmanship": "The forum's panel column collects field practice and defect back-tracing for the TFT-LCD / OLED chains.",
-      "stages": ["Substrate incoming & cleaning", "Array TFT", "Colour filter", "Cell lamination", "Module & inspection"],
+      "stages": [
+        "Substrate incoming & cleaning",
+        "Array TFT",
+        "Colour filter",
+        "Cell lamination",
+        "Module & inspection"
+      ],
       "whyWorks": "A target architecture can connect engineering assets, inspection results, and step identity. Cross-brand generation, control-loop latency, and end-to-end traceability still require validation in the target environment."
     },
     "semiconductor": {
@@ -36,7 +42,13 @@
       "vision": "openIndu-vision joins appearance and defect re-inspection, emitting coordinates and layer information.",
       "data": "Assess openIndu-cim for edge-side processing and openIndu-platform for associating wafer ID, FOUP, recipe versions, and metrology values.",
       "craftsmanship": "The forum's semiconductor column records interface conventions and traceability fields for the wafer-to-package chain.",
-      "stages": ["Wafer & material incoming", "Fab deposition & patterning", "Wafer test (CP)", "Back-end assembly & packaging", "Final test & shipment"],
+      "stages": [
+        "Wafer & material incoming",
+        "Fab deposition & patterning",
+        "Wafer test (CP)",
+        "Back-end assembly & packaging",
+        "Final test & shipment"
+      ],
       "whyWorks": "The scenario can verify whether decision data, edge processing, and chamber or lot traceability form a reproducible path."
     },
     "newEnergy": {
@@ -46,7 +58,13 @@
       "vision": "openIndu-vision inspects electrode alignment, weld spots and module appearance (including PV EL images).",
       "data": "Assess whether openIndu-cim + openIndu-platform can associate material lots, cell identity, test curves, PACK, and EOL records.",
       "craftsmanship": "The forum's new-energy column records process parameters and anomaly handling for the lithium-battery and PV-module chains.",
-      "stages": ["Incoming material & slurry", "Electrode manufacturing", "Cell assembly", "Formation, aging & grading", "Module PACK / module lamination"],
+      "stages": [
+        "Incoming material & slurry",
+        "Electrode manufacturing",
+        "Cell assembly",
+        "Formation, aging & grading",
+        "Module PACK / module lamination"
+      ],
       "whyWorks": "The scenario helps define validation points for identity continuity and curve association. Lithium-battery and PV workflows must be evaluated separately."
     }
   },
@@ -54,12 +72,30 @@
     "heading": "How openIndu Directions Support Scenario Assessment",
     "subheading": "The project map helps identify interfaces among vision, control, engineering assets, and data. Actual capability depends on repository status and reproducible evidence.",
     "items": [
-      { "title": "Cross-brand engineering asset exploration", "description": "Mappings and intermediate artifacts can reduce repeated entry; every brand, version, and output format still requires validation in the target IDE and hardware environment." },
-      { "title": "Vision-control interface assessment", "description": "Use openIndu-vision and openIndu-studio to explore inspection-result interfaces. Control-loop behaviour and latency require target-system tests." },
-      { "title": "Parameter delivery and audit", "description": "Use openIndu-platform to explore permissions, versions, effective-time mechanisms, and rollback. Delivery latency must be measured in the target environment." },
-      { "title": "Data-path validation", "description": "Map the intended path across equipment, vision, parameters, and process knowledge, then verify each interface. An architecture diagram is not a production data path." },
-      { "title": "Process knowledge discussion", "description": "The forum preserves context, constraints, validation steps, and applicability boundaries. Parameters cannot be reused outside their material, equipment, and test conditions." },
-      { "title": "Built for engineering collaboration", "description": "Review each repository's status, LICENSE, dependencies, deployment notes, and limitations before adoption or extension." }
+      {
+        "title": "Cross-brand engineering asset exploration",
+        "description": "Mappings and intermediate artifacts can reduce repeated entry; every brand, version, and output format still requires validation in the target IDE and hardware environment."
+      },
+      {
+        "title": "Vision-control interface assessment",
+        "description": "Use openIndu-vision and openIndu-studio to explore inspection-result interfaces. Control-loop behaviour and latency require target-system tests."
+      },
+      {
+        "title": "Parameter delivery and audit",
+        "description": "Use openIndu-platform to explore permissions, versions, effective-time mechanisms, and rollback. Delivery latency must be measured in the target environment."
+      },
+      {
+        "title": "Data-path validation",
+        "description": "Map the intended path across equipment, vision, parameters, and process knowledge, then verify each interface. An architecture diagram is not a production data path."
+      },
+      {
+        "title": "Process knowledge discussion",
+        "description": "The forum preserves context, constraints, validation steps, and applicability boundaries. Parameters cannot be reused outside their material, equipment, and test conditions."
+      },
+      {
+        "title": "Built for engineering collaboration",
+        "description": "Review each repository's status, LICENSE, dependencies, deployment notes, and limitations before adoption or extension."
+      }
     ]
   },
   "nextSteps": {

@@ -121,7 +121,6 @@ export interface ResourceTag {
   created_at?: string;
 }
 
-
 export const STORAGE_KEYS = {
   token: "openindu_portal_token",
   refreshToken: "openindu_portal_refresh_token",
@@ -229,9 +228,12 @@ const rawRefreshClient = axios.create({
 });
 
 async function rawRefresh(refreshToken: string): Promise<AuthResponse> {
-  const response = await rawRefreshClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/refresh", {
-    refresh_token: refreshToken,
-  });
+  const response = await rawRefreshClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>(
+    "/auth/refresh",
+    {
+      refresh_token: refreshToken,
+    },
+  );
   return normalizeAuthResponse(unwrap(response));
 }
 
@@ -287,7 +289,9 @@ apiClient.interceptors.response.use(
       isRefreshing = false;
       const target = loginPath();
       if (window.location.pathname !== target) {
-        window.location.assign(`${target}?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+        window.location.assign(
+          `${target}?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+        );
       }
       return Promise.reject(error);
     }
@@ -316,8 +320,13 @@ apiClient.interceptors.response.use(
         clearAuthStorage();
         isRefreshing = false;
         const target = loginPath();
-        if (window.location.pathname !== target && shouldRedirectToLogin(originalRequest.method, originalRequest.url)) {
-          window.location.assign(`${target}?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+        if (
+          window.location.pathname !== target &&
+          shouldRedirectToLogin(originalRequest.method, originalRequest.url)
+        ) {
+          window.location.assign(
+            `${target}?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+          );
         }
         return Promise.reject(error);
       }
@@ -338,7 +347,9 @@ apiClient.interceptors.response.use(
         // Force redirect to login on refresh token failure - token is definitely invalid
         const target = loginPath();
         if (window.location.pathname !== target) {
-          window.location.assign(`${target}?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+          window.location.assign(
+            `${target}?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+          );
         }
         return Promise.reject(refreshError);
       } finally {
@@ -350,8 +361,13 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       clearAuthStorage();
       const target = loginPath();
-      if (window.location.pathname !== target && shouldRedirectToLogin(originalRequest.method, originalRequest.url)) {
-        window.location.assign(`${target}?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+      if (
+        window.location.pathname !== target &&
+        shouldRedirectToLogin(originalRequest.method, originalRequest.url)
+      ) {
+        window.location.assign(
+          `${target}?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+        );
       }
     }
 
@@ -361,19 +377,48 @@ apiClient.interceptors.response.use(
 
 export const authApi = {
   async sendCode(phone: string) {
-    return unwrap(await apiClient.post<ApiEnvelope<{ success: boolean }>>("/auth/send-code", { phone }));
+    return unwrap(
+      await apiClient.post<ApiEnvelope<{ success: boolean }>>("/auth/send-code", { phone }),
+    );
   },
   async login(phone: string, code: string) {
-    return normalizeAuthResponse(unwrap(await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/login", { phone, code })));
+    return normalizeAuthResponse(
+      unwrap(
+        await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/login", {
+          phone,
+          code,
+        }),
+      ),
+    );
   },
   async register(phone: string, code: string) {
-    return normalizeAuthResponse(unwrap(await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/register", { phone, code })));
+    return normalizeAuthResponse(
+      unwrap(
+        await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/register", {
+          phone,
+          code,
+        }),
+      ),
+    );
   },
   async signIn(phone: string, code: string) {
-    return normalizeAuthResponse(unwrap(await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/sign-in", { phone, code })));
+    return normalizeAuthResponse(
+      unwrap(
+        await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/sign-in", {
+          phone,
+          code,
+        }),
+      ),
+    );
   },
   async refresh(refreshToken: string) {
-    return normalizeAuthResponse(unwrap(await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/refresh", { refresh_token: refreshToken })));
+    return normalizeAuthResponse(
+      unwrap(
+        await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/refresh", {
+          refresh_token: refreshToken,
+        }),
+      ),
+    );
   },
   async me() {
     return unwrap(await apiClient.get<ApiEnvelope<User>>("/auth/me"));
@@ -388,28 +433,47 @@ export const authApi = {
     return unwrap(await apiClient.delete<ApiEnvelope<{ success: boolean }>>("/auth/me"));
   },
   async changePhone(newPhone: string, code: string) {
-    return unwrap(await apiClient.post<ApiEnvelope<{ user: User }>>("/auth/change-phone", { new_phone: newPhone, code }));
+    return unwrap(
+      await apiClient.post<ApiEnvelope<{ user: User }>>("/auth/change-phone", {
+        new_phone: newPhone,
+        code,
+      }),
+    );
   },
 };
 
 export const tagsApi = {
   async list(type?: string, parent?: string, brand?: string) {
-    return unwrap(await apiClient.get<ApiEnvelope<ResourceTag[]>>("/tags", { params: { ...(type && { type }), ...(parent !== undefined && { parent }), ...(brand !== undefined && { brand }) } }));
+    return unwrap(
+      await apiClient.get<ApiEnvelope<ResourceTag[]>>("/tags", {
+        params: {
+          ...(type && { type }),
+          ...(parent !== undefined && { parent }),
+          ...(brand !== undefined && { brand }),
+        },
+      }),
+    );
   },
 };
 
 export const documentsApi = {
   async list(params: PaginationParams) {
-    return unwrap(await apiClient.get<ApiEnvelope<PaginatedResponse<ResourceItem>>>("/documents", { params }));
+    return unwrap(
+      await apiClient.get<ApiEnvelope<PaginatedResponse<ResourceItem>>>("/documents", { params }),
+    );
   },
   async get(id: number | string) {
     return unwrap(await apiClient.get<ApiEnvelope<ResourceItem>>(`/documents/${id}`));
   },
   async downloadLink(id: number | string) {
-    return unwrap(await apiClient.get<ApiEnvelope<DownloadLinkResponse>>(`/documents/${id}/download-link`));
+    return unwrap(
+      await apiClient.get<ApiEnvelope<DownloadLinkResponse>>(`/documents/${id}/download-link`),
+    );
   },
   async previewLink(id: number | string) {
-    return unwrap(await apiClient.get<ApiEnvelope<PreviewLinkResponse>>(`/documents/${id}/preview-link`));
+    return unwrap(
+      await apiClient.get<ApiEnvelope<PreviewLinkResponse>>(`/documents/${id}/preview-link`),
+    );
   },
   async brands() {
     return unwrap(await apiClient.get<ApiEnvelope<OptionValue[]>>("/documents/brands/list"));
@@ -421,16 +485,24 @@ export const documentsApi = {
 
 export const softwareApi = {
   async list(params: SoftwarePaginationParams) {
-    return unwrap(await apiClient.get<ApiEnvelope<PaginatedResponse<ResourceItem>>>("/software", { params }));
+    return unwrap(
+      await apiClient.get<ApiEnvelope<PaginatedResponse<ResourceItem>>>("/software", { params }),
+    );
   },
   async get(id: number | string) {
     return unwrap(await apiClient.get<ApiEnvelope<ResourceItem>>(`/software/${id}`));
   },
   async downloadLink(id: number | string) {
-    return unwrap(await apiClient.get<ApiEnvelope<DownloadLinkResponse>>(`/software/${id}/download-link`));
+    return unwrap(
+      await apiClient.get<ApiEnvelope<DownloadLinkResponse>>(`/software/${id}/download-link`),
+    );
   },
   async downloadVersionLink(id: number | string, versionId: number | string) {
-    return unwrap(await apiClient.get<ApiEnvelope<DownloadLinkResponse>>(`/software/${id}/versions/${versionId}/download-link`));
+    return unwrap(
+      await apiClient.get<ApiEnvelope<DownloadLinkResponse>>(
+        `/software/${id}/versions/${versionId}/download-link`,
+      ),
+    );
   },
   async brands() {
     return unwrap(await apiClient.get<ApiEnvelope<OptionValue[]>>("/software/brands/list"));
@@ -442,11 +514,13 @@ export const softwareApi = {
 
 export const visitsApi = {
   async track(path = window.location.pathname) {
-    return unwrap(await apiClient.post<ApiEnvelope<{ tracked: boolean }>>("/visits/track", {
-      path,
-      client_id: getClientId(),
-      event_type: "page_view",
-    }));
+    return unwrap(
+      await apiClient.post<ApiEnvelope<{ tracked: boolean }>>("/visits/track", {
+        path,
+        client_id: getClientId(),
+        event_type: "page_view",
+      }),
+    );
   },
 };
 
@@ -568,16 +642,27 @@ export const chatSessionApi = {
     return unwrap(await apiClient.post<ApiEnvelope<ChatSession>>("/chat/sessions"));
   },
   async rename(id: number, title: string): Promise<ChatSession> {
-    return unwrap(await apiClient.patch<ApiEnvelope<ChatSession>>(`/chat/sessions/${id}`, { title }));
+    return unwrap(
+      await apiClient.patch<ApiEnvelope<ChatSession>>(`/chat/sessions/${id}`, { title }),
+    );
   },
   async remove(id: number): Promise<void> {
     await apiClient.delete(`/chat/sessions/${id}`);
   },
   async messages(id: number) {
     return unwrap(
-      await apiClient.get<ApiEnvelope<Array<{ id: number; role: string; content: string; sources?: ChatSource[] | null; mode?: ChatMode | null; feedback?: number | null }>>>(
-        `/chat/sessions/${id}/messages`
-      )
+      await apiClient.get<
+        ApiEnvelope<
+          Array<{
+            id: number;
+            role: string;
+            content: string;
+            sources?: ChatSource[] | null;
+            mode?: ChatMode | null;
+            feedback?: number | null;
+          }>
+        >
+      >(`/chat/sessions/${id}/messages`),
     );
   },
   async feedback(sessionId: number, messageId: number, value: 1 | -1): Promise<void> {
@@ -706,7 +791,11 @@ export const chatApi = {
   },
 
   // 会话模式流式问答（history 由后端从 DB 读取）
-  async streamSession(sessionId: number, message: string, handlers: ChatStreamHandlers = {}): Promise<void> {
+  async streamSession(
+    sessionId: number,
+    message: string,
+    handlers: ChatStreamHandlers = {},
+  ): Promise<void> {
     const base = import.meta.env.VITE_API_BASE || "/api/v1";
 
     async function doFetch(): Promise<Response> {
@@ -718,7 +807,10 @@ export const chatApi = {
           "X-OpenIndu-Client-Id": getClientId(),
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ message, ...(handlers.filters ? { filters: handlers.filters } : {}) }),
+        body: JSON.stringify({
+          message,
+          ...(handlers.filters ? { filters: handlers.filters } : {}),
+        }),
         signal: handlers.signal,
       });
     }
@@ -760,7 +852,9 @@ export const chatApi = {
         try {
           const j = (await resp.json()) as { detail?: string; message?: string };
           detail = j?.detail || j?.message || detail;
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       }
       handlers.onError?.(detail);
       return;
@@ -778,18 +872,36 @@ export const chatApi = {
         buffer = rest;
         for (const ev of events) {
           if (ev.event === "delta") {
-            try { handlers.onDelta?.((JSON.parse(ev.data) as { text?: string }).text ?? ""); } catch { /* ignore */ }
+            try {
+              handlers.onDelta?.((JSON.parse(ev.data) as { text?: string }).text ?? "");
+            } catch {
+              /* ignore */
+            }
           } else if (ev.event === "sources") {
-            try { handlers.onSources?.(JSON.parse(ev.data) as ChatSource[]); } catch { /* ignore */ }
+            try {
+              handlers.onSources?.(JSON.parse(ev.data) as ChatSource[]);
+            } catch {
+              /* ignore */
+            }
           } else if (ev.event === "mode") {
             try {
               const m = (JSON.parse(ev.data) as { mode?: ChatMode }).mode;
               if (m === "grounded" || m === "fallback") handlers.onMode?.(m);
-            } catch { /* ignore */ }
+            } catch {
+              /* ignore */
+            }
           } else if (ev.event === "done") {
-            try { handlers.onDone?.(JSON.parse(ev.data)); } catch { handlers.onDone?.({}); }
+            try {
+              handlers.onDone?.(JSON.parse(ev.data));
+            } catch {
+              handlers.onDone?.({});
+            }
           } else if (ev.event === "error") {
-            try { handlers.onError?.((JSON.parse(ev.data) as { detail?: string }).detail ?? "生成失败"); } catch { handlers.onError?.("生成失败"); }
+            try {
+              handlers.onError?.((JSON.parse(ev.data) as { detail?: string }).detail ?? "生成失败");
+            } catch {
+              handlers.onError?.("生成失败");
+            }
           }
         }
       }
@@ -801,7 +913,6 @@ export const chatApi = {
   },
 };
 
-
 export interface MemberApplicationStatus {
   id: number;
   status: "pending" | "approved" | "rejected";
@@ -810,7 +921,9 @@ export interface MemberApplicationStatus {
 
 export const memberApplicationApi = {
   apply: async (note?: string) =>
-    unwrap<MemberApplicationStatus>(await apiClient.post("/member-applications", { note: note ?? null })),
+    unwrap<MemberApplicationStatus>(
+      await apiClient.post("/member-applications", { note: note ?? null }),
+    ),
   mine: async () =>
     unwrap<MemberApplicationStatus | null>(await apiClient.get("/member-applications/mine")),
 };

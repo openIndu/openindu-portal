@@ -131,32 +131,17 @@
     "industrialControl": {
       "title": "工控",
       "description": "讨论 PLC 硬件、软件、通信总线（EtherCAT、CANopen 等）和工控系统架构。分享多品牌 PLC 的选型、集成和工业控制网络方案。",
-      "topics": [
-        "PLC 硬件/软件",
-        "EtherCAT 总线",
-        "通信协议",
-        "系统架构"
-      ]
+      "topics": ["PLC 硬件/软件", "EtherCAT 总线", "通信协议", "系统架构"]
     },
     "automation": {
       "title": "自动化",
       "description": "分享 PLC 编程、HMI 编程、工业视觉、运动控制等自动化应用。讨论各类自动化设备集成、工程规范和最佳实践。",
-      "topics": [
-        "PLC 编程",
-        "HMI 编程",
-        "工业视觉",
-        "运动控制"
-      ]
+      "topics": ["PLC 编程", "HMI 编程", "工业视觉", "运动控制"]
     },
     "process": {
       "title": "工艺",
       "description": "分享工业工艺流程优化、工艺参数设定、缺陷分析和良率提升经验。讨论工艺知识库建设和工程方法论。",
-      "topics": [
-        "工艺流程",
-        "参数优化",
-        "良率分析",
-        "知识库"
-      ]
+      "topics": ["工艺流程", "参数优化", "良率分析", "知识库"]
     },
     "insights": {
       "title": "行业洞察",

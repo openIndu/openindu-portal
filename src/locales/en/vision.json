@@ -11,33 +11,90 @@
   },
   "features": {
     "heading": "Core Capabilities",
-    "defect": { "title": "Defect Detection", "description": "Deep-learning algorithms automatically identify surface defects, with accuracy above 99%." },
-    "measurement": { "title": "Dimensional Measurement", "description": "Sub-pixel-precision measurement for micron-level dimensional inspection." },
-    "recognition": { "title": "Object Recognition", "description": "Real-time workpiece recognition and localization, supporting multi-target detection in complex scenes." }
+    "defect": {
+      "title": "Defect Detection",
+      "description": "Deep-learning algorithms automatically identify surface defects, with accuracy above 99%."
+    },
+    "measurement": {
+      "title": "Dimensional Measurement",
+      "description": "Sub-pixel-precision measurement for micron-level dimensional inspection."
+    },
+    "recognition": {
+      "title": "Object Recognition",
+      "description": "Real-time workpiece recognition and localization, supporting multi-target detection in complex scenes."
+    }
   },
   "useCases": {
     "heading": "Use Cases",
     "industryLabel": "Industries",
-    "surfaceDefect": { "title": "Surface Defect Detection", "description": "Detects scratches, dents, stains, and other surface defects -- replacing manual inspection to improve efficiency and accuracy.", "industries": "Consumer electronics, automotive parts, textiles" },
-    "dimension": { "title": "Precision Dimensional Measurement", "description": "Non-contact, high-precision dimensional measurement, monitoring in real time whether products meet spec.", "industries": "Precision manufacturing, PCB, semiconductor" },
-    "ocr": { "title": "Character Recognition (OCR)", "description": "Reads serial numbers, production dates, QR codes, and other markings on products to enable traceability.", "industries": "Packaging, logistics, food & beverage" },
-    "assembly": { "title": "Assembly Verification", "description": "Checks whether components are correctly assembled and flags missing or incorrect parts, ensuring assembly quality.", "industries": "Automotive manufacturing, home-appliance assembly" },
-    "color": { "title": "Color Sorting", "description": "Precisely identifies and classifies product color, ensuring appearance consistency.", "industries": "Apparel, printing, cosmetics" },
-    "robotGuide": { "title": "Robot Vision Guidance", "description": "Gives robots visual-positioning capability, guiding precise pick-and-place of workpieces.", "industries": "Smart warehousing, automated production lines" }
+    "surfaceDefect": {
+      "title": "Surface Defect Detection",
+      "description": "Detects scratches, dents, stains, and other surface defects -- replacing manual inspection to improve efficiency and accuracy.",
+      "industries": "Consumer electronics, automotive parts, textiles"
+    },
+    "dimension": {
+      "title": "Precision Dimensional Measurement",
+      "description": "Non-contact, high-precision dimensional measurement, monitoring in real time whether products meet spec.",
+      "industries": "Precision manufacturing, PCB, semiconductor"
+    },
+    "ocr": {
+      "title": "Character Recognition (OCR)",
+      "description": "Reads serial numbers, production dates, QR codes, and other markings on products to enable traceability.",
+      "industries": "Packaging, logistics, food & beverage"
+    },
+    "assembly": {
+      "title": "Assembly Verification",
+      "description": "Checks whether components are correctly assembled and flags missing or incorrect parts, ensuring assembly quality.",
+      "industries": "Automotive manufacturing, home-appliance assembly"
+    },
+    "color": {
+      "title": "Color Sorting",
+      "description": "Precisely identifies and classifies product color, ensuring appearance consistency.",
+      "industries": "Apparel, printing, cosmetics"
+    },
+    "robotGuide": {
+      "title": "Robot Vision Guidance",
+      "description": "Gives robots visual-positioning capability, guiding precise pick-and-place of workpieces.",
+      "industries": "Smart warehousing, automated production lines"
+    }
   },
   "techStack": {
     "heading": "Technology Stack",
-    "capture": { "title": "Image Capture", "description": "Industrial cameras, lighting systems, and lens components form a high-quality image-capture system" },
-    "preprocess": { "title": "Image Preprocessing", "description": "Denoising, enhancement, and correction algorithms improve image quality" },
-    "aiAlgorithm": { "title": "AI Detection Algorithms", "description": "CNN, YOLO, Transformer, and other deep-learning models power intelligent detection" },
-    "output": { "title": "Result Output", "description": "Visualized detection results, statistical analysis, and integration with MES/ERP systems" }
+    "capture": {
+      "title": "Image Capture",
+      "description": "Industrial cameras, lighting systems, and lens components form a high-quality image-capture system"
+    },
+    "preprocess": {
+      "title": "Image Preprocessing",
+      "description": "Denoising, enhancement, and correction algorithms improve image quality"
+    },
+    "aiAlgorithm": {
+      "title": "AI Detection Algorithms",
+      "description": "CNN, YOLO, Transformer, and other deep-learning models power intelligent detection"
+    },
+    "output": {
+      "title": "Result Output",
+      "description": "Visualized detection results, statistical analysis, and integration with MES/ERP systems"
+    }
   },
   "advantages": {
     "heading": "Technical Advantages",
-    "accuracy": { "title": "High Accuracy", "description": "Deep-learning models trained on large datasets achieve over 99% detection accuracy, far exceeding manual inspection" },
-    "speed": { "title": "High-Speed Inspection", "description": "Millisecond-level detection speed meets high-speed production-line demands without affecting takt time" },
-    "learning": { "title": "Continuous Learning", "description": "Supports online learning and model updates, continuously improving detection performance as data accumulates" },
-    "deployment": { "title": "Easy Deployment", "description": "Modular design with edge-computing support enables rapid deployment on the production floor" }
+    "accuracy": {
+      "title": "High Accuracy",
+      "description": "Deep-learning models trained on large datasets achieve over 99% detection accuracy, far exceeding manual inspection"
+    },
+    "speed": {
+      "title": "High-Speed Inspection",
+      "description": "Millisecond-level detection speed meets high-speed production-line demands without affecting takt time"
+    },
+    "learning": {
+      "title": "Continuous Learning",
+      "description": "Supports online learning and model updates, continuously improving detection performance as data accumulates"
+    },
+    "deployment": {
+      "title": "Easy Deployment",
+      "description": "Modular design with edge-computing support enables rapid deployment on the production floor"
+    }
   },
   "cta": {
     "heading": "Coming soon",

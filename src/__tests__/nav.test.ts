@@ -35,7 +35,13 @@ describe("isNavItemActive", () => {
 
   // The inverse bug: Projects never lit up on its own child pages.
   it("on a project page, Projects is active — not Architecture", () => {
-    for (const path of ["/vision", "/vision/station", "/motion-control/studio", "/iiot-platform", "/edge-computing"]) {
+    for (const path of [
+      "/vision",
+      "/vision/station",
+      "/motion-control/studio",
+      "/iiot-platform",
+      "/edge-computing",
+    ]) {
       expect(isNavItemActive(PRODUCTS, path)).toBe(true);
       expect(isNavItemActive(ARCHITECTURE, path)).toBe(false);
     }
@@ -43,9 +49,19 @@ describe("isNavItemActive", () => {
 
   it("exactly one of the two ever matches, across every header route", () => {
     const routes = [
-      "/", "/architecture", "/use-cases", "/craftsmanship", "/forum", "/resources",
-      "/motion-control", "/motion-control/studio", "/vision", "/vision/station",
-      "/iiot-platform", "/edge-computing", "/chat",
+      "/",
+      "/architecture",
+      "/use-cases",
+      "/craftsmanship",
+      "/forum",
+      "/resources",
+      "/motion-control",
+      "/motion-control/studio",
+      "/vision",
+      "/vision/station",
+      "/iiot-platform",
+      "/edge-computing",
+      "/chat",
     ];
     for (const path of routes) {
       const both = [ARCHITECTURE, PRODUCTS].filter((i) => isNavItemActive(i, path));

@@ -11,33 +11,87 @@
   },
   "features": {
     "heading": "核心能力",
-    "defect": { "title": "缺陷检测", "description": "深度学习算法自动识别产品表面缺陷，准确率达99%以上" },
+    "defect": {
+      "title": "缺陷检测",
+      "description": "深度学习算法自动识别产品表面缺陷，准确率达99%以上"
+    },
     "measurement": { "title": "尺寸测量", "description": "亚像素级精度测量，实现微米级尺寸检测" },
-    "recognition": { "title": "目标识别", "description": "实时识别和定位工件，支持复杂场景下的多目标检测" }
+    "recognition": {
+      "title": "目标识别",
+      "description": "实时识别和定位工件，支持复杂场景下的多目标检测"
+    }
   },
   "useCases": {
     "heading": "应用场景",
     "industryLabel": "应用行业",
-    "surfaceDefect": { "title": "表面缺陷检测", "description": "检测产品表面的划痕、凹坑、污渍等缺陷，替代人工质检，提高效率和准确性。", "industries": "3C电子、汽车零部件、纺织品" },
-    "dimension": { "title": "尺寸精密测量", "description": "非接触式高精度尺寸测量，实时监控产品尺寸是否符合规格要求。", "industries": "精密制造、PCB、半导体" },
-    "ocr": { "title": "字符识别（OCR）", "description": "识别产品上的序列号、生产日期、二维码等信息，实现产品追溯。", "industries": "包装、物流、食品饮料" },
-    "assembly": { "title": "装配验证", "description": "检测零部件是否正确装配，是否缺件、错装，确保装配质量。", "industries": "汽车制造、家电组装" },
-    "color": { "title": "颜色分类", "description": "精确识别和分类产品颜色，确保产品外观一致性。", "industries": "服装、印刷、化妆品" },
-    "robotGuide": { "title": "机器人视觉引导", "description": "为机器人提供视觉定位能力，引导机器人精确抓取和放置工件。", "industries": "智能仓储、自动化产线" }
+    "surfaceDefect": {
+      "title": "表面缺陷检测",
+      "description": "检测产品表面的划痕、凹坑、污渍等缺陷，替代人工质检，提高效率和准确性。",
+      "industries": "3C电子、汽车零部件、纺织品"
+    },
+    "dimension": {
+      "title": "尺寸精密测量",
+      "description": "非接触式高精度尺寸测量，实时监控产品尺寸是否符合规格要求。",
+      "industries": "精密制造、PCB、半导体"
+    },
+    "ocr": {
+      "title": "字符识别（OCR）",
+      "description": "识别产品上的序列号、生产日期、二维码等信息，实现产品追溯。",
+      "industries": "包装、物流、食品饮料"
+    },
+    "assembly": {
+      "title": "装配验证",
+      "description": "检测零部件是否正确装配，是否缺件、错装，确保装配质量。",
+      "industries": "汽车制造、家电组装"
+    },
+    "color": {
+      "title": "颜色分类",
+      "description": "精确识别和分类产品颜色，确保产品外观一致性。",
+      "industries": "服装、印刷、化妆品"
+    },
+    "robotGuide": {
+      "title": "机器人视觉引导",
+      "description": "为机器人提供视觉定位能力，引导机器人精确抓取和放置工件。",
+      "industries": "智能仓储、自动化产线"
+    }
   },
   "techStack": {
     "heading": "技术体系",
-    "capture": { "title": "图像采集", "description": "工业相机、光源系统、镜头组件构成高质量图像采集系统" },
-    "preprocess": { "title": "图像预处理", "description": "降噪、增强、校正等预处理算法提升图像质量" },
-    "aiAlgorithm": { "title": "AI检测算法", "description": "CNN、YOLO、Transformer等深度学习模型实现智能检测" },
-    "output": { "title": "结果输出", "description": "检测结果可视化、数据统计分析、与MES/ERP系统集成" }
+    "capture": {
+      "title": "图像采集",
+      "description": "工业相机、光源系统、镜头组件构成高质量图像采集系统"
+    },
+    "preprocess": {
+      "title": "图像预处理",
+      "description": "降噪、增强、校正等预处理算法提升图像质量"
+    },
+    "aiAlgorithm": {
+      "title": "AI检测算法",
+      "description": "CNN、YOLO、Transformer等深度学习模型实现智能检测"
+    },
+    "output": {
+      "title": "结果输出",
+      "description": "检测结果可视化、数据统计分析、与MES/ERP系统集成"
+    }
   },
   "advantages": {
     "heading": "技术优势",
-    "accuracy": { "title": "高准确率", "description": "深度学习模型经过大量数据训练，检测准确率达99%以上，远超人工质检" },
-    "speed": { "title": "高速检测", "description": "毫秒级检测速度，满足高速产线需求，不影响生产节拍" },
-    "learning": { "title": "持续学习", "description": "支持在线学习和模型更新，随着数据积累不断提升检测性能" },
-    "deployment": { "title": "易于部署", "description": "模块化设计，支持边缘计算，可快速部署到生产现场" }
+    "accuracy": {
+      "title": "高准确率",
+      "description": "深度学习模型经过大量数据训练，检测准确率达99%以上，远超人工质检"
+    },
+    "speed": {
+      "title": "高速检测",
+      "description": "毫秒级检测速度，满足高速产线需求，不影响生产节拍"
+    },
+    "learning": {
+      "title": "持续学习",
+      "description": "支持在线学习和模型更新，随着数据积累不断提升检测性能"
+    },
+    "deployment": {
+      "title": "易于部署",
+      "description": "模块化设计，支持边缘计算，可快速部署到生产现场"
+    }
   },
   "cta": {
     "heading": "即将推出",

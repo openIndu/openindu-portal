@@ -70,14 +70,14 @@ export function LanguageSwitcher({
   };
 
   return (
-    <nav
-      className={`flex items-center gap-2 ${className ?? ""}`}
-      aria-label={t("language.label")}
-    >
+    <nav className={`flex items-center gap-2 ${className ?? ""}`} aria-label={t("language.label")}>
       <Globe className={`h-4 w-4 shrink-0 ${style.icon}`} aria-hidden="true" />
       {currentLocale === "zh" ? (
         <>
-          <span className={`text-sm font-medium ${style.active} inline-flex items-center py-2 px-1 min-h-[44px] whitespace-nowrap`} aria-current="true">
+          <span
+            className={`text-sm font-medium ${style.active} inline-flex items-center py-2 px-1 min-h-[44px] whitespace-nowrap`}
+            aria-current="true"
+          >
             {labels.zh}
           </span>
           <span className={`select-none ${style.sep}`}>|</span>
@@ -101,7 +101,10 @@ export function LanguageSwitcher({
             {labels.zh}
           </a>
           <span className={`select-none ${style.sep}`}>|</span>
-          <span className={`text-sm font-medium ${style.active} inline-flex items-center py-2 px-1 min-h-[44px] whitespace-nowrap`} aria-current="true">
+          <span
+            className={`text-sm font-medium ${style.active} inline-flex items-center py-2 px-1 min-h-[44px] whitespace-nowrap`}
+            aria-current="true"
+          >
             {labels.en}
           </span>
         </>
@@ -138,19 +141,12 @@ export function LanguageSwitcherCompact({ className }: { className?: string }) {
  * Segmented-control variant for the mobile hamburger menu.
  * Full-width horizontal pill: two equal halves, active side highlighted.
  */
-export function LanguageSwitcherMobile({
-  onNavigate,
-}: {
-  onNavigate?: () => void;
-}) {
+export function LanguageSwitcherMobile({ onNavigate }: { onNavigate?: () => void }) {
   const { t } = useTranslation("common");
   const { currentLocale, targetPath } = useLocaleSwitch();
 
   return (
-    <nav
-      className="flex rounded-lg bg-gray-100 p-0.5"
-      aria-label={t("language.label")}
-    >
+    <nav className="flex rounded-lg bg-gray-100 p-0.5" aria-label={t("language.label")}>
       {(["zh", "en"] as Locale[]).map((locale) => {
         const isActive = locale === currentLocale;
         const href = isActive ? undefined : targetPath;
@@ -159,9 +155,7 @@ export function LanguageSwitcherMobile({
         const inner = (
           <span
             className={`block w-full rounded-md px-3 py-2 text-center text-sm font-medium transition-colors ${
-              isActive
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
+              isActive ? "bg-white text-gray-900 shadow-sm" : "text-gray-600 hover:text-gray-900"
             }`}
           >
             {label}

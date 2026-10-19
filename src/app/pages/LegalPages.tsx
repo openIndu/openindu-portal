@@ -31,7 +31,12 @@ function LegalPage({
 }) {
   return (
     <section className="bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <SEO title={`${title}｜openIndu社区`} description={description} canonicalPath={canonicalPath} localized={false} />
+      <SEO
+        title={`${title}｜openIndu社区`}
+        description={description}
+        canonicalPath={canonicalPath}
+        localized={false}
+      />
       <div className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
         <div className="mb-8 border-b border-gray-100 pb-6">
           <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
@@ -44,11 +49,15 @@ function LegalPage({
             <section key={section.title} className="space-y-3">
               <h2 className="text-xl font-semibold text-gray-900">{section.title}</h2>
               {section.paragraphs?.map((paragraph, i) => (
-                <p key={i} className="leading-7">{paragraph}</p>
+                <p key={i} className="leading-7">
+                  {paragraph}
+                </p>
               ))}
               {section.items && (
                 <ul className="list-disc space-y-2 pl-6 leading-7">
-                  {section.items.map((item, i) => <li key={i}>{item}</li>)}
+                  {section.items.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
                 </ul>
               )}
               {section.subSections?.map((sub, i) => (
@@ -57,11 +66,15 @@ function LegalPage({
                     <h3 className="text-base font-semibold text-gray-800">{sub.title}</h3>
                   )}
                   {sub.paragraphs?.map((p, j) => (
-                    <p key={j} className="leading-7">{p}</p>
+                    <p key={j} className="leading-7">
+                      {p}
+                    </p>
                   ))}
                   {sub.items && (
                     <ul className="list-disc space-y-1 pl-6 leading-7">
-                      {sub.items.map((item, j) => <li key={j}>{item}</li>)}
+                      {sub.items.map((item, j) => (
+                        <li key={j}>{item}</li>
+                      ))}
                     </ul>
                   )}
                 </div>
@@ -75,7 +88,10 @@ function LegalPage({
             {contactNote || (
               <>
                 如你对本声明有疑问，或希望行使访问、更正、删除个人信息等权利，请通过
-                <a href="mailto:contact@openindu.com" className="font-medium underline"> contact@openindu.com </a>
+                <a href="mailto:contact@openindu.com" className="font-medium underline">
+                  {" "}
+                  contact@openindu.com{" "}
+                </a>
                 与 openIndu社区联系。
               </>
             )}
@@ -131,7 +147,9 @@ export function PrivacyPolicy() {
             },
             {
               title: "d）你主动提供的信息",
-              paragraphs: ["如果你通过邮件、Issue 或其他方式主动联系 openIndu社区，我们会收集你提供的联系信息（如邮箱、问题描述），仅用于回复和处理你的请求。"],
+              paragraphs: [
+                "如果你通过邮件、Issue 或其他方式主动联系 openIndu社区，我们会收集你提供的联系信息（如邮箱、问题描述），仅用于回复和处理你的请求。",
+              ],
             },
             {
               title: "e）社区论坛服务",
@@ -164,9 +182,7 @@ export function PrivacyPolicy() {
         },
         {
           title: "四、我们如何共享个人信息",
-          paragraphs: [
-            "除以下情形外，openIndu社区不向无关第三方出售、出租或共享你的个人信息：",
-          ],
+          paragraphs: ["除以下情形外，openIndu社区不向无关第三方出售、出租或共享你的个人信息："],
           items: [
             "你明确同意后向指定第三方共享授权范围内的信息。",
             "履行法律义务、响应司法或行政机关的合法要求。",
@@ -176,9 +192,7 @@ export function PrivacyPolicy() {
         },
         {
           title: "五、信息保留期限",
-          paragraphs: [
-            "openIndu社区在达成收集目的所需的最短期限内保留个人信息：",
-          ],
+          paragraphs: ["openIndu社区在达成收集目的所需的最短期限内保留个人信息："],
           items: [
             "账号信息：在账号存续期间保留；账号注销后依法保留必要期限后删除。",
             "下载记录：保留至统计分析完成或法律法规要求的期限届满。",
@@ -200,7 +214,9 @@ export function PrivacyPolicy() {
         },
         {
           title: "七、你的权利",
-          paragraphs: ["根据适用法律，你可能享有以下权利，请通过 contact@openindu.com 联系我们行使："],
+          paragraphs: [
+            "根据适用法律，你可能享有以下权利，请通过 contact@openindu.com 联系我们行使：",
+          ],
           items: [
             "访问权：查阅 openIndu社区持有的与你相关的个人信息。",
             "更正权：要求更正不准确或不完整的个人信息（如昵称）。",
@@ -314,7 +330,9 @@ export function LegalNotice() {
           subSections: [
             {
               title: "服务声明",
-              paragraphs: ["AI 生成内容由大语言模型技术产生，不代表 openIndu社区的立场或专业建议。用户对基于 AI 生成内容所做的决策自行承担责任，使用前应自行核验内容准确性。"],
+              paragraphs: [
+                "AI 生成内容由大语言模型技术产生，不代表 openIndu社区的立场或专业建议。用户对基于 AI 生成内容所做的决策自行承担责任，使用前应自行核验内容准确性。",
+              ],
             },
             {
               title: "合规使用",
@@ -326,7 +344,9 @@ export function LegalNotice() {
             },
             {
               title: "内容责任",
-              paragraphs: ["你向 AI 服务提交的输入内容须为你所有或已获授权，不得侵犯任何人的合法权益。分享 AI 生成内容时，应标注 AI 生成来源，并自行核验内容准确性。你的提问内容及 AI 回复将存储于 openIndu社区服务器，用于支持历史会话查看；请勿在提问中输入个人隐私信息或你所在单位的保密技术数据。"],
+              paragraphs: [
+                "你向 AI 服务提交的输入内容须为你所有或已获授权，不得侵犯任何人的合法权益。分享 AI 生成内容时，应标注 AI 生成来源，并自行核验内容准确性。你的提问内容及 AI 回复将存储于 openIndu社区服务器，用于支持历史会话查看；请勿在提问中输入个人隐私信息或你所在单位的保密技术数据。",
+              ],
             },
           ],
         },
@@ -435,20 +455,36 @@ export function CookiesPolicy() {
 export function LegalIndex() {
   return (
     <section className="bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <SEO title="法律与隐私｜openIndu社区" description="openIndu社区法律与隐私相关声明。" canonicalPath="/legal-center" localized={false} />
+      <SEO
+        title="法律与隐私｜openIndu社区"
+        description="openIndu社区法律与隐私相关声明。"
+        canonicalPath="/legal-center"
+        localized={false}
+      />
       <div className="mx-auto max-w-4xl rounded-2xl bg-white p-8 shadow-sm">
         <h1 className="text-3xl font-bold text-gray-900">法律与隐私</h1>
-        <p className="mt-3 text-gray-600">openIndu社区承诺保护用户隐私并遵守适用法律。以下文件说明我们如何收集信息、保护权利及规范使用行为。</p>
+        <p className="mt-3 text-gray-600">
+          openIndu社区承诺保护用户隐私并遵守适用法律。以下文件说明我们如何收集信息、保护权利及规范使用行为。
+        </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <Link to="/privacy" className="rounded-xl border border-gray-100 p-5 hover:border-sky-200 hover:bg-sky-50 transition-colors">
+          <Link
+            to="/privacy"
+            className="rounded-xl border border-gray-100 p-5 hover:border-sky-200 hover:bg-sky-50 transition-colors"
+          >
             <div className="font-semibold text-gray-900 mb-1">隐私声明</div>
             <div className="text-sm text-gray-500">个人信息收集、使用与保护说明</div>
           </Link>
-          <Link to="/legal" className="rounded-xl border border-gray-100 p-5 hover:border-sky-200 hover:bg-sky-50 transition-colors">
+          <Link
+            to="/legal"
+            className="rounded-xl border border-gray-100 p-5 hover:border-sky-200 hover:bg-sky-50 transition-colors"
+          >
             <div className="font-semibold text-gray-900 mb-1">法律声明</div>
             <div className="text-sm text-gray-500">网站访问条件、知识产权与免责条款</div>
           </Link>
-          <Link to="/cookies" className="rounded-xl border border-gray-100 p-5 hover:border-sky-200 hover:bg-sky-50 transition-colors">
+          <Link
+            to="/cookies"
+            className="rounded-xl border border-gray-100 p-5 hover:border-sky-200 hover:bg-sky-50 transition-colors"
+          >
             <div className="font-semibold text-gray-900 mb-1">关于 Cookies</div>
             <div className="text-sm text-gray-500">本地存储与 Cookie 使用说明</div>
           </Link>

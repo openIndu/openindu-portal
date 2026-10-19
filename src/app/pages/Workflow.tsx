@@ -1,6 +1,17 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, Bot, Cpu, FileSpreadsheet, ListChecks, MonitorCog, Workflow as WorkflowIcon, Zap, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  ArrowRight,
+  Bot,
+  Cpu,
+  FileSpreadsheet,
+  ListChecks,
+  MonitorCog,
+  Workflow as WorkflowIcon,
+  Zap,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { SEO } from "../components/SEO";
 import { Card, CardContent } from "../components/ui/card";
 
@@ -45,9 +56,7 @@ export function Workflow() {
             {t("hero.badge")}
           </div>
           <h1 className="text-4xl font-bold text-gray-900">{t("hero.title")}</h1>
-          <p className="mx-auto mt-4 max-w-3xl text-lg text-gray-600">
-            {t("hero.subtitle")}
-          </p>
+          <p className="mx-auto mt-4 max-w-3xl text-lg text-gray-600">{t("hero.subtitle")}</p>
         </div>
 
         <div className="grid gap-5 lg:grid-cols-2">
@@ -66,8 +75,12 @@ export function Workflow() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="mb-2 flex items-center gap-3">
-                        <span className="rounded-full bg-sky-50 px-3 py-1 text-sm font-semibold text-sky-800">{t("stepLabel")} {index + 1}</span>
-                        {index < steps.length - 1 && <ArrowRight className="hidden h-4 w-4 text-gray-400 sm:block" />}
+                        <span className="rounded-full bg-sky-50 px-3 py-1 text-sm font-semibold text-sky-800">
+                          {t("stepLabel")} {index + 1}
+                        </span>
+                        {index < steps.length - 1 && (
+                          <ArrowRight className="hidden h-4 w-4 text-gray-400 sm:block" />
+                        )}
                         <div className="ml-auto shrink-0">
                           {isExpanded ? (
                             <ChevronUp className="h-5 w-5 text-sky-700" />
@@ -81,10 +94,15 @@ export function Workflow() {
                         <div className="space-y-4">
                           <p className="leading-relaxed text-gray-600">{step.description}</p>
                           <div>
-                            <p className="mb-2 text-sm font-semibold text-gray-900">{t("deliverablesLabel")}</p>
+                            <p className="mb-2 text-sm font-semibold text-gray-900">
+                              {t("deliverablesLabel")}
+                            </p>
                             <div className="flex flex-wrap gap-2">
                               {step.deliverables.map((item) => (
-                                <span key={item} className="rounded-full bg-sky-50 px-3 py-1 text-xs font-medium text-sky-800">
+                                <span
+                                  key={item}
+                                  className="rounded-full bg-sky-50 px-3 py-1 text-xs font-medium text-sky-800"
+                                >
                                   {item}
                                 </span>
                               ))}
@@ -92,9 +110,7 @@ export function Workflow() {
                           </div>
                         </div>
                       ) : (
-                        <p className="leading-relaxed text-gray-500 text-sm">
-                          {step.description}
-                        </p>
+                        <p className="leading-relaxed text-gray-500 text-sm">{step.description}</p>
                       )}
                     </div>
                   </div>
@@ -106,13 +122,16 @@ export function Workflow() {
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="rounded-2xl border border-sky-100 bg-white p-6 shadow-sm">
-            <h2 className="mb-3 text-2xl font-semibold text-gray-900">{t("artifactChain.heading")}</h2>
-            <p className="mb-4 text-gray-600">
-              {t("artifactChain.description")}
-            </p>
+            <h2 className="mb-3 text-2xl font-semibold text-gray-900">
+              {t("artifactChain.heading")}
+            </h2>
+            <p className="mb-4 text-gray-600">{t("artifactChain.description")}</p>
             <div className="grid gap-3 sm:grid-cols-2">
               {artifactItems.map((item) => (
-                <div key={item} className="rounded-xl bg-sky-50 px-4 py-3 text-sm font-medium text-sky-800">
+                <div
+                  key={item}
+                  className="rounded-xl bg-sky-50 px-4 py-3 text-sm font-medium text-sky-800"
+                >
                   {item}
                 </div>
               ))}
@@ -120,9 +139,7 @@ export function Workflow() {
           </div>
           <div className="rounded-2xl border border-sky-100 bg-white p-6 shadow-sm">
             <h2 className="mb-3 text-2xl font-semibold text-gray-900">{t("roadmap.heading")}</h2>
-            <p className="text-gray-600">
-              {t("roadmap.description")}
-            </p>
+            <p className="text-gray-600">{t("roadmap.description")}</p>
           </div>
         </div>
       </div>

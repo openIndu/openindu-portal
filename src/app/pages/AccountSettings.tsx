@@ -1,8 +1,21 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate, useNavigate } from "react-router";
-import { AlertTriangle, CheckCircle2, Loader2, LogOut, ShieldCheck, Trash2, UserRound } from "lucide-react";
-import { authApi, getApiErrorMessage, memberApplicationApi, type MemberApplicationStatus } from "@/api";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Loader2,
+  LogOut,
+  ShieldCheck,
+  Trash2,
+  UserRound,
+} from "lucide-react";
+import {
+  authApi,
+  getApiErrorMessage,
+  memberApplicationApi,
+  type MemberApplicationStatus,
+} from "@/api";
 import { useAuth } from "@/store/auth";
 import { maskPhone } from "../utils/user";
 import { SEO } from "../components/SEO";
@@ -33,7 +46,9 @@ export function AccountSettings() {
   const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [application, setApplication] = useState<MemberApplicationStatus | null | undefined>(undefined);
+  const [application, setApplication] = useState<MemberApplicationStatus | null | undefined>(
+    undefined,
+  );
   const [applying, setApplying] = useState(false);
   const [applyError, setApplyError] = useState("");
 
@@ -53,7 +68,10 @@ export function AccountSettings() {
 
   useEffect(() => {
     if (user?.role === "user") {
-      memberApplicationApi.mine().then((v) => setApplication(v ?? null)).catch(() => setApplication(null));
+      memberApplicationApi
+        .mine()
+        .then((v) => setApplication(v ?? null))
+        .catch(() => setApplication(null));
     }
   }, [user?.role]);
 
@@ -150,15 +168,11 @@ export function AccountSettings() {
   }
 
   const deliverableItems = t("deleteAccount.items", { returnObjects: true }) as string[];
-  const roleLabel = user?.role ? (t(`role.labels.${user.role}`, { defaultValue: user.role })) : "—";
+  const roleLabel = user?.role ? t(`role.labels.${user.role}`, { defaultValue: user.role }) : "—";
 
   return (
     <section className="bg-gradient-to-br from-blue-50 via-white to-cyan-50 px-4 py-12 sm:px-6 lg:px-8">
-      <SEO
-        title={t("seo.title")}
-        description={t("seo.description")}
-        canonicalPath="/account"
-      />
+      <SEO title={t("seo.title")} description={t("seo.description")} canonicalPath="/account" />
       <div className="mx-auto max-w-3xl">
         <div className="mb-8">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-sky-100 px-4 py-2 text-sm font-semibold text-sky-800">
@@ -178,7 +192,12 @@ export function AccountSettings() {
           <CardContent>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="space-y-2">
-                <label htmlFor="nickname" className="text-sm font-medium text-gray-700 block text-left px-3">{t("profile.nicknameLabel")}</label>
+                <label
+                  htmlFor="nickname"
+                  className="text-sm font-medium text-gray-700 block text-left px-3"
+                >
+                  {t("profile.nicknameLabel")}
+                </label>
                 <Input
                   id="nickname"
                   value={nickname}
@@ -188,8 +207,12 @@ export function AccountSettings() {
                 />
               </div>
 
-              {message && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{message}</p>}
-              {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+              {message && (
+                <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{message}</p>
+              )}
+              {error && (
+                <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+              )}
 
               <Button type="submit" disabled={saving} className="bg-sky-700 hover:bg-[#085A90]">
                 {saving ? <Loader2 className="animate-spin mr-2" /> : null}
@@ -210,9 +233,7 @@ export function AccountSettings() {
           </CardHeader>
           <CardContent>
             <div className="rounded-xl border border-gray-100 bg-gray-50 py-4 px-4">
-              <p className="text-base font-semibold text-gray-900">
-                {roleLabel}
-              </p>
+              <p className="text-base font-semibold text-gray-900">{roleLabel}</p>
             </div>
             {user?.role === "user" && (
               <div className="mt-4">
@@ -277,9 +298,7 @@ export function AccountSettings() {
                     {t("role.applyButton")}
                   </Button>
                 )}
-                {applyError && (
-                  <p className="mt-2 text-xs text-red-600">{applyError}</p>
-                )}
+                {applyError && <p className="mt-2 text-xs text-red-600">{applyError}</p>}
               </div>
             )}
           </CardContent>
@@ -295,7 +314,9 @@ export function AccountSettings() {
             {!showPhoneChange ? (
               <>
                 <div className="rounded-xl border border-gray-100 bg-gray-50 py-4 px-3 mb-4">
-                  <div className="mb-1 text-sm font-medium text-gray-700">{t("phoneChange.currentPhoneLabel")}</div>
+                  <div className="mb-1 text-sm font-medium text-gray-700">
+                    {t("phoneChange.currentPhoneLabel")}
+                  </div>
                   <p className="text-lg font-semibold text-gray-900">{maskPhone(user?.phone)}</p>
                 </div>
                 <Button
@@ -310,28 +331,44 @@ export function AccountSettings() {
             ) : (
               <form className="space-y-4" onSubmit={handleChangePhone}>
                 <div className="rounded-xl border border-sky-100 bg-sky-50 py-4 px-3 mb-4">
-                  <div className="text-sm font-medium text-sky-800">{t("phoneChange.currentPhoneLabel")}</div>
+                  <div className="text-sm font-medium text-sky-800">
+                    {t("phoneChange.currentPhoneLabel")}
+                  </div>
                   <p className="text-lg font-semibold text-[#0B72B5]">{maskPhone(user?.phone)}</p>
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="new-phone" className="text-sm font-medium text-gray-700 block text-left px-3">{t("phoneChange.newPhoneLabel")}</label>
+                  <label
+                    htmlFor="new-phone"
+                    className="text-sm font-medium text-gray-700 block text-left px-3"
+                  >
+                    {t("phoneChange.newPhoneLabel")}
+                  </label>
                   <Input
                     id="new-phone"
                     value={newPhone}
-                    onChange={(event) => setNewPhone(event.target.value.replace(/\D/g, "").slice(0, 11))}
+                    onChange={(event) =>
+                      setNewPhone(event.target.value.replace(/\D/g, "").slice(0, 11))
+                    }
                     inputMode="numeric"
                     placeholder={t("phoneChange.newPhonePlaceholder")}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="phone-code" className="text-sm font-medium text-gray-700 block text-left px-3">{t("phoneChange.codeLabel")}</label>
+                  <label
+                    htmlFor="phone-code"
+                    className="text-sm font-medium text-gray-700 block text-left px-3"
+                  >
+                    {t("phoneChange.codeLabel")}
+                  </label>
                   <div className="flex gap-2">
                     <Input
                       id="phone-code"
                       value={phoneCode}
-                      onChange={(event) => setPhoneCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                      onChange={(event) =>
+                        setPhoneCode(event.target.value.replace(/\D/g, "").slice(0, 6))
+                      }
                       inputMode="numeric"
                       placeholder={t("phoneChange.codePlaceholder")}
                     />
@@ -342,13 +379,27 @@ export function AccountSettings() {
                       disabled={cooldown > 0 || sendingCode}
                       className="min-w-28"
                     >
-                      {sendingCode ? <Loader2 className="animate-spin" /> : cooldown > 0 ? `${cooldown}s` : t("phoneChange.sendCode")}
+                      {sendingCode ? (
+                        <Loader2 className="animate-spin" />
+                      ) : cooldown > 0 ? (
+                        `${cooldown}s`
+                      ) : (
+                        t("phoneChange.sendCode")
+                      )}
                     </Button>
                   </div>
                 </div>
 
-                {phoneMessage && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{phoneMessage}</p>}
-                {phoneError && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{phoneError}</p>}
+                {phoneMessage && (
+                  <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">
+                    {phoneMessage}
+                  </p>
+                )}
+                {phoneError && (
+                  <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {phoneError}
+                  </p>
+                )}
 
                 <div className="flex gap-3 pt-2">
                   <Button
@@ -367,10 +418,16 @@ export function AccountSettings() {
                   </Button>
                   <Button
                     type="submit"
-                    disabled={!phonePattern.test(newPhone) || !codePattern.test(phoneCode) || changingPhone}
+                    disabled={
+                      !phonePattern.test(newPhone) || !codePattern.test(phoneCode) || changingPhone
+                    }
                     className="flex-1 bg-sky-700 hover:bg-[#085A90]"
                   >
-                    {changingPhone ? <Loader2 className="animate-spin mr-2" /> : t("phoneChange.confirmButton")}
+                    {changingPhone ? (
+                      <Loader2 className="animate-spin mr-2" />
+                    ) : (
+                      t("phoneChange.confirmButton")
+                    )}
                   </Button>
                 </div>
               </form>
@@ -415,7 +472,8 @@ export function AccountSettings() {
                         ))}
                       </ul>
                       <div className="rounded-lg bg-red-50 p-3 text-red-700 text-sm border border-red-100">
-                        <strong>{t("deleteAccount.warningPrefix")}</strong>{t("deleteAccount.warningText")}
+                        <strong>{t("deleteAccount.warningPrefix")}</strong>
+                        {t("deleteAccount.warningText")}
                       </div>
                     </div>
                   </AlertDialogDescription>

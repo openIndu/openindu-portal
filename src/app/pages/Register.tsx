@@ -34,7 +34,8 @@ export function Register() {
 
   // 仅在倒计时/发送中禁用按钮；手机号格式校验放到点击时提示，避免按钮静默置灰让用户误以为"无法点击"。
   const canSendCode = cooldown === 0 && !sending;
-  const canRegister = phonePattern.test(phone) && codePattern.test(code) && privacyAccepted && !submitting;
+  const canRegister =
+    phonePattern.test(phone) && codePattern.test(code) && privacyAccepted && !submitting;
 
   async function handleSendCode() {
     setError("");
@@ -89,7 +90,9 @@ export function Register() {
         <CardContent>
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="space-y-2">
-              <label htmlFor="register-phone" className="text-sm font-medium text-gray-700">手机号</label>
+              <label htmlFor="register-phone" className="text-sm font-medium text-gray-700">
+                手机号
+              </label>
               <Input
                 id="register-phone"
                 value={phone}
@@ -100,7 +103,9 @@ export function Register() {
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="register-code" className="text-sm font-medium text-gray-700">验证码</label>
+              <label htmlFor="register-code" className="text-sm font-medium text-gray-700">
+                验证码
+              </label>
               <div className="flex gap-2">
                 <Input
                   id="register-code"
@@ -110,8 +115,20 @@ export function Register() {
                   autoComplete="one-time-code"
                   placeholder="6 位验证码"
                 />
-                <Button type="button" variant="outline" onClick={handleSendCode} disabled={!canSendCode} className="min-w-28">
-                  {sending ? <Loader2 className="animate-spin" /> : cooldown > 0 ? `${cooldown}s` : "发送验证码"}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleSendCode}
+                  disabled={!canSendCode}
+                  className="min-w-28"
+                >
+                  {sending ? (
+                    <Loader2 className="animate-spin" />
+                  ) : cooldown > 0 ? (
+                    `${cooldown}s`
+                  ) : (
+                    "发送验证码"
+                  )}
                 </Button>
               </div>
             </div>
@@ -123,17 +140,32 @@ export function Register() {
                 className="mt-1"
               />
               <span>
-                我已阅读并同意 <Link to="/privacy" className="font-medium text-sky-700 hover:text-sky-800">openIndu社区隐私声明</Link>，了解平台对个人信息的处理方式。
+                我已阅读并同意{" "}
+                <Link to="/privacy" className="font-medium text-sky-700 hover:text-sky-800">
+                  openIndu社区隐私声明
+                </Link>
+                ，了解平台对个人信息的处理方式。
               </span>
             </label>
-            {message && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{message}</p>}
-            {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
-            <Button type="submit" disabled={!canRegister} className="w-full bg-sky-700 hover:bg-[#085A90]">
+            {message && (
+              <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{message}</p>
+            )}
+            {error && (
+              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+            )}
+            <Button
+              type="submit"
+              disabled={!canRegister}
+              className="w-full bg-sky-700 hover:bg-[#085A90]"
+            >
               {submitting ? <Loader2 className="animate-spin" /> : "注册并登录"}
             </Button>
           </form>
           <p className="mt-6 text-center text-sm text-gray-600">
-            已有账号？ <Link to="/login" className="font-medium text-sky-700 hover:text-sky-800">返回登录</Link>
+            已有账号？{" "}
+            <Link to="/login" className="font-medium text-sky-700 hover:text-sky-800">
+              返回登录
+            </Link>
           </p>
         </CardContent>
       </Card>

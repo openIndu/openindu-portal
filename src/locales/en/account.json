@@ -1,13 +1,24 @@
 {
-  "seo": { "title": "Account Settings | openIndu", "description": "Manage your openIndu Community account nickname and profile." },
-  "header": { "badge": "Account Center", "title": "Account Settings", "subtitle": "Set your community nickname, change your phone number, or delete your account." },
+  "seo": {
+    "title": "Account Settings | openIndu",
+    "description": "Manage your openIndu Community account nickname and profile."
+  },
+  "header": {
+    "badge": "Account Center",
+    "title": "Account Settings",
+    "subtitle": "Set your community nickname, change your phone number, or delete your account."
+  },
   "profile": {
     "cardTitle": "Profile",
     "cardDescription": "Your nickname appears at the account-center entry point once signed in.",
     "nicknameLabel": "Nickname",
     "nicknamePlaceholder": "Enter a nickname",
     "saveButton": "Save Nickname",
-    "errors": { "tooLong": "Nickname cannot exceed 50 characters", "saveFailed": "Failed to save account settings", "saved": "Account settings saved" }
+    "errors": {
+      "tooLong": "Nickname cannot exceed 50 characters",
+      "saveFailed": "Failed to save account settings",
+      "saved": "Account settings saved"
+    }
   },
   "role": {
     "cardTitle": "Account Role",
@@ -48,7 +59,11 @@
     "triggerButton": "Delete Account",
     "dialogTitle": "Confirm Account Deletion",
     "dialogIntro": "This will permanently delete your account, including:",
-    "items": ["All profile information", "Sign-in credentials and access records", "All data associated with the account"],
+    "items": [
+      "All profile information",
+      "Sign-in credentials and access records",
+      "All data associated with the account"
+    ],
     "warningPrefix": "⚠️ Important: ",
     "warningText": "This action cannot be undone -- no data can be recovered after deletion.",
     "cancelButton": "Cancel",

@@ -11,7 +11,9 @@ describe("user display helpers", () => {
   });
 
   it("prefers nickname as display name", () => {
-    expect(getDisplayName({ id: 1, phone: "13800138000", nickname: "Tom", role: "member" })).toBe("Tom");
+    expect(getDisplayName({ id: 1, phone: "13800138000", nickname: "Tom", role: "member" })).toBe(
+      "Tom",
+    );
   });
 
   it("uses personal center when nickname is missing", () => {

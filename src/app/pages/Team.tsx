@@ -45,11 +45,7 @@ export function Team() {
 
   return (
     <div>
-      <SEO
-        title={t("seo.title")}
-        description={t("seo.description")}
-        canonicalPath="/team"
-      />
+      <SEO title={t("seo.title")} description={t("seo.description")} canonicalPath="/team" />
 
       {/* Hero */}
       <section className="bg-gradient-to-b from-sky-50 via-white to-white pt-16 sm:pt-24 pb-10 sm:pb-14">
@@ -74,7 +70,10 @@ export function Team() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {areas.map((area) => (
-              <div key={area.key} className="border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-shadow">
+              <div
+                key={area.key}
+                className="border border-gray-200 rounded-xl p-8 hover:shadow-lg transition-shadow"
+              >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-lg bg-sky-50 text-[#0B72B5] flex items-center justify-center flex-shrink-0">
                     <area.icon className="w-6 h-6" />
@@ -161,13 +160,26 @@ export function Team() {
           <h2 className="text-3xl font-bold text-gray-900 mb-6">{t("contact.heading")}</h2>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">{t("contact.description")}</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="https://forum.openindu.com/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-200 rounded-lg hover:border-[#0B72B5] hover:text-[#0B72B5] transition-colors">
+            <a
+              href="https://forum.openindu.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-200 rounded-lg hover:border-[#0B72B5] hover:text-[#0B72B5] transition-colors"
+            >
               {tc("nav.forum")}
             </a>
-            <a href={`${ORG}/community/discussions`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-200 rounded-lg hover:border-[#0B72B5] hover:text-[#0B72B5] transition-colors">
+            <a
+              href={`${ORG}/community/discussions`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-200 rounded-lg hover:border-[#0B72B5] hover:text-[#0B72B5] transition-colors"
+            >
               GitHub Discussions
             </a>
-            <a href="mailto:contact@openindu.com" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-200 rounded-lg hover:border-[#0B72B5] hover:text-[#0B72B5] transition-colors">
+            <a
+              href="mailto:contact@openindu.com"
+              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-200 rounded-lg hover:border-[#0B72B5] hover:text-[#0B72B5] transition-colors"
+            >
               <Mail className="w-5 h-5" />
               {t("contact.email")}
             </a>

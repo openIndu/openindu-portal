@@ -8,7 +8,14 @@ const featureKeys = [
   { key: "recognition", icon: Target },
 ] as const;
 
-const useCaseKeys = ["surfaceDefect", "dimension", "ocr", "assembly", "color", "robotGuide"] as const;
+const useCaseKeys = [
+  "surfaceDefect",
+  "dimension",
+  "ocr",
+  "assembly",
+  "color",
+  "robotGuide",
+] as const;
 
 const techStackKeys = [
   { key: "capture", color: "bg-green-600" },
@@ -52,7 +59,9 @@ export function Vision() {
       {/* Features */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("features.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("features.heading")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featureKeys.map((feature) => (
               <div
@@ -62,7 +71,9 @@ export function Vision() {
                 <div className="flex items-center justify-center w-12 h-12 bg-green-100 text-green-800 rounded-lg mb-4">
                   <feature.icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{t(`features.${feature.key}.title`)}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {t(`features.${feature.key}.title`)}
+                </h3>
                 <p className="text-sm text-gray-600">{t(`features.${feature.key}.description`)}</p>
               </div>
             ))}
@@ -73,18 +84,24 @@ export function Vision() {
       {/* Use Cases */}
       <section className="py-16 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("useCases.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("useCases.heading")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {useCaseKeys.map((key, index) => (
               <div key={key} className="bg-white p-8 rounded-xl shadow-sm">
                 <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-teal-600 text-white rounded-lg flex items-center justify-center mb-4 text-xl font-bold">
                   {index + 1}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{t(`useCases.${key}.title`)}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  {t(`useCases.${key}.title`)}
+                </h3>
                 <p className="text-gray-600 mb-4">{t(`useCases.${key}.description`)}</p>
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-500">{t("useCases.industryLabel")}</p>
-                  <p className="text-sm text-gray-700 font-medium">{t(`useCases.${key}.industries`)}</p>
+                  <p className="text-sm text-gray-700 font-medium">
+                    {t(`useCases.${key}.industries`)}
+                  </p>
                 </div>
               </div>
             ))}
@@ -95,18 +112,26 @@ export function Vision() {
       {/* Technology Stack */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("techStack.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("techStack.heading")}
+          </h2>
           <div className="max-w-4xl mx-auto">
             <div className="bg-gradient-to-br from-green-50 to-teal-50 p-8 rounded-xl border border-green-200">
               <div className="space-y-6">
                 {techStackKeys.map((item, index) => (
                   <div key={item.key} className="flex items-center gap-4">
-                    <div className={`flex-shrink-0 w-12 h-12 ${item.color} text-white rounded-lg flex items-center justify-center font-bold`}>
+                    <div
+                      className={`flex-shrink-0 w-12 h-12 ${item.color} text-white rounded-lg flex items-center justify-center font-bold`}
+                    >
                       {index + 1}
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">{t(`techStack.${item.key}.title`)}</h4>
-                      <p className="text-sm text-gray-600">{t(`techStack.${item.key}.description`)}</p>
+                      <h4 className="font-semibold text-gray-900 mb-1">
+                        {t(`techStack.${item.key}.title`)}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {t(`techStack.${item.key}.description`)}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -119,7 +144,9 @@ export function Vision() {
       {/* Advantages */}
       <section className="py-16 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("advantages.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("advantages.heading")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {advantageKeys.map((key) => (
               <div key={key} className="flex items-start gap-4">
@@ -127,7 +154,9 @@ export function Vision() {
                   ✓
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{t(`advantages.${key}.title`)}</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    {t(`advantages.${key}.title`)}
+                  </h4>
                   <p className="text-gray-600 text-sm">{t(`advantages.${key}.description`)}</p>
                 </div>
               </div>

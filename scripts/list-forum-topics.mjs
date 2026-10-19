@@ -4,7 +4,7 @@
  * so page content can link to posts that actually exist. Hand-guessed
  * category sub-paths were 404ing.
  */
-const BASE = 'https://forum.openindu.com';
+const BASE = "https://forum.openindu.com";
 
 const site = await fetch(`${BASE}/site.json`).then((r) => r.json());
 const cats = site.categories.filter((c) => c.slug);
@@ -23,6 +23,8 @@ for (const c of cats) {
   for (const t of real) {
     console.log(`  ${BASE}/t/topic/${t.id}`);
     console.log(`      ${t.title}`);
-    console.log(`      回复 ${t.reply_count ?? 0} · 浏览 ${t.views ?? 0} · 建于 ${String(t.created_at).slice(0, 10)}`);
+    console.log(
+      `      回复 ${t.reply_count ?? 0} · 浏览 ${t.views ?? 0} · 建于 ${String(t.created_at).slice(0, 10)}`,
+    );
   }
 }

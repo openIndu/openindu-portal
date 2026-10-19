@@ -64,15 +64,50 @@ export const router = createBrowserRouter(
         { path: "login", Component: Login },
         { path: "register", element: <Navigate to="/login" replace /> },
         { path: "account", Component: AccountSettings },
-        { path: "privacy", element: <ZhOnlyGuard><PrivacyPolicy /></ZhOnlyGuard> },
-        { path: "legal", element: <ZhOnlyGuard><LegalNotice /></ZhOnlyGuard> },
-        { path: "cookies", element: <ZhOnlyGuard><CookiesPolicy /></ZhOnlyGuard> },
-        { path: "legal-center", element: <ZhOnlyGuard><LegalIndex /></ZhOnlyGuard> },
+        {
+          path: "privacy",
+          element: (
+            <ZhOnlyGuard>
+              <PrivacyPolicy />
+            </ZhOnlyGuard>
+          ),
+        },
+        {
+          path: "legal",
+          element: (
+            <ZhOnlyGuard>
+              <LegalNotice />
+            </ZhOnlyGuard>
+          ),
+        },
+        {
+          path: "cookies",
+          element: (
+            <ZhOnlyGuard>
+              <CookiesPolicy />
+            </ZhOnlyGuard>
+          ),
+        },
+        {
+          path: "legal-center",
+          element: (
+            <ZhOnlyGuard>
+              <LegalIndex />
+            </ZhOnlyGuard>
+          ),
+        },
         { path: "motion-control", Component: MotionControl },
         // openIndu-studio (formerly "workflow"): sub-page of AI+Motion Control, publicly visible
         { path: "motion-control/studio", Component: Workflow },
         // Chat's RAG knowledge base is Chinese-only — same ZH-only treatment as legal pages.
-        { path: "chat", element: <ZhOnlyGuard><ChatPage /></ZhOnlyGuard> },
+        {
+          path: "chat",
+          element: (
+            <ZhOnlyGuard>
+              <ChatPage />
+            </ZhOnlyGuard>
+          ),
+        },
         { path: "vision", Component: Vision },
         // openIndu-station: sub-page of AI+Vision, publicly visible
         { path: "vision/station", Component: Station },

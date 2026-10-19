@@ -26,11 +26,7 @@ export function Pricing() {
 
   return (
     <div>
-      <SEO
-        title={t("seo.title")}
-        description={t("seo.description")}
-        canonicalPath="/pricing"
-      />
+      <SEO title={t("seo.title")} description={t("seo.description")} canonicalPath="/pricing" />
 
       {/* Hero */}
       <section className="bg-gradient-to-b from-sky-50 via-white to-white pt-16 sm:pt-24 pb-10 sm:pb-14">
@@ -93,10 +89,14 @@ export function Pricing() {
       {/* License & Support */}
       <section className="py-16 sm:py-20 bg-gray-50">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">{t("license.heading")}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+            {t("license.heading")}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg p-8 border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">{t("license.openSourceTitle")}</h3>
+              <h3 className="text-lg font-bold text-gray-900 mb-4">
+                {t("license.openSourceTitle")}
+              </h3>
               <ul className="space-y-3 text-sm text-gray-700">
                 {openSourceItems.map((item) => (
                   <li key={item} className="flex items-start gap-3">
@@ -108,7 +108,9 @@ export function Pricing() {
             </div>
 
             <div className="bg-white rounded-lg p-8 border-2 border-[#0B72B5]">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">{t("license.enterpriseTitle")}</h3>
+              <h3 className="text-lg font-bold text-gray-900 mb-4">
+                {t("license.enterpriseTitle")}
+              </h3>
               <ul className="space-y-3 text-sm text-gray-700">
                 {enterpriseItems.map((item) => (
                   <li key={item} className="flex items-start gap-3">

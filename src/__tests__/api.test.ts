@@ -23,7 +23,13 @@ vi.mock("axios", () => {
     },
     AxiosError: class AxiosError extends Error {
       response?: unknown;
-      constructor(message: string, code?: string, config?: unknown, request?: unknown, response?: unknown) {
+      constructor(
+        message: string,
+        code?: string,
+        config?: unknown,
+        request?: unknown,
+        response?: unknown,
+      ) {
         super(message);
         this.response = response;
       }
@@ -85,9 +91,13 @@ const {
   visitsApi: typeof apiModule.visitsApi;
   apiClient: typeof apiModule.apiClient;
   unwrap: <T>(response: AxiosResponse<apiModule.ApiEnvelope<T> | T>) => T;
-  normalizeAuthResponse: (payload: apiModule.AuthResponse | apiModule.NestedAuthResponse) => apiModule.AuthResponse;
+  normalizeAuthResponse: (
+    payload: apiModule.AuthResponse | apiModule.NestedAuthResponse,
+  ) => apiModule.AuthResponse;
   unwrapPortalContent: <T>(value: T | apiModule.PortalContentRecord<T>) => T;
-  unwrapPortalList: <T>(value: T[] | { items?: Array<T | apiModule.PortalContentRecord<T>> } | undefined) => T[];
+  unwrapPortalList: <T>(
+    value: T[] | { items?: Array<T | apiModule.PortalContentRecord<T>> } | undefined,
+  ) => T[];
 };
 
 // Get access to the mocked functions
@@ -135,7 +145,11 @@ describe("normalizeAuthResponse", () => {
   });
 
   it("should return flat auth response as-is", () => {
-    const flat = { access_token: "a", refresh_token: "r", user: { id: 1, phone: "13800000000", role: "user" as const } };
+    const flat = {
+      access_token: "a",
+      refresh_token: "r",
+      user: { id: 1, phone: "13800000000", role: "user" as const },
+    };
     const result = normalizeAuthResponse(flat);
     expect(result).toEqual(flat);
   });
@@ -302,8 +316,16 @@ describe("visitsApi", () => {
     await visitsApi.track("/");
 
     expect(mockPost).toHaveBeenCalledTimes(2);
-    expect(mockPost).toHaveBeenNthCalledWith(1, "/visits/track", expect.objectContaining({ path: "/" }));
-    expect(mockPost).toHaveBeenNthCalledWith(2, "/visits/track", expect.objectContaining({ path: "/" }));
+    expect(mockPost).toHaveBeenNthCalledWith(
+      1,
+      "/visits/track",
+      expect.objectContaining({ path: "/" }),
+    );
+    expect(mockPost).toHaveBeenNthCalledWith(
+      2,
+      "/visits/track",
+      expect.objectContaining({ path: "/" }),
+    );
   });
 });
 
@@ -460,7 +482,8 @@ describe("documentsApi", () => {
   });
 
   it("brands and categories should call backend option endpoints", async () => {
-    const mockGet = vi.spyOn(apiClient, "get")
+    const mockGet = vi
+      .spyOn(apiClient, "get")
       .mockResolvedValueOnce({ data: { code: 200, data: ["siemens"] } })
       .mockResolvedValueOnce({ data: { code: 200, data: ["plc-manual"] } });
 
@@ -511,7 +534,8 @@ describe("softwareApi", () => {
   });
 
   it("brands and categories should call backend option endpoints", async () => {
-    const mockGet = vi.spyOn(apiClient, "get")
+    const mockGet = vi
+      .spyOn(apiClient, "get")
       .mockResolvedValueOnce({ data: { code: 200, data: ["siemens"] } })
       .mockResolvedValueOnce({ data: { code: 200, data: ["utility"] } });
 
@@ -553,9 +577,7 @@ describe("portalApi", () => {
       data: {
         code: 200,
         data: {
-          items: [
-            { id: 1, content: { id: 1, title: "PLC", description: "PLC workflow" } },
-          ],
+          items: [{ id: 1, content: { id: 1, title: "PLC", description: "PLC workflow" } }],
         },
       },
     });
@@ -582,9 +604,7 @@ describe("portalApi", () => {
       data: {
         code: 200,
         data: {
-          items: [
-            { id: 1, content: { id: 1, title: "Slide 1", image_url: "image.jpg" } },
-          ],
+          items: [{ id: 1, content: { id: 1, title: "Slide 1", image_url: "image.jpg" } }],
         },
       },
     });

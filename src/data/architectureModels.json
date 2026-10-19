@@ -14,14 +14,25 @@
           "number": 2,
           "name": "Programming & Configuration",
           "chinese": "编程与组态层",
-          "components": ["openIndu-studio", "PLC编程", "HMI配置", "BOM生成", "电路图绘制", "跨品牌代码生成"],
+          "components": [
+            "openIndu-studio",
+            "PLC编程",
+            "HMI配置",
+            "BOM生成",
+            "电路图绘制",
+            "跨品牌代码生成"
+          ],
           "value": "多品牌支持、工程自动化、成本降低"
         },
         {
           "number": 3,
           "name": "Application Layer",
           "chinese": "应用层",
-          "components": ["openIndu-vision (工业视觉)", "openIndu-cim (边缘计算)", "openIndu-platform (IIoT平台)"],
+          "components": [
+            "openIndu-vision (工业视觉)",
+            "openIndu-cim (边缘计算)",
+            "openIndu-platform (IIoT平台)"
+          ],
           "value": "工业视觉定位检测、边缘实时决策、数据驱动洞察"
         },
         {

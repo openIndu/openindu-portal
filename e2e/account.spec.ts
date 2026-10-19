@@ -12,14 +12,22 @@ const LOCALES = [
 for (const { locale, prefix, label } of LOCALES) {
   test.describe(`Account Settings (${label})`, () => {
     test("should show personal center with masked phone after login", async ({ page }) => {
-      await page.route("**/api/v1/auth/me", (route) => route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({ code: 200, data: { id: 1, phone: "13800138000", nickname: "Tom", role: "member" } }),
-      }));
+      await page.route("**/api/v1/auth/me", (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            code: 200,
+            data: { id: 1, phone: "13800138000", nickname: "Tom", role: "member" },
+          }),
+        }),
+      );
       await page.addInitScript(() => {
         localStorage.setItem("openindu_portal_token", "test-token");
-        localStorage.setItem("openindu_portal_user", JSON.stringify({ id: 1, phone: "13800138000", nickname: "Tom", role: "member" }));
+        localStorage.setItem(
+          "openindu_portal_user",
+          JSON.stringify({ id: 1, phone: "13800138000", nickname: "Tom", role: "member" }),
+        );
       });
       await page.goto(prefix + "/");
 

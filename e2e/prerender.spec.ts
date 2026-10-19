@@ -134,7 +134,9 @@ test.describe("Prerendered HTML", () => {
     expect(html).toContain('<link rel="canonical" href="https://www.openindu.com/"');
   });
 
-  test("hydration keeps canonical and structured URLs on the production HTTPS host", async ({ page }) => {
+  test("hydration keeps canonical and structured URLs on the production HTTPS host", async ({
+    page,
+  }) => {
     await page.goto(servePath("/resources"));
     await page.waitForLoadState("networkidle");
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
