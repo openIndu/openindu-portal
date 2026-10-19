@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import type { CookieConsent as Preference } from "@/lib/cookieConsent";
@@ -16,6 +16,9 @@ import {
 
 export const OPEN_COOKIE_SETTINGS_EVENT = "openindu:open-cookie-settings";
 
+// Published on <html> while the bar is shown; src/styles/index.css keeps that much room at the page bottom.
+export const COOKIE_BANNER_HEIGHT_VAR = "--cookie-banner-height";
+
 type Props = {
   preference: Preference | null;
   onChange: (preference: Preference) => void;
@@ -26,6 +29,26 @@ export function CookieConsent({ preference, onChange }: Props) {
   const [open, setOpen] = useState(false);
   const [analytics, setAnalytics] = useState(preference?.analytics ?? false);
   const restoreFocusRef = useRef<HTMLElement | null>(null);
+  const bannerRef = useRef<HTMLElement | null>(null);
+  const bannerVisible = !preference;
+
+  // Before paint, so the room is reserved in the same frame the bar appears.
+  useLayoutEffect(() => {
+    const banner = bannerRef.current;
+    if (!bannerVisible || !banner) return;
+    const root = document.documentElement;
+    const publish = () =>
+      root.style.setProperty(COOKIE_BANNER_HEIGHT_VAR, `${banner.offsetHeight}px`);
+    publish();
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(publish);
+    observer?.observe(banner);
+    window.addEventListener("resize", publish);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("resize", publish);
+      root.style.removeProperty(COOKIE_BANNER_HEIGHT_VAR);
+    };
+  }, [bannerVisible]);
 
   useEffect(() => {
     const openSettings = () => {
@@ -49,19 +72,21 @@ export function CookieConsent({ preference, onChange }: Props) {
 
   return (
     <>
-      {!preference && (
+      {/* z-30: under the mobile menu (z-40), the header and the settings dialog (z-50). */}
+      {bannerVisible && (
         <section
+          ref={bannerRef}
           aria-label={t("cookieConsent.title")}
           aria-live="polite"
-          className="fixed bottom-4 left-4 z-[60] max-h-[45vh] w-[calc(100%-2rem)] max-w-[380px] overflow-y-auto rounded-2xl border border-sky-200 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.16)]"
+          className="fixed inset-x-0 bottom-0 z-30 border-t border-sky-200 bg-white/95 shadow-[0_-8px_24px_rgba(15,23,42,0.12)] backdrop-blur supports-[backdrop-filter]:bg-white/90"
           data-testid="cookie-consent-banner"
         >
-          <div className="grid gap-2 p-3">
-            <div>
-              <h2 className="text-lg font-semibold leading-6 tracking-tight text-gray-950">
+          <div className="mx-auto flex max-h-[45vh] max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:gap-8 lg:px-8">
+            <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
+              <h2 className="text-base font-semibold leading-6 tracking-tight text-gray-950">
                 {t("cookieConsent.title")}
               </h2>
-              <p className="mt-1 text-sm leading-5 text-gray-700">
+              <p className="mt-0.5 text-sm leading-5 text-gray-700">
                 {t("cookieConsent.description")}{" "}
                 <Link
                   className="font-medium text-sky-700 underline underline-offset-4"
@@ -71,23 +96,23 @@ export function CookieConsent({ preference, onChange }: Props) {
                 </Link>
               </p>
             </div>
-            <div className="flex flex-row flex-wrap gap-1.5" data-testid="cookie-actions">
+            <div className="flex shrink-0 flex-row flex-wrap gap-2" data-testid="cookie-actions">
               <button
-                className="min-h-11 rounded-full bg-sky-700 px-2.5 py-1.5 text-sm font-medium text-white transition-colors hover:bg-sky-800"
+                className="min-h-11 rounded-full bg-sky-700 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-sky-800"
                 data-testid="cookie-accept"
                 onClick={() => choose(true)}
               >
                 {t("cookieConsent.accept")}
               </button>
               <button
-                className="min-h-11 rounded-full border border-sky-700 px-2.5 py-1.5 text-sm font-medium text-sky-800 transition-colors hover:bg-sky-50"
+                className="min-h-11 rounded-full border border-sky-700 px-4 py-1.5 text-sm font-medium text-sky-800 transition-colors hover:bg-sky-50"
                 data-testid="cookie-reject"
                 onClick={() => choose(false)}
               >
                 {t("cookieConsent.reject")}
               </button>
               <button
-                className="min-h-11 rounded-full border border-sky-700 px-2.5 py-1.5 text-sm font-medium text-sky-800 transition-colors hover:bg-sky-50"
+                className="min-h-11 rounded-full border border-sky-700 px-4 py-1.5 text-sm font-medium text-sky-800 transition-colors hover:bg-sky-50"
                 data-testid="cookie-manage"
                 onClick={(event) => {
                   restoreFocusRef.current = event.currentTarget;
