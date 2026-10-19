@@ -153,23 +153,21 @@ export function StructuredData({ pageTitle, pageDescription, pagePath }: Structu
       // --- Inject ---
       const allPayload = [...sitePayload, ...pagePayload];
 
-    // --- Inject ---
-    // A noindex page (the 404 page) describes no real page: keep only the site-level schemas.
-    const noindex = document.head
-      .querySelector<HTMLMetaElement>('meta[name="robots"]')
-      ?.content.includes("noindex");
-    const allPayload = noindex ? sitePayload : [...sitePayload, ...pagePayload];
+      // --- Inject ---
+      // A noindex page (the 404 page) describes no real page: keep only the site-level schemas.
+      const noindex = document.head
+        .querySelector<HTMLMetaElement>('meta[name="robots"]')
+        ?.content.includes("noindex");
+      const allPayload = noindex ? sitePayload : [...sitePayload, ...pagePayload];
 
-    // Remove any previous openIndu JSON-LD scripts to avoid duplicates
-    document.head
-      .querySelectorAll('script[data-openindu-jsonld]')
-      .forEach((el) => el.remove());
+      // Remove any previous openIndu JSON-LD scripts to avoid duplicates
+      document.head.querySelectorAll("script[data-openindu-jsonld]").forEach((el) => el.remove());
 
-    script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.setAttribute("data-openindu-jsonld", "1");
-    script.textContent = JSON.stringify(allPayload);
-    document.head.appendChild(script);
+      script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.setAttribute("data-openindu-jsonld", "1");
+      script.textContent = JSON.stringify(allPayload);
+      document.head.appendChild(script);
 
       script = document.createElement("script");
       script.type = "application/ld+json";

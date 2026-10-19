@@ -62,7 +62,19 @@ const PAGE_SIZE_OPTIONS = [10, 20, 50];
 /** How long typing must pause before the search box queries the API. */
 const SEARCH_DEBOUNCE_MS = 300;
 
-function ChipBar({ label, options, selected, onSelect, disabled }: { label: string; options: FilterOption[]; selected: string; onSelect: (v: string) => void; disabled?: boolean }) {
+function ChipBar({
+  label,
+  options,
+  selected,
+  onSelect,
+  disabled,
+}: {
+  label: string;
+  options: FilterOption[];
+  selected: string;
+  onSelect: (v: string) => void;
+  disabled?: boolean;
+}) {
   const { t } = useTranslation("resources");
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -114,7 +126,9 @@ export function Resources() {
   const [series, setSeries] = useState("");
   // `keyword` is what the search box shows; `query` is what is sent to the API.
   // Typing only moves `keyword`, so a request is not fired per keystroke.
-  const [keyword, setKeyword] = useState(() => new URLSearchParams(location.search).get("keyword") ?? "");
+  const [keyword, setKeyword] = useState(
+    () => new URLSearchParams(location.search).get("keyword") ?? "",
+  );
   const [query, setQuery] = useState(keyword);
   const [reloadToken, setReloadToken] = useState(0);
   const [page, setPage] = useState(1);

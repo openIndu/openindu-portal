@@ -20,13 +20,13 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router'],
+          "vendor-react": ["react", "react-dom", "react-router"],
           // react-markdown / remark-gfm only serve the AI chat page. In this shared
           // chunk they were preloaded on every page; without them they travel with
           // the chat page's own lazy chunk instead.
-          'vendor-ui': ['lucide-react'],
-          'vendor-i18n': ['i18next', 'react-i18next'],
-          'vendor-others': ['axios'],
+          "vendor-ui": ["lucide-react"],
+          "vendor-i18n": ["i18next", "react-i18next"],
+          "vendor-others": ["axios"],
         },
       },
     },
