@@ -647,7 +647,7 @@ export function Resources() {
               {t("pagination.totalItems", { count: data.total })}
             </span>
             <Select
-              className="h-9 w-32 shrink-0 scroll-mb-[45vh]"
+              className="h-9 w-32 shrink-0"
               value={String(pageSize)}
               onChange={(event) => {
                 setPageSize(Number(event.target.value));
