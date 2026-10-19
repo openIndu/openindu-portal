@@ -16,6 +16,12 @@ interface SEOProps {
    * the canonical always points to the ZH version.
    */
   localized?: boolean;
+  /**
+   * Keep the page out of search indexes (error pages). Emits robots noindex and
+   * drops the canonical, og:url and hreflang alternates, which make no sense
+   * for a page that should not be indexed.
+   */
+  noindex?: boolean;
 }
 
 // ── helpers ──────────────────────────────────────────────────────────
@@ -69,6 +75,7 @@ export function SEO({
   canonicalPath,
   image,
   localized = true,
+  noindex = false,
 }: SEOProps) {
   useEffect(() => {
     const origin = SITE_ORIGIN;
@@ -122,10 +129,14 @@ export function SEO({
       property: "og:locale",
       content: pageLocale === "en" ? "en_US" : "zh_CN",
     });
-    upsertMeta('meta[property="og:url"]', {
-      property: "og:url",
-      content: fullCanonical,
-    });
+    if (noindex) {
+      document.head.querySelector('meta[property="og:url"]')?.remove();
+    } else {
+      upsertMeta('meta[property="og:url"]', {
+        property: "og:url",
+        content: fullCanonical,
+      });
+    }
     upsertMeta('meta[property="og:image"]', {
       property: "og:image",
       content: imageUrl,
@@ -149,14 +160,26 @@ export function SEO({
       content: imageUrl,
     });
 
+    // Robots. This is a single-page app: a page that is not noindex must also clear
+    // the directive the previous route left behind.
+    if (noindex) {
+      upsertMeta('meta[name="robots"]', { name: "robots", content: "noindex,follow" });
+    } else {
+      document.head.querySelector('meta[name="robots"]')?.remove();
+    }
+
     // Canonical
-    upsertLink('link[rel="canonical"]', {
-      rel: "canonical",
-      href: fullCanonical,
-    });
+    if (noindex) {
+      document.head.querySelector('link[rel="canonical"]')?.remove();
+    } else {
+      upsertLink('link[rel="canonical"]', {
+        rel: "canonical",
+        href: fullCanonical,
+      });
+    }
 
     // hreflang alternates
-    if (localized && routePath) {
+    if (localized && routePath && !noindex) {
       setHreflangs([
         {
           hreflang: "zh-Hans",
@@ -174,7 +197,7 @@ export function SEO({
     } else {
       setHreflangs([]);
     }
-  }, [canonicalPath, description, image, keywords, localized, title]);
+  }, [canonicalPath, description, image, keywords, localized, noindex, title]);
 
   return null;
 }
