@@ -40,9 +40,10 @@ const GOLDEN = {
   wechatAlt: { zh: "openIndu 微信公众号二维码", en: "openIndu WeChat QR code" },
 } as const;
 
-type GoldenKey = keyof typeof GOLDEN;
+// The two list-valued entries are read directly (GOLDEN.stepTitles[locale]); gv() is for single strings.
+type TextKey = Exclude<keyof typeof GOLDEN, "stackTitles" | "stepTitles">;
 
-function gv(key: GoldenKey, locale: "zh" | "en") {
+function gv(key: TextKey, locale: "zh" | "en") {
   return GOLDEN[key][locale];
 }
 

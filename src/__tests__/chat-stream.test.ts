@@ -189,7 +189,7 @@ describe.each(variants)("chat stream: $name", ({ call, path }) => {
       expect(fetchMock.mock.calls[1][1].headers.Authorization).toBe("Bearer new-access");
       expect(onDelta).toHaveBeenCalledWith("recovered");
     } finally {
-      delete (navigator as Navigator & { locks?: unknown }).locks;
+      delete (navigator as unknown as { locks?: unknown }).locks;
     }
   });
 });
