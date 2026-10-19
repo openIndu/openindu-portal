@@ -1,2 +1,16 @@
 @import "./tailwind.css";
 @import "./theme.css";
+
+/*
+ * While the cookie bar is on screen, CookieConsent publishes its height as --cookie-banner-height.
+ * The page keeps that much room at the bottom, so the fixed bar never covers the footer or the
+ * last controls, and anything scrolled into view (links, form fields, #anchors) stops above it.
+ * Without the bar the variable is unset and both rules are 0.
+ */
+html {
+  scroll-padding-bottom: var(--cookie-banner-height, 0px);
+}
+
+body {
+  padding-bottom: var(--cookie-banner-height, 0px);
+}
