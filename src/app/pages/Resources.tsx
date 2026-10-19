@@ -44,6 +44,9 @@ function normalizeList(data: PaginatedResponse<ResourceItem> | ResourceItem[] | 
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
+/** How long typing must pause before the search box queries the API. */
+const SEARCH_DEBOUNCE_MS = 300;
+
 function ChipBar({ label, options, selected, onSelect, disabled }: { label: string; options: FilterOption[]; selected: string; onSelect: (v: string) => void; disabled?: boolean }) {
   const { t } = useTranslation("resources");
   return (
@@ -92,7 +95,11 @@ export function Resources() {
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [series, setSeries] = useState("");
+  // `keyword` is what the search box shows; `query` is what is sent to the API.
+  // Typing only moves `keyword`, so a request is not fired per keystroke.
   const [keyword, setKeyword] = useState(() => new URLSearchParams(location.search).get("keyword") ?? "");
+  const [query, setQuery] = useState(keyword);
+  const [reloadToken, setReloadToken] = useState(0);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [data, setData] = useState<PaginatedResponse<ResourceItem>>({ items: [], total: 0, page: 1, page_size: 10 });
@@ -106,41 +113,60 @@ export function Resources() {
   const [previewingId, setPreviewingId] = useState<string | number | null>(null);
   const [error, setError] = useState("");
   const [rateLimitError, setRateLimitError] = useState("");
-  // Stays in lockstep with activeTab so async handlers can compare against
-  // the latest value (the captured prop in their closure may be stale).
-  const activeTabRef = useRef(activeTab);
-  useEffect(() => { activeTabRef.current = activeTab; }, [activeTab]);
+  // Only the newest list request may update the page (see loadResources).
+  const latestRequest = useRef(0);
+  const queryRef = useRef(query);
+  useEffect(() => {
+    queryRef.current = query;
+  }, [query]);
 
   const totalPages = useMemo(() => data.pages ?? Math.max(1, Math.ceil(data.total / data.page_size)), [data]);
   const brandMap = useMemo(() => optionMap(brandOptions), [brandOptions]);
   const categoryMap = useMemo(() => optionMap(categoryOptions), [categoryOptions]);
   const seriesMap = useMemo(() => optionMap(allSeriesOptions), [allSeriesOptions]);
 
-  const loadResources = useCallback(async () => {
-    setLoading(true);
-    setError("");
-    const requestedTab = activeTab;
-    try {
-      const baseParams = { page, size: pageSize, brand: brand || undefined, category: category || undefined, keyword: keyword || undefined, published_only: true };
-      // Only documents have a "series" dimension. Do not leak the document
-      // series filter into software requests; the backend has removed the
-      // legacy software.series field entirely.
-      const params = requestedTab === "software"
-        ? { ...baseParams, expand_versions: true, sort_by: "brand", sort_order: "asc" }
-        : { ...baseParams, series: series || undefined, sort_by: "brand", sort_order: "asc" };
-      const result = requestedTab === "documents" ? await documentsApi.list(params) : await softwareApi.list(params);
-      // Compare against the ref — if the user clicked the other tab while
-      // this request was in flight, drop the stale result.
-      if (requestedTab !== activeTabRef.current) return;
-      setData(normalizeList(result, page, pageSize));
-    } catch (err) {
-      if (requestedTab !== activeTabRef.current) return;
-      setError(getApiErrorMessage(err, t("errors.loadFailed")));
-      setData({ items: [], total: 0, page, page_size: pageSize });
-    } finally {
-      if (requestedTab === activeTabRef.current) setLoading(false);
-    }
-  }, [activeTab, brand, category, series, keyword, page, pageSize, t]);
+  const loadResources = useCallback(
+    async (signal?: AbortSignal) => {
+      // A slow response for an older query must not overwrite newer results, and a
+      // superseded request must not clear `loading` for the one that replaced it.
+      // Whatever changed the request (tab, filter, query, page) also made it stale.
+      const requestId = ++latestRequest.current;
+      const isStale = () => requestId !== latestRequest.current;
+      setLoading(true);
+      setError("");
+      try {
+        const baseParams = {
+          page,
+          size: pageSize,
+          brand: brand || undefined,
+          category: category || undefined,
+          keyword: query || undefined,
+          published_only: true,
+        };
+        // Only documents have a "series" dimension. Do not leak the document
+        // series filter into software requests; the backend has removed the
+        // legacy software.series field entirely.
+        const params =
+          activeTab === "software"
+            ? { ...baseParams, expand_versions: true, sort_by: "brand", sort_order: "asc" }
+            : { ...baseParams, series: series || undefined, sort_by: "brand", sort_order: "asc" };
+        const result =
+          activeTab === "documents"
+            ? await documentsApi.list(params, { signal })
+            : await softwareApi.list(params, { signal });
+        if (isStale()) return;
+        setData(normalizeList(result, page, pageSize));
+      } catch (err) {
+        // Aborting a superseded request is deliberate, not an error to show.
+        if (isStale() || signal?.aborted) return;
+        setError(getApiErrorMessage(err, t("errors.loadFailed")));
+        setData({ items: [], total: 0, page, page_size: pageSize });
+      } finally {
+        if (!isStale()) setLoading(false);
+      }
+    },
+    [activeTab, brand, category, series, query, page, pageSize, t],
+  );
 
   useEffect(() => {
     const routeTab = location.pathname.endsWith("/software") ? "software" : "documents";
@@ -202,8 +228,22 @@ export function Resources() {
   }, [activeTab, brand, category, t]);
 
   useEffect(() => {
-    void loadResources();
-  }, [loadResources]);
+    const controller = new AbortController();
+    void loadResources(controller.signal);
+    return () => controller.abort();
+  }, [loadResources, reloadToken]);
+
+  // Typing waits for a pause before querying; Enter, the Search button and Clear apply at once.
+  const applyKeyword = useCallback((value: string) => {
+    if (value === queryRef.current) return;
+    setQuery(value);
+    setPage(1);
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => applyKeyword(keyword), SEARCH_DEBOUNCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [keyword, applyKeyword]);
 
   function handleTabChange(nextTab: ResourceType) {
     setActiveTab(nextTab);
@@ -216,8 +256,10 @@ export function Resources() {
   }
 
   function handleSearch() {
+    setQuery(keyword);
     setPage(1);
-    void loadResources();
+    // Searching again with an unchanged query still refreshes the list.
+    setReloadToken((token) => token + 1);
   }
 
   async function getLink(item: ResourceItem): Promise<string | null> {
@@ -352,9 +394,28 @@ export function Resources() {
                   <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <Input className="pl-9" value={keyword} onChange={(event) => setKeyword(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") handleSearch(); }} placeholder={t("filters.searchPlaceholder")} />
                 </div>
-                <Button type="button" onClick={handleSearch} className="bg-sky-700 hover:bg-[#085A90]">{t("filters.searchButton")}</Button>
-                {(brand || category || series || keyword) ? (
-                  <Button type="button" variant="outline" onClick={() => { setBrand(""); setCategory(""); setSeries(""); setKeyword(""); setPage(1); }}>{t("filters.clearButton")}</Button>
+                <Button
+                  type="button"
+                  onClick={handleSearch}
+                  className="bg-sky-700 hover:bg-[#085A90]"
+                >
+                  {t("filters.searchButton")}
+                </Button>
+                {brand || category || series || keyword ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setBrand("");
+                      setCategory("");
+                      setSeries("");
+                      setKeyword("");
+                      setQuery("");
+                      setPage(1);
+                    }}
+                  >
+                    {t("filters.clearButton")}
+                  </Button>
                 ) : null}
               </div>
             </div>

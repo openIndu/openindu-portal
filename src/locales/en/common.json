@@ -90,6 +90,12 @@
     "mobileNavigation": "Mobile navigation",
     "skipToContent": "Skip to main content"
   },
+  "notFound": {
+    "seoTitle": "Page not found | openIndu",
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "home": "Back to home"
+  },
   "edgeComputing": {
     "description": "Edge computing platform for industrial automation",
     "subtitle": "A project direction for equipment connectivity, edge data processing, and distributed automation; capabilities depend on repository evidence",

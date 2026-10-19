@@ -23,7 +23,13 @@ vi.mock("axios", () => {
     },
     AxiosError: class AxiosError extends Error {
       response?: unknown;
-      constructor(message: string, code?: string, config?: unknown, request?: unknown, response?: unknown) {
+      constructor(
+        message: string,
+        _code?: string,
+        _config?: unknown,
+        _request?: unknown,
+        response?: unknown,
+      ) {
         super(message);
         this.response = response;
       }
@@ -185,7 +191,9 @@ describe("unwrapPortalList", () => {
   });
 
   it("should return empty array for malformed data", () => {
-    const result = unwrapPortalList({ items: null });
+    // Deliberately outside the declared type: the API can return null for an empty list.
+    const malformed = { items: null } as unknown as Parameters<typeof unwrapPortalList>[0];
+    const result = unwrapPortalList(malformed);
     expect(result).toEqual([]);
   });
 });
@@ -439,6 +447,24 @@ describe("documentsApi", () => {
     expect(mockGet).toHaveBeenCalledWith("/documents", { params: { page: 1, page_size: 10 } });
   });
 
+  it("list passes an abort signal through, and adds none when not given one", async () => {
+    const response = { data: { code: 200, data: { items: [], total: 0, page: 1, page_size: 10 } } };
+    const mockGet = vi
+      .spyOn(apiClient, "get")
+      .mockResolvedValueOnce(response)
+      .mockResolvedValueOnce(response);
+    const controller = new AbortController();
+
+    await documentsApi.list({ page: 1 }, { signal: controller.signal });
+    expect(mockGet).toHaveBeenLastCalledWith("/documents", {
+      params: { page: 1 },
+      signal: controller.signal,
+    });
+
+    await documentsApi.list({ page: 1 }, {});
+    expect(mockGet.mock.lastCall?.[1]).not.toHaveProperty("signal");
+  });
+
   it("get should call get with id and unwrap result", async () => {
     const mockGet = vi.spyOn(apiClient, "get").mockResolvedValueOnce({
       data: { code: 200, data: { id: 1, name: "doc.pdf" } },
@@ -488,6 +514,19 @@ describe("softwareApi", () => {
     const result = await softwareApi.list({ page: 1, page_size: 10 });
     expect(result).toEqual({ items: [], total: 0, page: 1, page_size: 10 });
     expect(mockGet).toHaveBeenCalledWith("/software", { params: { page: 1, page_size: 10 } });
+  });
+
+  it("list passes an abort signal through to the request", async () => {
+    const mockGet = vi.spyOn(apiClient, "get").mockResolvedValueOnce({
+      data: { code: 200, data: { items: [], total: 0, page: 1, page_size: 10 } },
+    });
+    const controller = new AbortController();
+
+    await softwareApi.list({ page: 1 }, { signal: controller.signal });
+    expect(mockGet).toHaveBeenCalledWith("/software", {
+      params: { page: 1 },
+      signal: controller.signal,
+    });
   });
 
   it("get should call get with id and unwrap result", async () => {
