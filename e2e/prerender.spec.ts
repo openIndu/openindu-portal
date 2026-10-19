@@ -217,19 +217,6 @@ test.describe("Prerendered HTML", () => {
   });
 });
 
-test.describe("EN legal-page client-side fallback (ZhOnlyGuard)", () => {
-  // Covers only the client-side fallback -- the authoritative redirect is
-  // nginx's `return 302` (nginx.conf / nginx.k8s.conf), which needs the
-  // real container to verify; `vite preview` has no nginx in front of it.
-  for (const path of ["/en/privacy", "/en/legal", "/en/cookies", "/en/legal-center"]) {
-    test(`${path} replaces to the ZH URL client-side`, async ({ page }) => {
-      await page.goto(servePath(path));
-      await page.waitForURL((url) => !url.pathname.startsWith("/en"));
-      expect(new URL(page.url()).pathname.replace(/\/$/, "") || "/").toBe(path.replace("/en", ""));
-    });
-  }
-});
-
 test.describe("Lazy route chunks", () => {
   test("a deep link keeps its prerendered content until the route chunk has loaded", async ({
     page,
@@ -292,4 +279,17 @@ test.describe("Lazy route chunks", () => {
     // The initial load plus exactly one recovery reload -- never a reload loop.
     expect(documentRequests).toBe(2);
   });
+});
+
+test.describe("EN legal-page client-side fallback (ZhOnlyGuard)", () => {
+  // Covers only the client-side fallback -- the authoritative redirect is
+  // nginx's `return 302` (nginx.conf / nginx.k8s.conf), which needs the
+  // real container to verify; `vite preview` has no nginx in front of it.
+  for (const path of ["/en/privacy", "/en/legal", "/en/cookies", "/en/legal-center"]) {
+    test(`${path} replaces to the ZH URL client-side`, async ({ page }) => {
+      await page.goto(servePath(path));
+      await page.waitForURL((url) => !url.pathname.startsWith("/en"));
+      expect(new URL(page.url()).pathname.replace(/\/$/, "") || "/").toBe(path.replace("/en", ""));
+    });
+  }
 });
