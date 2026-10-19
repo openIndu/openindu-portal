@@ -148,7 +148,11 @@ export function StructuredData({
     });
 
     // --- Inject ---
-    const allPayload = [...sitePayload, ...pagePayload];
+    // A noindex page (the 404 page) describes no real page: keep only the site-level schemas.
+    const noindex = document.head
+      .querySelector<HTMLMetaElement>('meta[name="robots"]')
+      ?.content.includes("noindex");
+    const allPayload = noindex ? sitePayload : [...sitePayload, ...pagePayload];
 
     // Remove any previous openIndu JSON-LD scripts to avoid duplicates
     document.head
