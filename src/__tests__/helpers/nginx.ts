@@ -87,10 +87,13 @@ export async function startNginx(
   }
   writeFileSync(join(prefix, "site.conf"), site);
 
+  // `daemon off`: on Linux nginx otherwise forks into the background and the process spawned
+  // here exits at once (Windows builds never fork), which would read as a failed start.
   const main = join(prefix, "nginx.conf");
   writeFileSync(
     main,
-    `worker_processes 1;
+    `daemon off;
+worker_processes 1;
 pid ${slash(join(prefix, "nginx.pid"))};
 error_log ${slash(join(prefix, "error.log"))} warn;
 events { worker_connections 64; }

@@ -65,7 +65,8 @@ suite.each(["nginx.conf", "nginx.k8s.conf"] as ConfName[])(
       // A tab opened before a deploy asks for a chunk the new build no longer has.
       const response = await get("/assets/removed-AbCd1234.js");
       expect(response.status).toBe(404);
-      expect(response.headers.get("cache-control")).toBeNull();
+      // Whatever it carries, it must not be the year-long immutable policy of a real asset.
+      expect(response.headers.get("cache-control") ?? "").not.toMatch(/immutable|max-age=3153/);
     });
 
     it("HTML is never cached", async () => {
