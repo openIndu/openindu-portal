@@ -89,7 +89,7 @@ export function StructuredData({ pageTitle, pageDescription, pagePath }: Structu
           name: "openIndu Community",
           alternateName: "openIndu",
           url: origin,
-          sameAs: ["https://github.com/openIndu"],
+          sameAs: ["https://github.com/openIndu", "https://gitee.com/openIndu"],
           logo: `${origin}/assets/logo-512.png`,
           description: isEnglish
             ? "An open smart manufacturing ecosystem built through the forum, open engineering tools, and verifiable projects."

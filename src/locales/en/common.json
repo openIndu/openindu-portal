@@ -97,6 +97,7 @@
     "home": "Back to home"
   },
   "edgeComputing": {
+    "seoTitle": "openIndu-cim | Edge Computing | openIndu",
     "description": "Edge computing platform for industrial automation",
     "subtitle": "A project direction for equipment connectivity, edge data processing, and distributed automation; capabilities depend on repository evidence",
     "github": "View on GitHub",

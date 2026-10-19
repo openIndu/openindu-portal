@@ -40,11 +40,7 @@ export function EdgeComputing() {
   return (
     <div>
       <SEO
-        title={
-          t("nav.edgeComputing") === "openIndu-cim"
-            ? "openIndu-cim | Edge Computing | openIndu"
-            : `openIndu-cim | ${t("nav.edgeComputing")} | openIndu`
-        }
+        title={t("edgeComputing.seoTitle") || "openIndu-cim | Edge Computing | openIndu"}
         description={
           t("edgeComputing.description") || "Edge computing platform for industrial automation"
         }

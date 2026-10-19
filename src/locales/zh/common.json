@@ -97,7 +97,8 @@
     "home": "返回首页"
   },
   "edgeComputing": {
-    "description": "工业边缘计算平台",
+    "seoTitle": "openIndu-cim｜工业边缘计算平台｜openIndu 社区",
+    "description": "openIndu-cim 是面向设备互联、边缘数据处理和分布式自动化的工业边缘计算项目；能力以仓库与验证记录为准。",
     "subtitle": "面向设备互联、边缘数据处理和分布式自动化的项目方向；能力以仓库与验证记录为准",
     "github": "在 GitHub 上查看",
     "iotPlatform": "工业物联网平台",

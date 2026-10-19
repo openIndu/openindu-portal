@@ -50,7 +50,7 @@ const TITLES: Record<string, string> = {
   "/en/developers": "Developers | openIndu Community",
   "/team": "团队｜openIndu 社区",
   "/en/team": "Team | openIndu Community",
-  "/edge-computing": "openIndu-cim | Edge Computing | openIndu",
+  "/edge-computing": "openIndu-cim｜工业边缘计算平台｜openIndu 社区",
   "/en/edge-computing": "openIndu-cim | Edge Computing | openIndu",
   "/forum": "论坛 | openIndu Community",
   "/en/forum": "Forum | openIndu Community",
@@ -84,14 +84,18 @@ function servePath(path: string) {
   return path === "/" ? "/" : `${path}/`;
 }
 
-function webPageJsonLd(html: string) {
+function jsonLdItem(html: string, type: string) {
   const marker = 'data-openindu-jsonld="1">';
   const start = html.indexOf(marker);
   expect(start).toBeGreaterThanOrEqual(0);
   const from = start + marker.length;
   const end = html.indexOf("</script>", from);
   const payload = JSON.parse(html.slice(from, end)) as Array<Record<string, unknown>>;
-  return payload.find((item) => item["@type"] === "WebPage") as Record<string, unknown>;
+  return payload.find((item) => item["@type"] === type) as Record<string, unknown>;
+}
+
+function webPageJsonLd(html: string) {
+  return jsonLdItem(html, "WebPage");
 }
 
 test.describe("Prerendered HTML", () => {
@@ -184,6 +188,20 @@ test.describe("Prerendered HTML", () => {
     expect((schema.about as Record<string, unknown>).name).toBe(
       "Smart Manufacturing and Industrial Automation",
     );
+  });
+
+  test("no two prerendered pages share a title", () => {
+    const titles = Object.values(TITLES);
+    expect(new Set(titles).size).toBe(titles.length);
+  });
+
+  test("the Organization structured data links both public code hosts", async ({ page }) => {
+    const response = await page.goto(servePath("/"));
+    const organization = jsonLdItem(await response!.text(), "Organization");
+    expect(organization.sameAs).toEqual([
+      "https://github.com/openIndu",
+      "https://gitee.com/openIndu",
+    ]);
   });
 
   test("sitemap contains every localized public route", async ({ request }) => {
