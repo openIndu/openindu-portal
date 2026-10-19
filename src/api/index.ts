@@ -59,6 +59,11 @@ export interface PaginationParams {
 
 export type SoftwarePaginationParams = Omit<PaginationParams, "series">;
 
+export interface RequestOptions {
+  /** Cancels the HTTP request, e.g. when a newer search supersedes it. */
+  signal?: AbortSignal;
+}
+
 export interface PaginatedResponse<T> {
   items: T[];
   total: number;
@@ -399,8 +404,13 @@ export const tagsApi = {
 };
 
 export const documentsApi = {
-  async list(params: PaginationParams) {
-    return unwrap(await apiClient.get<ApiEnvelope<PaginatedResponse<ResourceItem>>>("/documents", { params }));
+  async list(params: PaginationParams, options?: RequestOptions) {
+    return unwrap(
+      await apiClient.get<ApiEnvelope<PaginatedResponse<ResourceItem>>>("/documents", {
+        params,
+        ...(options?.signal && { signal: options.signal }),
+      }),
+    );
   },
   async get(id: number | string) {
     return unwrap(await apiClient.get<ApiEnvelope<ResourceItem>>(`/documents/${id}`));
@@ -420,8 +430,13 @@ export const documentsApi = {
 };
 
 export const softwareApi = {
-  async list(params: SoftwarePaginationParams) {
-    return unwrap(await apiClient.get<ApiEnvelope<PaginatedResponse<ResourceItem>>>("/software", { params }));
+  async list(params: SoftwarePaginationParams, options?: RequestOptions) {
+    return unwrap(
+      await apiClient.get<ApiEnvelope<PaginatedResponse<ResourceItem>>>("/software", {
+        params,
+        ...(options?.signal && { signal: options.signal }),
+      }),
+    );
   },
   async get(id: number | string) {
     return unwrap(await apiClient.get<ApiEnvelope<ResourceItem>>(`/software/${id}`));
