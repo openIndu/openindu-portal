@@ -1,10 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { Camera, Crosshair, Droplets, Factory, Layers, Zap } from "lucide-react";
+import { productScreenshots } from "@/assets/product-images";
 import { SEO } from "../components/SEO";
 
 const screenshots = [
-  { key: "overview", src: "/assets/vision/station-overview.png" },
-  { key: "vision", src: "/assets/vision/station-vision.png" },
+  { key: "overview", image: productScreenshots.stationOverview },
+  { key: "vision", image: productScreenshots.stationVision },
 ] as const;
 
 const capabilityKeys = [
@@ -66,7 +67,9 @@ export function Station() {
               <figure key={shot.key}>
                 <div className="rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white">
                   <img
-                    src={shot.src}
+                    src={shot.image.src}
+                    width={shot.image.width}
+                    height={shot.image.height}
                     alt={t(`screenshots.${shot.key}Alt`)}
                     className="w-full h-auto"
                     loading="lazy"

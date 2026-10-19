@@ -1,50 +1,66 @@
-import { useEffect, type ReactNode } from "react";
+import type { ComponentType } from "react";
 import { createBrowserRouter, Navigate } from "react-router";
 import { Layout } from "./components/Layout";
 import { NotFound } from "./components/NotFound";
+import { ZhOnlyGuard } from "./components/ZhOnlyGuard";
 import { Home } from "./pages/Home";
-import { About } from "./pages/About";
-import { Developers } from "./pages/Developers";
-import { Team } from "./pages/Team";
-import { Architecture } from "./pages/Architecture";
-import { Craftsmanship } from "./pages/Craftsmanship";
-import { UseCases } from "./pages/UseCases";
-import { Pricing } from "./pages/Pricing";
-import { EdgeComputing } from "./pages/EdgeComputing";
-import { MotionControl } from "./pages/MotionControl";
-import { Vision } from "./pages/Vision";
-import { IIoTPlatform } from "./pages/IIoTPlatform";
-import { TokenService } from "./pages/TokenService";
-import { Login } from "./pages/Login";
-import { Resources } from "./pages/Resources";
-import { Workflow } from "./pages/Workflow";
-import { Station } from "./pages/Station";
-import { Forum } from "./pages/Forum";
-import ChatPage from "./pages/ChatPage";
-import { AccountSettings } from "./pages/AccountSettings";
-import { CookiesPolicy, LegalIndex, LegalNotice, PrivacyPolicy } from "./pages/LegalPages";
-import { detectLocale, stripLocalePrefix } from "@/i18n/locale";
+import { detectLocale } from "@/i18n/locale";
 
 /**
- * On the EN locale, legal pages are not translated — redirect to the ZH
- * version via a real browser navigation (cross-basename boundary).  On the
- * ZH locale this is a transparent pass-through.
+ * Every page except Home is its own chunk, fetched the first time its route is
+ * visited, so a first-time visitor no longer downloads the AI chat page's
+ * Markdown stack, the legal text and the account screens just to read the home
+ * page. Home stays in the entry bundle: it is the landing page for most visits.
+ *
+ * `.then((m) => m.X)` is type-checked, so a renamed or missing export fails the
+ * build instead of leaving a blank page at runtime. Loaders that point at the
+ * same module (the legacy aliases, the Resources tabs) share one chunk.
  */
-function ZhOnlyGuard({ children }: { children: ReactNode }) {
-  // Computed during render, not in the effect: returning the children first
-  // painted the full Chinese page for the frame before the redirect fired, so
-  // an EN visitor saw a flash of Chinese legal text on the way out.
-  const leaving = typeof window !== "undefined" && detectLocale() === "en";
+const load = {
+  about: () => import("./pages/About").then((m) => m.About),
+  account: () => import("./pages/AccountSettings").then((m) => m.AccountSettings),
+  architecture: () => import("./pages/Architecture").then((m) => m.Architecture),
+  chat: () => import("./pages/ChatPage").then((m) => m.default),
+  cookies: () => import("./pages/LegalPages").then((m) => m.CookiesPolicy),
+  craftsmanship: () => import("./pages/Craftsmanship").then((m) => m.Craftsmanship),
+  developers: () => import("./pages/Developers").then((m) => m.Developers),
+  edgeComputing: () => import("./pages/EdgeComputing").then((m) => m.EdgeComputing),
+  forum: () => import("./pages/Forum").then((m) => m.Forum),
+  iiotPlatform: () => import("./pages/IIoTPlatform").then((m) => m.IIoTPlatform),
+  legalCenter: () => import("./pages/LegalPages").then((m) => m.LegalIndex),
+  legalNotice: () => import("./pages/LegalPages").then((m) => m.LegalNotice),
+  login: () => import("./pages/Login").then((m) => m.Login),
+  motionControl: () => import("./pages/MotionControl").then((m) => m.MotionControl),
+  pricing: () => import("./pages/Pricing").then((m) => m.Pricing),
+  privacy: () => import("./pages/LegalPages").then((m) => m.PrivacyPolicy),
+  resources: () => import("./pages/Resources").then((m) => m.Resources),
+  station: () => import("./pages/Station").then((m) => m.Station),
+  studio: () => import("./pages/Workflow").then((m) => m.Workflow),
+  team: () => import("./pages/Team").then((m) => m.Team),
+  tokenService: () => import("./pages/TokenService").then((m) => m.TokenService),
+  useCases: () => import("./pages/UseCases").then((m) => m.UseCases),
+  vision: () => import("./pages/Vision").then((m) => m.Vision),
+} satisfies Record<string, () => Promise<ComponentType>>;
 
-  useEffect(() => {
-    if (leaving) {
-      window.location.replace(stripLocalePrefix(window.location.pathname));
-    }
-  }, [leaving]);
+type Loader = () => Promise<ComponentType>;
 
-  if (leaving) return null;
-  return <>{children}</>;
-}
+const lazyPage = (loader: Loader) => ({
+  lazy: async () => ({ Component: await loader() }),
+});
+
+/** Same, for pages that exist only in Chinese: EN visitors are sent to the ZH URL. */
+const zhOnlyPage = (loader: Loader) => ({
+  lazy: async () => {
+    const Page = await loader();
+    return {
+      element: (
+        <ZhOnlyGuard>
+          <Page />
+        </ZhOnlyGuard>
+      ),
+    };
+  },
+});
 
 export const router = createBrowserRouter(
   [
@@ -53,78 +69,43 @@ export const router = createBrowserRouter(
       Component: Layout,
       children: [
         { index: true, Component: Home },
-        { path: "architecture", Component: Architecture },
-        { path: "craftsmanship", Component: Craftsmanship },
-        { path: "use-cases", Component: UseCases },
-        { path: "pricing", Component: Pricing },
-        { path: "about", Component: About },
-        { path: "developers", Component: Developers },
-        { path: "team", Component: Team },
-        { path: "edge-computing", Component: EdgeComputing },
-        { path: "login", Component: Login },
+        { path: "architecture", ...lazyPage(load.architecture) },
+        { path: "craftsmanship", ...lazyPage(load.craftsmanship) },
+        { path: "use-cases", ...lazyPage(load.useCases) },
+        { path: "pricing", ...lazyPage(load.pricing) },
+        { path: "about", ...lazyPage(load.about) },
+        { path: "developers", ...lazyPage(load.developers) },
+        { path: "team", ...lazyPage(load.team) },
+        { path: "edge-computing", ...lazyPage(load.edgeComputing) },
+        { path: "login", ...lazyPage(load.login) },
         { path: "register", element: <Navigate to="/login" replace /> },
-        { path: "account", Component: AccountSettings },
-        {
-          path: "privacy",
-          element: (
-            <ZhOnlyGuard>
-              <PrivacyPolicy />
-            </ZhOnlyGuard>
-          ),
-        },
-        {
-          path: "legal",
-          element: (
-            <ZhOnlyGuard>
-              <LegalNotice />
-            </ZhOnlyGuard>
-          ),
-        },
-        {
-          path: "cookies",
-          element: (
-            <ZhOnlyGuard>
-              <CookiesPolicy />
-            </ZhOnlyGuard>
-          ),
-        },
-        {
-          path: "legal-center",
-          element: (
-            <ZhOnlyGuard>
-              <LegalIndex />
-            </ZhOnlyGuard>
-          ),
-        },
-        { path: "motion-control", Component: MotionControl },
+        { path: "account", ...lazyPage(load.account) },
+        { path: "privacy", ...zhOnlyPage(load.privacy) },
+        { path: "legal", ...zhOnlyPage(load.legalNotice) },
+        { path: "cookies", ...zhOnlyPage(load.cookies) },
+        { path: "legal-center", ...zhOnlyPage(load.legalCenter) },
+        { path: "motion-control", ...lazyPage(load.motionControl) },
         // openIndu-studio (formerly "workflow"): sub-page of AI+Motion Control, publicly visible
-        { path: "motion-control/studio", Component: Workflow },
+        { path: "motion-control/studio", ...lazyPage(load.studio) },
         // Chat's RAG knowledge base is Chinese-only — same ZH-only treatment as legal pages.
-        {
-          path: "chat",
-          element: (
-            <ZhOnlyGuard>
-              <ChatPage />
-            </ZhOnlyGuard>
-          ),
-        },
-        { path: "vision", Component: Vision },
+        { path: "chat", ...zhOnlyPage(load.chat) },
+        { path: "vision", ...lazyPage(load.vision) },
         // openIndu-station: sub-page of AI+Vision, publicly visible
-        { path: "vision/station", Component: Station },
-        { path: "iiot-platform", Component: IIoTPlatform },
+        { path: "vision/station", ...lazyPage(load.station) },
+        { path: "iiot-platform", ...lazyPage(load.iiotPlatform) },
         // Community forum — may redirect to external platform (Discourse/GitHub Discussions) in future
-        { path: "forum", Component: Forum },
-        { path: "infrastructure", Component: TokenService },
-        { path: "resources", Component: Resources },
-        { path: "resources/documents", Component: Resources },
-        { path: "resources/software", Component: Resources },
+        { path: "forum", ...lazyPage(load.forum) },
+        { path: "infrastructure", ...lazyPage(load.tokenService) },
+        { path: "resources", ...lazyPage(load.resources) },
+        { path: "resources/documents", ...lazyPage(load.resources) },
+        { path: "resources/software", ...lazyPage(load.resources) },
         // Legacy route redirects
         { path: "workflow", element: <Navigate to="/motion-control/studio" replace /> },
-        { path: "platform", Component: IIoTPlatform },
-        { path: "features", Component: IIoTPlatform },
-        { path: "quick-start", Component: IIoTPlatform },
-        { path: "docs", Component: IIoTPlatform },
-        { path: "token-service", Component: TokenService },
+        { path: "platform", ...lazyPage(load.iiotPlatform) },
+        { path: "features", ...lazyPage(load.iiotPlatform) },
+        { path: "quick-start", ...lazyPage(load.iiotPlatform) },
+        { path: "docs", ...lazyPage(load.iiotPlatform) },
+        { path: "token-service", ...lazyPage(load.tokenService) },
         { path: "*", Component: NotFound },
       ],
     },

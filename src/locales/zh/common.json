@@ -90,6 +90,12 @@
     "mobileNavigation": "移动端导航",
     "skipToContent": "跳到主要内容"
   },
+  "notFound": {
+    "seoTitle": "页面未找到｜openIndu",
+    "title": "页面未找到",
+    "description": "您访问的页面不存在或已被移动。",
+    "home": "返回首页"
+  },
   "edgeComputing": {
     "description": "工业边缘计算平台",
     "subtitle": "面向设备互联、边缘数据处理和分布式自动化的项目方向；能力以仓库与验证记录为准",

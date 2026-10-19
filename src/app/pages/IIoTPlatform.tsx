@@ -15,6 +15,7 @@ import {
   Zap,
   BarChart3,
 } from "lucide-react";
+import { productScreenshots, type Screenshot } from "@/assets/product-images";
 import { SEO } from "../components/SEO";
 
 const featureKeys = [
@@ -25,42 +26,42 @@ const featureKeys = [
     icon: Shield,
     iconColor: "text-sky-700",
     iconBg: "bg-sky-100",
-    screenshotSrc: "/assets/iiot/login.png",
+    screenshot: productScreenshots.login,
   },
   {
     key: "workbench",
     icon: LayoutDashboard,
     iconColor: "text-cyan-600",
     iconBg: "bg-cyan-100",
-    screenshotSrc: "/assets/iiot/workbench.png",
+    screenshot: productScreenshots.workbench,
   },
   {
     key: "dashboard",
     icon: Monitor,
     iconColor: "text-purple-600",
     iconBg: "bg-purple-100",
-    screenshotSrc: "/assets/iiot/dashboard.png",
+    screenshot: productScreenshots.dashboard,
   },
   {
     key: "deviceManagement",
     icon: Database,
     iconColor: "text-green-600",
     iconBg: "bg-green-100",
-    screenshotSrc: "/assets/iiot/device-mgmt.png",
+    screenshot: productScreenshots.deviceMgmt,
   },
   {
     key: "traceability",
     icon: BarChart3,
     iconColor: "text-orange-600",
     iconBg: "bg-orange-100",
-    screenshotSrc: "/assets/iiot/traceability.png",
+    screenshot: productScreenshots.traceability,
   },
   {
     key: "miniProgram",
     icon: Smartphone,
     iconColor: "text-pink-600",
     iconBg: "bg-pink-100",
-    screenshotSrc: "/assets/iiot/mini-program.png",
+    screenshot: productScreenshots.miniProgram,
     isTall: true,
   },
 ] as const;
@@ -150,7 +151,7 @@ type Feature = {
   icon: typeof Shield;
   iconColor: string;
   iconBg: string;
-  screenshotSrc: string;
+  screenshot: Screenshot;
   isTall?: boolean;
 };
 
@@ -171,7 +172,9 @@ function FeatureRow({ feature, reversed, t }: { feature: Feature; reversed: bool
           className={`rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-white ${feature.isTall ? "max-w-[220px]" : ""}`}
         >
           <img
-            src={feature.screenshotSrc}
+            src={feature.screenshot.src}
+            width={feature.screenshot.width}
+            height={feature.screenshot.height}
             alt={t(`features.${feature.key}.screenshotAlt`)}
             className="w-full h-auto"
             loading="lazy"
