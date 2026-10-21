@@ -1,4 +1,11 @@
 {
+  "captcha": {
+    "label": "Captcha",
+    "placeholder": "4 characters",
+    "refreshHint": "Hard to read? Click to refresh",
+    "loading": "Loading...",
+    "required": "Please enter the captcha"
+  },
   "nav": {
     "home": "Home",
     "architecture": "Architecture",

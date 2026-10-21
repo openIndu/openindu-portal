@@ -1,4 +1,11 @@
 {
+  "captcha": {
+    "label": "图形验证码",
+    "placeholder": "4 位字符",
+    "refreshHint": "看不清？点击刷新",
+    "loading": "加载中...",
+    "required": "请输入图形验证码"
+  },
   "nav": {
     "home": "首页",
     "architecture": "全栈架构",

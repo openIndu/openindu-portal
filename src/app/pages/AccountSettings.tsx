@@ -19,6 +19,8 @@ import {
 import { useAuth } from "@/store/auth";
 import { maskPhone } from "../utils/user";
 import { SEO } from "../components/SEO";
+import { CaptchaField } from "../components/CaptchaField";
+import { useCaptcha } from "../utils/useCaptcha";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -39,6 +41,7 @@ const codePattern = /^\d{6}$/;
 
 export function AccountSettings() {
   const { t } = useTranslation("account");
+  const { t: tCommon } = useTranslation("common");
   const { isAuthenticated, isLoading, user, updateProfile, logout, setUser } = useAuth();
   const navigate = useNavigate();
   const [nickname, setNickname] = useState(user?.nickname ?? "");
@@ -58,6 +61,12 @@ export function AccountSettings() {
   const [phoneCode, setPhoneCode] = useState("");
   const [sendingCode, setSendingCode] = useState(false);
   const [changingPhone, setChangingPhone] = useState(false);
+  const {
+    captcha,
+    text: captchaText,
+    setText: setCaptchaText,
+    refresh: refreshCaptcha,
+  } = useCaptcha();
   const [cooldown, setCooldown] = useState(0);
   const [phoneMessage, setPhoneMessage] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -125,15 +134,21 @@ export function AccountSettings() {
       setPhoneError(t("phoneChange.errors.invalidPhone"));
       return;
     }
+    if (!captcha || !captchaText) {
+      setPhoneError(tCommon("captcha.required"));
+      return;
+    }
     setSendingCode(true);
     try {
-      await authApi.sendCode(newPhone);
+      await authApi.sendCode(newPhone, captcha.captcha_id, captchaText);
       setCooldown(60);
       setPhoneMessage(t("phoneChange.errors.codeSent"));
     } catch (err) {
       setPhoneError(getApiErrorMessage(err, t("phoneChange.errors.sendFailed")));
     } finally {
       setSendingCode(false);
+      // The challenge is consumed whether the send succeeded or not.
+      void refreshCaptcha();
     }
   }
 
@@ -354,6 +369,14 @@ export function AccountSettings() {
                     placeholder={t("phoneChange.newPhonePlaceholder")}
                   />
                 </div>
+
+                <CaptchaField
+                  captcha={captcha}
+                  text={captchaText}
+                  onTextChange={setCaptchaText}
+                  onRefresh={() => void refreshCaptcha()}
+                  idPrefix="phone-change"
+                />
 
                 <div className="space-y-2">
                   <label

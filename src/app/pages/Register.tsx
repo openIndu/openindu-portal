@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router";
 import { Loader2 } from "lucide-react";
 import { authApi, getApiErrorMessage } from "@/api";
 import { useAuth } from "@/store/auth";
+import { CaptchaField } from "../components/CaptchaField";
+import { useCaptcha } from "../utils/useCaptcha";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -21,6 +23,12 @@ export function Register() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const {
+    captcha,
+    text: captchaText,
+    setText: setCaptchaText,
+    refresh: refreshCaptcha,
+  } = useCaptcha();
 
   useEffect(() => {
     if (isAuthenticated) navigate("/resources", { replace: true });
@@ -44,15 +52,21 @@ export function Register() {
       setError("请输入 11 位中国大陆手机号");
       return;
     }
+    if (!captcha || !captchaText) {
+      setError("请输入图形验证码");
+      return;
+    }
     setSending(true);
     try {
-      await authApi.sendCode(phone);
+      await authApi.sendCode(phone, captcha.captcha_id, captchaText);
       setCooldown(60);
       setMessage("验证码已发送，开发环境默认验证码通常为 888888");
     } catch (err) {
       setError(getApiErrorMessage(err, "验证码发送失败"));
     } finally {
       setSending(false);
+      // The challenge is consumed whether the send succeeded or not.
+      void refreshCaptcha();
     }
   }
 
@@ -102,6 +116,13 @@ export function Register() {
                 placeholder="请输入 11 位手机号"
               />
             </div>
+            <CaptchaField
+              captcha={captcha}
+              text={captchaText}
+              onTextChange={setCaptchaText}
+              onRefresh={() => void refreshCaptcha()}
+              idPrefix="register"
+            />
             <div className="space-y-2">
               <label htmlFor="register-code" className="text-sm font-medium text-gray-700">
                 验证码

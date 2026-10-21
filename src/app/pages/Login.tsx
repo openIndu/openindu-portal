@@ -6,6 +6,8 @@ import { authApi, getApiErrorMessage } from "@/api";
 import { useAuth } from "@/store/auth";
 import { stripLocalePrefix } from "@/i18n/locale";
 import { SEO } from "../components/SEO";
+import { CaptchaField } from "../components/CaptchaField";
+import { useCaptcha } from "../utils/useCaptcha";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -26,6 +28,13 @@ export function Login() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const {
+    captcha,
+    text: captchaText,
+    setText: setCaptchaText,
+    refresh: refreshCaptcha,
+  } = useCaptcha();
+  const { t: tCommon } = useTranslation("common");
 
   // `state.from` (set by AuthGuard's <Navigate>) is already basename-relative --
   // React Router's own location object never carries the /en prefix. The
@@ -62,9 +71,13 @@ export function Login() {
       setError(t("errors.invalidPhone"));
       return;
     }
+    if (!captcha || !captchaText) {
+      setError(tCommon("captcha.required"));
+      return;
+    }
     setSending(true);
     try {
-      await authApi.sendCode(phone);
+      await authApi.sendCode(phone, captcha.captcha_id, captchaText);
       setCooldown(60);
       setMessage(t("errors.codeSent"));
     } catch (err) {
@@ -79,6 +92,8 @@ export function Login() {
       }
     } finally {
       setSending(false);
+      // The challenge is consumed whether the send succeeded or not.
+      void refreshCaptcha();
     }
   }
 
@@ -141,6 +156,13 @@ export function Login() {
                 placeholder={t("phonePlaceholder")}
               />
             </div>
+            <CaptchaField
+              captcha={captcha}
+              text={captchaText}
+              onTextChange={setCaptchaText}
+              onRefresh={() => void refreshCaptcha()}
+              idPrefix="login"
+            />
             <div className="space-y-2">
               <label htmlFor="login-code" className="text-sm font-medium text-gray-700">
                 {t("codeLabel")}
