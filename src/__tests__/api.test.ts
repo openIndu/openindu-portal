@@ -341,14 +341,31 @@ describe("authApi", () => {
     expect(typeof authApi.logout).toBe("function");
   });
 
-  it("sendCode should call post and unwrap result", async () => {
+  it("sendCode should call post with captcha fields and unwrap result", async () => {
     const mockPost = vi.spyOn(apiClient, "post").mockResolvedValueOnce({
       data: { code: 200, data: { success: true } },
     });
 
-    const result = await authApi.sendCode("13800000000");
+    const result = await authApi.sendCode("13800000000", 7, "AB2C");
     expect(result).toEqual({ success: true });
-    expect(mockPost).toHaveBeenCalledWith("/auth/send-code", { phone: "13800000000" });
+    expect(mockPost).toHaveBeenCalledWith("/auth/send-code", {
+      phone: "13800000000",
+      captcha_id: 7,
+      captcha_text: "AB2C",
+    });
+  });
+
+  it("getCaptcha should call get and unwrap the challenge", async () => {
+    const mockGet = vi.spyOn(apiClient, "get").mockResolvedValueOnce({
+      data: {
+        code: 200,
+        data: { captcha_id: 7, image: "data:image/png;base64,xyz", expires_in: 300 },
+      },
+    });
+
+    const result = await authApi.getCaptcha();
+    expect(result).toEqual({ captcha_id: 7, image: "data:image/png;base64,xyz", expires_in: 300 });
+    expect(mockGet).toHaveBeenCalledWith("/auth/captcha");
   });
 
   it("login should call post and normalize nested response", async () => {

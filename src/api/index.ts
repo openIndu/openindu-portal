@@ -380,10 +380,23 @@ apiClient.interceptors.response.use(
   },
 );
 
+export interface CaptchaChallenge {
+  captcha_id: number;
+  image: string;
+  expires_in: number;
+}
+
 export const authApi = {
-  async sendCode(phone: string) {
+  async getCaptcha() {
+    return unwrap(await apiClient.get<ApiEnvelope<CaptchaChallenge>>("/auth/captcha"));
+  },
+  async sendCode(phone: string, captchaId: number, captchaText: string) {
     return unwrap(
-      await apiClient.post<ApiEnvelope<{ success: boolean }>>("/auth/send-code", { phone }),
+      await apiClient.post<ApiEnvelope<{ success: boolean }>>("/auth/send-code", {
+        phone,
+        captcha_id: captchaId,
+        captcha_text: captchaText,
+      }),
     );
   },
   async login(phone: string, code: string) {
