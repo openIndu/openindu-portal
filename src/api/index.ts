@@ -27,6 +27,7 @@ export interface AuthTokens {
 export interface AuthResponse extends AuthTokens {
   user?: User;
   is_new_user?: boolean;
+  biz_code?: string;
 }
 
 export interface NestedAuthResponse {
@@ -43,6 +44,8 @@ export interface NestedAuthResponse {
 
 export interface ApiEnvelope<T> {
   code?: number;
+  biz_code?: string;
+  params?: Record<string, string | number>;
   data?: T;
   message?: string;
   detail?: string;
@@ -434,14 +437,11 @@ export const authApi = {
     );
   },
   async signIn(phone: string, code: string) {
-    return normalizeAuthResponse(
-      unwrap(
-        await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/sign-in", {
-          phone,
-          code,
-        }),
-      ),
+    const response = await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>(
+      "/auth/sign-in",
+      { phone, code },
     );
+    return { ...normalizeAuthResponse(unwrap(response)), biz_code: response.data.biz_code };
   },
   async refresh(refreshToken: string) {
     return normalizeAuthResponse(

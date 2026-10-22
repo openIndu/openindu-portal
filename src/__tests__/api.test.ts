@@ -155,6 +155,26 @@ describe("normalizeAuthResponse", () => {
   });
 });
 
+describe("authApi.signIn", () => {
+  it("keeps the business outcome from the response envelope", async () => {
+    vi.mocked(apiClient.post).mockResolvedValueOnce({
+      data: {
+        code: 200,
+        biz_code: "AUTH_ACCOUNT_CREATED",
+        data: {
+          user: { id: 1, phone: "13800000000", role: "user" },
+          tokens: { access_token: "a", refresh_token: "r" },
+          is_new_user: true,
+        },
+      },
+    } as AxiosResponse);
+
+    const result = await authApi.signIn("13800000000", "123456");
+    expect(result.biz_code).toBe("AUTH_ACCOUNT_CREATED");
+    expect(result.is_new_user).toBe(true);
+  });
+});
+
 describe("unwrapPortalContent", () => {
   it("should unwrap content from PortalContentRecord", () => {
     const record = { id: 1, content: { title: "Test" } };

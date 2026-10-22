@@ -14,6 +14,18 @@ import { Input } from "../components/ui/input";
 const phonePattern = /^1\d{10}$/;
 const codePattern = /^\d{6}$/;
 
+const authErrorKeys: Record<string, string> = {
+  AUTH_INVALID_PHONE: "errors.invalidPhone",
+  AUTH_INVALID_CODE: "errors.invalidCode",
+  AUTH_SLIDER_FAILED: "errors.sliderFailed",
+  AUTH_SLIDER_REQUIRED: "errors.sliderRequired",
+  AUTH_SMS_RATE_LIMIT: "errors.rateLimit",
+  AUTH_SMS_DAILY_LIMIT: "errors.dailyLimit",
+  AUTH_SMS_FAILED: "errors.sendFailed",
+  AUTH_ACCOUNT_DISABLED: "errors.accountDisabled",
+  AUTH_ACCOUNT_REMOVED: "errors.accountRemoved",
+};
+
 export function Login() {
   const { t } = useTranslation("login");
   const navigate = useNavigate();
@@ -57,6 +69,16 @@ export function Login() {
   const canSubmit =
     phonePattern.test(phone) && codePattern.test(code) && privacyAccepted && !submitting;
 
+  function authErrorMessage(error: unknown, fallback: string) {
+    const body = (
+      error as {
+        response?: { data?: { biz_code?: string; params?: Record<string, string | number> } };
+      }
+    )?.response?.data;
+    const key = body?.biz_code && authErrorKeys[body.biz_code];
+    return key ? t(key, body?.params ?? {}) : getApiErrorMessage(error, fallback);
+  }
+
   // 点「发送验证码」先校验手机号，再弹出滑块拼图；通过后才真正发短信。
   function handleSendCode() {
     setError("");
@@ -79,7 +101,7 @@ export function Login() {
       // No cooldown on failure (incl. rate-limit): the backend 429 message
       // carries the real remaining seconds, and a fake "sent"-style countdown
       // reads as if the SMS went out when it did not.
-      setError(getApiErrorMessage(err, t("errors.sendFailed")));
+      setError(authErrorMessage(err, t("errors.sendFailed")));
     } finally {
       setSending(false);
     }
@@ -101,13 +123,13 @@ export function Login() {
     try {
       const result = await authApi.signIn(phone, code);
       await login(result);
-      if (result.is_new_user) {
+      if (result.biz_code === "AUTH_ACCOUNT_CREATED") {
         setMessage(t("errors.newUserCreated"));
       }
       // 登录会更新 AuthProvider 状态；等待 isAuthenticated 变为 true 后由上方 effect 跳转，
       // 避免在同一个事件周期内直接进入受保护路由导致 AuthGuard 读到旧状态并回跳登录页。
     } catch (err) {
-      setError(getApiErrorMessage(err, t("errors.signInFailed")));
+      setError(authErrorMessage(err, t("errors.signInFailed")));
     } finally {
       setSubmitting(false);
     }
