@@ -20,7 +20,6 @@
     "invalidPhone": "Enter an 11-digit mainland China phone number",
     "codeSent": "Code sent -- please complete sign-in/sign-up within 5 minutes",
     "sendFailed": "Failed to send verification code",
-    "rateLimitedSuffix": " -- please wait 60 seconds and try again",
     "newUserCreated": "First sign-in -- your openIndu Community account has been created",
     "signInFailed": "Sign-in/sign-up failed -- please check your verification code",
     "privacyRequired": "Please read and agree to the Privacy Statement first",
