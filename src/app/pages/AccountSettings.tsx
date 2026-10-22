@@ -507,7 +507,11 @@ export function AccountSettings() {
           </CardContent>
         </Card>
       </div>
-      <SliderCaptcha open={sliderOpen} onClose={() => setSliderOpen(false)} onPass={handleSliderPass} />
+      <SliderCaptcha
+        open={sliderOpen}
+        onClose={() => setSliderOpen(false)}
+        onPass={handleSliderPass}
+      />
     </section>
   );
 }

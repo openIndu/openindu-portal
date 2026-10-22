@@ -71,7 +71,10 @@ export function SliderCaptcha({ open, onClose, onPass }: SliderCaptchaProps) {
   function onPointerMove(event: React.PointerEvent<HTMLDivElement>) {
     if (!dragRef.current || status !== "ready") return;
     const max = PUZZLE_W - PIECE_BOX;
-    const next = Math.min(max, Math.max(0, dragRef.current.baseX + (event.clientX - dragRef.current.startX)));
+    const next = Math.min(
+      max,
+      Math.max(0, dragRef.current.baseX + (event.clientX - dragRef.current.startX)),
+    );
     setDragX(next);
   }
 
@@ -136,7 +139,10 @@ export function SliderCaptcha({ open, onClose, onPass }: SliderCaptchaProps) {
             </button>
           </div>
         </div>
-        <div className="relative overflow-hidden rounded-md border border-gray-200 bg-gray-100" style={{ width: PUZZLE_W, height: PUZZLE_H, maxWidth: "100%" }}>
+        <div
+          className="relative overflow-hidden rounded-md border border-gray-200 bg-gray-100"
+          style={{ width: PUZZLE_W, height: PUZZLE_H, maxWidth: "100%" }}
+        >
           {challenge ? (
             <>
               <img
@@ -165,13 +171,26 @@ export function SliderCaptcha({ open, onClose, onPass }: SliderCaptchaProps) {
             </div>
           )}
         </div>
-        <div className="relative mt-3 select-none rounded-md bg-gray-100" style={{ width: PUZZLE_W, height: 40, maxWidth: "100%" }}>
+        <div
+          className="relative mt-3 select-none rounded-md bg-gray-100"
+          style={{ width: PUZZLE_W, height: 40, maxWidth: "100%" }}
+        >
           <div
             className={`absolute inset-y-0 left-0 rounded-md ${status === "success" ? "bg-emerald-100" : status === "fail" ? "bg-red-100" : "bg-sky-100"}`}
             style={{ width: dragX + PIECE_BOX }}
           />
           <div className="absolute inset-0 flex items-center justify-center text-xs">
-            <span className={status === "success" ? "text-emerald-700" : status === "fail" ? "text-red-600" : "text-gray-500"}>{hint}</span>
+            <span
+              className={
+                status === "success"
+                  ? "text-emerald-700"
+                  : status === "fail"
+                    ? "text-red-600"
+                    : "text-gray-500"
+              }
+            >
+              {hint}
+            </span>
           </div>
           <div
             role="slider"
@@ -192,7 +211,11 @@ export function SliderCaptcha({ open, onClose, onPass }: SliderCaptchaProps) {
             }`}
             style={{ left: dragX, width: PIECE_BOX }}
           >
-            {status === "success" ? <Check className="h-5 w-5" /> : <ChevronsRight className="h-5 w-5" />}
+            {status === "success" ? (
+              <Check className="h-5 w-5" />
+            ) : (
+              <ChevronsRight className="h-5 w-5" />
+            )}
           </div>
         </div>
       </div>

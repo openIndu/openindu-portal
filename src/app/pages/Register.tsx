@@ -177,7 +177,11 @@ export function Register() {
           </p>
         </CardContent>
       </Card>
-      <SliderCaptcha open={sliderOpen} onClose={() => setSliderOpen(false)} onPass={handleSliderPass} />
+      <SliderCaptcha
+        open={sliderOpen}
+        onClose={() => setSliderOpen(false)}
+        onPass={handleSliderPass}
+      />
     </section>
   );
 }
