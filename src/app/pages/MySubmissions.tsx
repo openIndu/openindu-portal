@@ -373,6 +373,8 @@ function SoftwareUploadForm({ onUploaded }: { onUploaded: () => void }) {
         });
       }
       setSuccessMsg(t("upload.success"));
+      setPhase("idle");
+      resetProgress();
       setFile(null);
       setVersion("");
       setDescription("");
