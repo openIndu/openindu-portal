@@ -1,0 +1,77 @@
+{
+  "seo": {
+    "title": "我的投稿｜openIndu",
+    "description": "上传软件与文档投稿，跟踪审核状态与驳回理由。"
+  },
+  "header": {
+    "badge": "个人中心",
+    "title": "我的投稿",
+    "subtitle": "上传软件和文档供官方审核，审核通过后将在资源中心公开。"
+  },
+  "back": "返回账号设置",
+  "memberOnly": {
+    "title": "会员可提交资源",
+    "description": "开通会员后，即可上传软件和文档供管理员审核。",
+    "action": "前往个人中心申请会员"
+  },
+  "tabs": { "software": "软件投稿", "documents": "文档投稿" },
+  "status": {
+    "pending": "待审核",
+    "published": "已发布",
+    "rejected": "已驳回"
+  },
+  "pendingHint": "管理员审核通过后将在资源中心公开",
+  "publishedHint": "已在资源中心公开",
+  "rejectedReasonLabel": "驳回理由",
+  "meta": { "version": "版本", "time": "投稿时间", "description": "说明" },
+  "delete": {
+    "trigger": "删除",
+    "title": "确认删除该投稿？",
+    "description": "将同时删除已上传的文件，此操作不可恢复。",
+    "cancel": "取消",
+    "confirm": "确认删除",
+    "success": "投稿已删除",
+    "failed": "删除失败，请稍后重试"
+  },
+  "empty": { "software": "还没有软件投稿", "documents": "还没有文档投稿" },
+  "upload": {
+    "showSoftware": "上传软件投稿",
+    "hideSoftware": "收起上传表单",
+    "showDocuments": "上传文档投稿",
+    "hideDocuments": "收起上传表单",
+    "softwareTitle": "上传软件投稿",
+    "softwareDescription": "填写信息并上传软件包（最大 5GB，大文件直传对象存储），管理员审核通过后公开。",
+    "documentTitle": "上传文档投稿",
+    "documentDescription": "上传 PDF 文档（最大 50MB），管理员审核通过后公开。",
+    "brand": "品牌",
+    "brandPlaceholder": "请选择品牌",
+    "category": "分类",
+    "categoryPlaceholder": "请选择分类",
+    "series": "系列（可选）",
+    "seriesPlaceholder": "不指定系列",
+    "version": "版本号",
+    "versionPlaceholder": "如 V18 / 2.1.0",
+    "description": "说明",
+    "descriptionPlaceholder": "简要说明内容，便于审核（可选）",
+    "softwareFile": "软件包",
+    "documentFile": "PDF 文档",
+    "chooseSoftwareFile": "点击选择软件包（.zip/.exe/.msi/.rar/.7z/.pkg/.package）",
+    "chooseDocumentFile": "点击选择 PDF 文档",
+    "submit": "提交投稿",
+    "uploading": "上传中...",
+    "finalizing": "处理中...",
+    "cancel": "取消",
+    "cancelUpload": "取消上传",
+    "progressMerged": "文件已上传，正在合并并写入数据库...",
+    "success": "投稿成功，等待管理员审核",
+    "errors": {
+      "brand": "请选择品牌",
+      "category": "请选择分类",
+      "version": "请填写版本号",
+      "file": "请选择文件",
+      "loadTags": "品牌/分类列表加载失败，请刷新重试",
+      "failed": "上传失败，请检查文件和网络连接"
+    }
+  },
+  "errors": { "load": "投稿列表加载失败", "retry": "重试" }
+}

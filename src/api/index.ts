@@ -1,4 +1,9 @@
-import axios, { AxiosError, type AxiosResponse, type InternalAxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  type AxiosProgressEvent,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from "axios";
 import { getClientId } from "@/lib/clientIdentity";
 import { loginPath } from "@/i18n/locale";
 
@@ -22,6 +27,7 @@ export interface AuthTokens {
 export interface AuthResponse extends AuthTokens {
   user?: User;
   is_new_user?: boolean;
+  biz_code?: string;
 }
 
 export interface NestedAuthResponse {
@@ -38,6 +44,8 @@ export interface NestedAuthResponse {
 
 export interface ApiEnvelope<T> {
   code?: number;
+  biz_code?: string;
+  params?: Record<string, string | number>;
   data?: T;
   message?: string;
   detail?: string;
@@ -380,22 +388,31 @@ apiClient.interceptors.response.use(
   },
 );
 
-export interface CaptchaChallenge {
-  captcha_id: number;
-  image: string;
+export interface SliderChallenge {
+  challenge_id: number;
+  background: string;
+  piece: string;
+  piece_y: number;
   expires_in: number;
 }
 
 export const authApi = {
-  async getCaptcha() {
-    return unwrap(await apiClient.get<ApiEnvelope<CaptchaChallenge>>("/auth/captcha"));
+  async getSliderCaptcha() {
+    return unwrap(await apiClient.get<ApiEnvelope<SliderChallenge>>("/auth/slider-captcha"));
   },
-  async sendCode(phone: string, captchaId: number, captchaText: string) {
+  async verifySlider(challengeId: number, x: number) {
+    return unwrap(
+      await apiClient.post<ApiEnvelope<{ ticket: string; expires_in: number }>>(
+        "/auth/slider-captcha/verify",
+        { challenge_id: challengeId, x },
+      ),
+    );
+  },
+  async sendCode(phone: string, sliderTicket: string) {
     return unwrap(
       await apiClient.post<ApiEnvelope<{ success: boolean }>>("/auth/send-code", {
         phone,
-        captcha_id: captchaId,
-        captcha_text: captchaText,
+        slider_ticket: sliderTicket,
       }),
     );
   },
@@ -420,14 +437,11 @@ export const authApi = {
     );
   },
   async signIn(phone: string, code: string) {
-    return normalizeAuthResponse(
-      unwrap(
-        await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>("/auth/sign-in", {
-          phone,
-          code,
-        }),
-      ),
+    const response = await apiClient.post<ApiEnvelope<AuthResponse | NestedAuthResponse>>(
+      "/auth/sign-in",
+      { phone, code },
     );
+    return { ...normalizeAuthResponse(unwrap(response)), biz_code: response.data.biz_code };
   },
   async refresh(refreshToken: string) {
     return normalizeAuthResponse(
@@ -964,3 +978,100 @@ export function getApiErrorMessage(error: unknown, fallback = "请求失败，�
 export function isTooManyRequests(error: unknown) {
   return axios.isAxiosError(error) && error.response?.status === 429;
 }
+
+// --- 我的投稿（会员上传软件/文档，管理员审核后公开）---------------------------
+
+export type SubmissionStatus = "pending" | "published" | "rejected";
+
+export interface SubmissionItem {
+  id: number;
+  original_name: string;
+  brand: string;
+  category: string;
+  series?: string | null;
+  version?: string;
+  file_size: number;
+  description?: string | null;
+  submission_status: SubmissionStatus;
+  rejected_reason?: string | null;
+  is_published: boolean;
+  created_at?: string;
+  upload_time?: string;
+}
+
+export interface SoftwareUploadInit {
+  mode: "sync" | "single" | "multipart";
+  token?: string;
+  oss_key?: string;
+  part_size?: number;
+  part_urls?: string[];
+  upload_url?: string;
+  expires_in?: number;
+}
+
+export interface SoftwareUploadPart {
+  part_number: number;
+  etag: string;
+}
+
+// apiClient 默认 15s 超时是给普通 JSON 请求的；上传通道（尤其是几 GB 的软件包）
+// 必须关掉超时，进度回调保持可用。
+function uploadRequestConfig(onUploadProgress?: (e: AxiosProgressEvent) => void) {
+  return {
+    timeout: 0,
+    headers: { "Content-Type": "multipart/form-data" },
+    ...(onUploadProgress && { onUploadProgress }),
+  };
+}
+
+export const submissionsApi = {
+  async softwareList(): Promise<SubmissionItem[]> {
+    const data = unwrap(
+      await apiClient.get<ApiEnvelope<{ items: SubmissionItem[] }>>("/software/my-submissions"),
+    );
+    return data.items;
+  },
+  async documentList(): Promise<SubmissionItem[]> {
+    const data = unwrap(
+      await apiClient.get<ApiEnvelope<{ items: SubmissionItem[] }>>("/documents/my-submissions"),
+    );
+    return data.items;
+  },
+  async deleteSoftware(id: number): Promise<void> {
+    await apiClient.delete(`/software/my-submissions/${id}`);
+  },
+  async deleteDocument(id: number): Promise<void> {
+    await apiClient.delete(`/documents/my-submissions/${id}`);
+  },
+  async uploadSoftwareInit(meta: {
+    filename: string;
+    brand: string;
+    category: string;
+    version: string;
+    description?: string;
+    content_type?: string;
+    size: number;
+  }): Promise<SoftwareUploadInit> {
+    return unwrap(
+      await apiClient.post<ApiEnvelope<SoftwareUploadInit>>("/software/upload/init", meta, {
+        timeout: 60_000,
+      }),
+    );
+  },
+  async uploadSoftwareComplete(payload: {
+    token: string;
+    parts?: SoftwareUploadPart[];
+  }): Promise<void> {
+    await apiClient.post("/software/upload/complete", payload, { timeout: 60_000 });
+  },
+  async uploadSoftware(formData: FormData, onUploadProgress?: (e: AxiosProgressEvent) => void) {
+    return unwrap(
+      await apiClient.post("/software/upload", formData, uploadRequestConfig(onUploadProgress)),
+    );
+  },
+  async uploadDocument(formData: FormData, onUploadProgress?: (e: AxiosProgressEvent) => void) {
+    return unwrap(
+      await apiClient.post("/documents/upload", formData, uploadRequestConfig(onUploadProgress)),
+    );
+  },
+};

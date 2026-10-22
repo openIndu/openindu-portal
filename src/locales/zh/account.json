@@ -28,6 +28,11 @@
     "applyButton": "申请成为会员",
     "applyFailed": "申请失败，请稍后重试"
   },
+  "submissions": {
+    "cardTitle": "我的投稿",
+    "cardDescription": "上传软件与文档投稿，跟踪审核状态与驳回理由。",
+    "action": "管理投稿"
+  },
   "phoneChange": {
     "cardTitle": "修改手机号",
     "cardDescription": "修改账号绑定的手机号，需要接收验证码验证。",

@@ -31,6 +31,11 @@
     "applyButton": "Apply for Membership",
     "applyFailed": "Application failed -- please try again later"
   },
+  "submissions": {
+    "cardTitle": "My Submissions",
+    "cardDescription": "Upload software and documents, and track their review status and feedback.",
+    "action": "Manage Submissions"
+  },
   "phoneChange": {
     "cardTitle": "Change Phone Number",
     "cardDescription": "Changing the phone number tied to your account requires verification by code.",

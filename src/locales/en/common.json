@@ -1,11 +1,4 @@
 {
-  "captcha": {
-    "label": "Captcha",
-    "placeholder": "4 characters",
-    "refreshHint": "Hard to read? Click to refresh",
-    "loading": "Loading...",
-    "required": "Please enter the captcha"
-  },
   "nav": {
     "home": "Home",
     "architecture": "Architecture",
@@ -80,7 +73,8 @@
     "legalNotice": "Legal Notice",
     "aboutCookies": "About Cookies",
     "copyright": "© 2026 openIndu Community. Last updated: {{date}}",
-    "icpFiling": "ICP Filing No."
+    "icpFiling": "ICP Filing No.",
+    "contact": "Contact"
   },
   "language": {
     "label": "Language",
@@ -185,5 +179,15 @@
     "ctaHeading": "Ready to join the community?",
     "ctaDescription": "Start with one well-described field problem: equipment and version, symptoms, attempted methods, and what remains uncertain.",
     "ctaButton": "Go to the forum →"
+  },
+  "slider": {
+    "title": "Security check",
+    "hint": "Drag the slider to complete the puzzle",
+    "passed": "Verified",
+    "failed": "Not aligned - a new puzzle was loaded, try again",
+    "loading": "Loading...",
+    "loadFailed": "Failed to load, click refresh",
+    "refresh": "Refresh",
+    "close": "Close"
   }
 }

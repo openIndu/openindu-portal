@@ -726,6 +726,15 @@ export function Layout() {
                     蜀ICP备2025160760号-1
                   </a>
                 </p>
+                <p className="text-sky-100 text-sm mt-1">
+                  {`${t("footer.contact")}: `}
+                  <a
+                    href="tel:17603095488"
+                    className="hover:text-white transition-colors inline-flex items-center py-1.5 pr-2 min-h-[44px]"
+                  >
+                    176-0309-5488
+                  </a>
+                </p>
               </div>
               <div className="order-1 sm:order-2">
                 <LanguageSwitcher variant="dark" />

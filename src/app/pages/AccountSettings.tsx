@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { Navigate, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -8,6 +8,7 @@ import {
   LogOut,
   ShieldCheck,
   Trash2,
+  Upload,
   UserRound,
 } from "lucide-react";
 import {
@@ -19,8 +20,7 @@ import {
 import { useAuth } from "@/store/auth";
 import { maskPhone } from "../utils/user";
 import { SEO } from "../components/SEO";
-import { CaptchaField } from "../components/CaptchaField";
-import { useCaptcha } from "../utils/useCaptcha";
+import { SliderCaptcha } from "../components/SliderCaptcha";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -41,7 +41,6 @@ const codePattern = /^\d{6}$/;
 
 export function AccountSettings() {
   const { t } = useTranslation("account");
-  const { t: tCommon } = useTranslation("common");
   const { isAuthenticated, isLoading, user, updateProfile, logout, setUser } = useAuth();
   const navigate = useNavigate();
   const [nickname, setNickname] = useState(user?.nickname ?? "");
@@ -61,12 +60,7 @@ export function AccountSettings() {
   const [phoneCode, setPhoneCode] = useState("");
   const [sendingCode, setSendingCode] = useState(false);
   const [changingPhone, setChangingPhone] = useState(false);
-  const {
-    captcha,
-    text: captchaText,
-    setText: setCaptchaText,
-    refresh: refreshCaptcha,
-  } = useCaptcha();
+  const [sliderOpen, setSliderOpen] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const [phoneMessage, setPhoneMessage] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -127,28 +121,28 @@ export function AccountSettings() {
     }
   }
 
-  async function handleSendPhoneCode() {
+  // 点「发送验证码」先校验手机号，再弹出滑块拼图；通过后才真正发短信。
+  function handleSendPhoneCode() {
     setPhoneError("");
     setPhoneMessage("");
     if (!phonePattern.test(newPhone)) {
       setPhoneError(t("phoneChange.errors.invalidPhone"));
       return;
     }
-    if (!captcha || !captchaText) {
-      setPhoneError(tCommon("captcha.required"));
-      return;
-    }
+    setSliderOpen(true);
+  }
+
+  async function handleSliderPass(ticket: string) {
+    setSliderOpen(false);
     setSendingCode(true);
     try {
-      await authApi.sendCode(newPhone, captcha.captcha_id, captchaText);
+      await authApi.sendCode(newPhone, ticket);
       setCooldown(60);
       setPhoneMessage(t("phoneChange.errors.codeSent"));
     } catch (err) {
       setPhoneError(getApiErrorMessage(err, t("phoneChange.errors.sendFailed")));
     } finally {
       setSendingCode(false);
-      // The challenge is consumed whether the send succeeded or not.
-      void refreshCaptcha();
     }
   }
 
@@ -319,6 +313,22 @@ export function AccountSettings() {
           </CardContent>
         </Card>
 
+        {/* 我的投稿 - 独立卡片 */}
+        <Card className="border-sky-100 shadow-sm mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Upload className="h-5 w-5 text-sky-700" />
+              {t("submissions.cardTitle")}
+            </CardTitle>
+            <CardDescription>{t("submissions.cardDescription")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="w-full bg-sky-700 hover:bg-[#085A90] sm:w-auto">
+              <Link to="/account/submissions">{t("submissions.action")}</Link>
+            </Button>
+          </CardContent>
+        </Card>
+
         {/* 修改手机号 - 独立卡片 */}
         <Card className="border-sky-100 shadow-sm mb-6">
           <CardHeader>
@@ -369,14 +379,6 @@ export function AccountSettings() {
                     placeholder={t("phoneChange.newPhonePlaceholder")}
                   />
                 </div>
-
-                <CaptchaField
-                  captcha={captcha}
-                  text={captchaText}
-                  onTextChange={setCaptchaText}
-                  onRefresh={() => void refreshCaptcha()}
-                  idPrefix="phone-change"
-                />
 
                 <div className="space-y-2">
                   <label
@@ -522,6 +524,11 @@ export function AccountSettings() {
           </CardContent>
         </Card>
       </div>
+      <SliderCaptcha
+        open={sliderOpen}
+        onClose={() => setSliderOpen(false)}
+        onPass={handleSliderPass}
+      />
     </section>
   );
 }

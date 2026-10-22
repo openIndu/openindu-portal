@@ -6,14 +6,25 @@ import { authApi, getApiErrorMessage } from "@/api";
 import { useAuth } from "@/store/auth";
 import { stripLocalePrefix } from "@/i18n/locale";
 import { SEO } from "../components/SEO";
-import { CaptchaField } from "../components/CaptchaField";
-import { useCaptcha } from "../utils/useCaptcha";
+import { SliderCaptcha } from "../components/SliderCaptcha";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 
 const phonePattern = /^1\d{10}$/;
 const codePattern = /^\d{6}$/;
+
+const authErrorKeys: Record<string, string> = {
+  AUTH_INVALID_PHONE: "errors.invalidPhone",
+  AUTH_INVALID_CODE: "errors.invalidCode",
+  AUTH_SLIDER_FAILED: "errors.sliderFailed",
+  AUTH_SLIDER_REQUIRED: "errors.sliderRequired",
+  AUTH_SMS_RATE_LIMIT: "errors.rateLimit",
+  AUTH_SMS_DAILY_LIMIT: "errors.dailyLimit",
+  AUTH_SMS_FAILED: "errors.sendFailed",
+  AUTH_ACCOUNT_DISABLED: "errors.accountDisabled",
+  AUTH_ACCOUNT_REMOVED: "errors.accountRemoved",
+};
 
 export function Login() {
   const { t } = useTranslation("login");
@@ -28,13 +39,7 @@ export function Login() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
-  const {
-    captcha,
-    text: captchaText,
-    setText: setCaptchaText,
-    refresh: refreshCaptcha,
-  } = useCaptcha();
-  const { t: tCommon } = useTranslation("common");
+  const [sliderOpen, setSliderOpen] = useState(false);
 
   // `state.from` (set by AuthGuard's <Navigate>) is already basename-relative --
   // React Router's own location object never carries the /en prefix. The
@@ -64,36 +69,41 @@ export function Login() {
   const canSubmit =
     phonePattern.test(phone) && codePattern.test(code) && privacyAccepted && !submitting;
 
-  async function handleSendCode() {
+  function authErrorMessage(error: unknown, fallback: string) {
+    const body = (
+      error as {
+        response?: { data?: { biz_code?: string; params?: Record<string, string | number> } };
+      }
+    )?.response?.data;
+    const key = body?.biz_code && authErrorKeys[body.biz_code];
+    return key ? t(key, body?.params ?? {}) : getApiErrorMessage(error, fallback);
+  }
+
+  // 点「发送验证码」先校验手机号，再弹出滑块拼图；通过后才真正发短信。
+  function handleSendCode() {
     setError("");
     setMessage("");
     if (!phonePattern.test(phone)) {
       setError(t("errors.invalidPhone"));
       return;
     }
-    if (!captcha || !captchaText) {
-      setError(tCommon("captcha.required"));
-      return;
-    }
+    setSliderOpen(true);
+  }
+
+  async function handleSliderPass(ticket: string) {
+    setSliderOpen(false);
     setSending(true);
     try {
-      await authApi.sendCode(phone, captcha.captcha_id, captchaText);
+      await authApi.sendCode(phone, ticket);
       setCooldown(60);
       setMessage(t("errors.codeSent"));
     } catch (err) {
-      const msg = getApiErrorMessage(err, t("errors.sendFailed"));
-      // Backend rate-limit message is Chinese-only (backend not yet i18n'd);
-      // detection substring stays Chinese, only our appended guidance is localized.
-      if (msg.includes("过于频繁")) {
-        setCooldown(60);
-        setError(`${msg}${t("errors.rateLimitedSuffix")}`);
-      } else {
-        setError(msg);
-      }
+      // No cooldown on failure (incl. rate-limit): the backend 429 message
+      // carries the real remaining seconds, and a fake "sent"-style countdown
+      // reads as if the SMS went out when it did not.
+      setError(authErrorMessage(err, t("errors.sendFailed")));
     } finally {
       setSending(false);
-      // The challenge is consumed whether the send succeeded or not.
-      void refreshCaptcha();
     }
   }
 
@@ -113,13 +123,13 @@ export function Login() {
     try {
       const result = await authApi.signIn(phone, code);
       await login(result);
-      if (result.is_new_user) {
+      if (result.biz_code === "AUTH_ACCOUNT_CREATED") {
         setMessage(t("errors.newUserCreated"));
       }
       // 登录会更新 AuthProvider 状态；等待 isAuthenticated 变为 true 后由上方 effect 跳转，
       // 避免在同一个事件周期内直接进入受保护路由导致 AuthGuard 读到旧状态并回跳登录页。
     } catch (err) {
-      setError(getApiErrorMessage(err, t("errors.signInFailed")));
+      setError(authErrorMessage(err, t("errors.signInFailed")));
     } finally {
       setSubmitting(false);
     }
@@ -156,13 +166,6 @@ export function Login() {
                 placeholder={t("phonePlaceholder")}
               />
             </div>
-            <CaptchaField
-              captcha={captcha}
-              text={captchaText}
-              onTextChange={setCaptchaText}
-              onRefresh={() => void refreshCaptcha()}
-              idPrefix="login"
-            />
             <div className="space-y-2">
               <label htmlFor="login-code" className="text-sm font-medium text-gray-700">
                 {t("codeLabel")}
@@ -224,6 +227,11 @@ export function Login() {
           </form>
         </CardContent>
       </Card>
+      <SliderCaptcha
+        open={sliderOpen}
+        onClose={() => setSliderOpen(false)}
+        onPass={handleSliderPass}
+      />
     </section>
   );
 }

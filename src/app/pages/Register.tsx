@@ -3,8 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { Loader2 } from "lucide-react";
 import { authApi, getApiErrorMessage } from "@/api";
 import { useAuth } from "@/store/auth";
-import { CaptchaField } from "../components/CaptchaField";
-import { useCaptcha } from "../utils/useCaptcha";
+import { SliderCaptcha } from "../components/SliderCaptcha";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -23,12 +22,7 @@ export function Register() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
-  const {
-    captcha,
-    text: captchaText,
-    setText: setCaptchaText,
-    refresh: refreshCaptcha,
-  } = useCaptcha();
+  const [sliderOpen, setSliderOpen] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) navigate("/resources", { replace: true });
@@ -45,28 +39,28 @@ export function Register() {
   const canRegister =
     phonePattern.test(phone) && codePattern.test(code) && privacyAccepted && !submitting;
 
-  async function handleSendCode() {
+  // 点「发送验证码」先校验手机号，再弹出滑块拼图；通过后才真正发短信。
+  function handleSendCode() {
     setError("");
     setMessage("");
     if (!phonePattern.test(phone)) {
       setError("请输入 11 位中国大陆手机号");
       return;
     }
-    if (!captcha || !captchaText) {
-      setError("请输入图形验证码");
-      return;
-    }
+    setSliderOpen(true);
+  }
+
+  async function handleSliderPass(ticket: string) {
+    setSliderOpen(false);
     setSending(true);
     try {
-      await authApi.sendCode(phone, captcha.captcha_id, captchaText);
+      await authApi.sendCode(phone, ticket);
       setCooldown(60);
       setMessage("验证码已发送，开发环境默认验证码通常为 888888");
     } catch (err) {
       setError(getApiErrorMessage(err, "验证码发送失败"));
     } finally {
       setSending(false);
-      // The challenge is consumed whether the send succeeded or not.
-      void refreshCaptcha();
     }
   }
 
@@ -116,13 +110,6 @@ export function Register() {
                 placeholder="请输入 11 位手机号"
               />
             </div>
-            <CaptchaField
-              captcha={captcha}
-              text={captchaText}
-              onTextChange={setCaptchaText}
-              onRefresh={() => void refreshCaptcha()}
-              idPrefix="register"
-            />
             <div className="space-y-2">
               <label htmlFor="register-code" className="text-sm font-medium text-gray-700">
                 验证码
@@ -190,6 +177,11 @@ export function Register() {
           </p>
         </CardContent>
       </Card>
+      <SliderCaptcha
+        open={sliderOpen}
+        onClose={() => setSliderOpen(false)}
+        onPass={handleSliderPass}
+      />
     </section>
   );
 }
