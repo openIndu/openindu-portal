@@ -380,22 +380,31 @@ apiClient.interceptors.response.use(
   },
 );
 
-export interface CaptchaChallenge {
-  captcha_id: number;
-  image: string;
+export interface SliderChallenge {
+  challenge_id: number;
+  background: string;
+  piece: string;
+  piece_y: number;
   expires_in: number;
 }
 
 export const authApi = {
-  async getCaptcha() {
-    return unwrap(await apiClient.get<ApiEnvelope<CaptchaChallenge>>("/auth/captcha"));
+  async getSliderCaptcha() {
+    return unwrap(await apiClient.get<ApiEnvelope<SliderChallenge>>("/auth/slider-captcha"));
   },
-  async sendCode(phone: string, captchaId: number, captchaText: string) {
+  async verifySlider(challengeId: number, x: number) {
+    return unwrap(
+      await apiClient.post<ApiEnvelope<{ ticket: string; expires_in: number }>>(
+        "/auth/slider-captcha/verify",
+        { challenge_id: challengeId, x },
+      ),
+    );
+  },
+  async sendCode(phone: string, sliderTicket: string) {
     return unwrap(
       await apiClient.post<ApiEnvelope<{ success: boolean }>>("/auth/send-code", {
         phone,
-        captcha_id: captchaId,
-        captcha_text: captchaText,
+        slider_ticket: sliderTicket,
       }),
     );
   },

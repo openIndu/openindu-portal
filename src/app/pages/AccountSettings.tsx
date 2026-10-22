@@ -19,8 +19,7 @@ import {
 import { useAuth } from "@/store/auth";
 import { maskPhone } from "../utils/user";
 import { SEO } from "../components/SEO";
-import { CaptchaField } from "../components/CaptchaField";
-import { useCaptcha } from "../utils/useCaptcha";
+import { SliderCaptcha } from "../components/SliderCaptcha";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -41,7 +40,6 @@ const codePattern = /^\d{6}$/;
 
 export function AccountSettings() {
   const { t } = useTranslation("account");
-  const { t: tCommon } = useTranslation("common");
   const { isAuthenticated, isLoading, user, updateProfile, logout, setUser } = useAuth();
   const navigate = useNavigate();
   const [nickname, setNickname] = useState(user?.nickname ?? "");
@@ -61,12 +59,7 @@ export function AccountSettings() {
   const [phoneCode, setPhoneCode] = useState("");
   const [sendingCode, setSendingCode] = useState(false);
   const [changingPhone, setChangingPhone] = useState(false);
-  const {
-    captcha,
-    text: captchaText,
-    setText: setCaptchaText,
-    refresh: refreshCaptcha,
-  } = useCaptcha();
+  const [sliderOpen, setSliderOpen] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const [phoneMessage, setPhoneMessage] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -127,28 +120,28 @@ export function AccountSettings() {
     }
   }
 
-  async function handleSendPhoneCode() {
+  // 点「发送验证码」先校验手机号，再弹出滑块拼图；通过后才真正发短信。
+  function handleSendPhoneCode() {
     setPhoneError("");
     setPhoneMessage("");
     if (!phonePattern.test(newPhone)) {
       setPhoneError(t("phoneChange.errors.invalidPhone"));
       return;
     }
-    if (!captcha || !captchaText) {
-      setPhoneError(tCommon("captcha.required"));
-      return;
-    }
+    setSliderOpen(true);
+  }
+
+  async function handleSliderPass(ticket: string) {
+    setSliderOpen(false);
     setSendingCode(true);
     try {
-      await authApi.sendCode(newPhone, captcha.captcha_id, captchaText);
+      await authApi.sendCode(newPhone, ticket);
       setCooldown(60);
       setPhoneMessage(t("phoneChange.errors.codeSent"));
     } catch (err) {
       setPhoneError(getApiErrorMessage(err, t("phoneChange.errors.sendFailed")));
     } finally {
       setSendingCode(false);
-      // The challenge is consumed whether the send succeeded or not.
-      void refreshCaptcha();
     }
   }
 
@@ -370,14 +363,6 @@ export function AccountSettings() {
                   />
                 </div>
 
-                <CaptchaField
-                  captcha={captcha}
-                  text={captchaText}
-                  onTextChange={setCaptchaText}
-                  onRefresh={() => void refreshCaptcha()}
-                  idPrefix="phone-change"
-                />
-
                 <div className="space-y-2">
                   <label
                     htmlFor="phone-code"
@@ -522,6 +507,11 @@ export function AccountSettings() {
           </CardContent>
         </Card>
       </div>
+      <SliderCaptcha
+        open={sliderOpen}
+        onClose={() => setSliderOpen(false)}
+        onPass={handleSliderPass}
+      />
     </section>
   );
 }

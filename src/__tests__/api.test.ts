@@ -341,31 +341,49 @@ describe("authApi", () => {
     expect(typeof authApi.logout).toBe("function");
   });
 
-  it("sendCode should call post with captcha fields and unwrap result", async () => {
+  it("sendCode should call post with the slider ticket and unwrap result", async () => {
     const mockPost = vi.spyOn(apiClient, "post").mockResolvedValueOnce({
       data: { code: 200, data: { success: true } },
     });
 
-    const result = await authApi.sendCode("13800000000", 7, "AB2C");
+    const result = await authApi.sendCode("13800000000", "ticket-abc");
     expect(result).toEqual({ success: true });
     expect(mockPost).toHaveBeenCalledWith("/auth/send-code", {
       phone: "13800000000",
-      captcha_id: 7,
-      captcha_text: "AB2C",
+      slider_ticket: "ticket-abc",
     });
   });
 
-  it("getCaptcha should call get and unwrap the challenge", async () => {
+  it("getSliderCaptcha should call get and unwrap the puzzle challenge", async () => {
     const mockGet = vi.spyOn(apiClient, "get").mockResolvedValueOnce({
       data: {
         code: 200,
-        data: { captcha_id: 7, image: "data:image/png;base64,xyz", expires_in: 300 },
+        data: {
+          challenge_id: 7,
+          background: "data:image/png;base64,bg",
+          piece: "data:image/png;base64,pc",
+          piece_y: 40,
+          expires_in: 120,
+        },
       },
     });
 
-    const result = await authApi.getCaptcha();
-    expect(result).toEqual({ captcha_id: 7, image: "data:image/png;base64,xyz", expires_in: 300 });
-    expect(mockGet).toHaveBeenCalledWith("/auth/captcha");
+    const result = await authApi.getSliderCaptcha();
+    expect(result.challenge_id).toBe(7);
+    expect(mockGet).toHaveBeenCalledWith("/auth/slider-captcha");
+  });
+
+  it("verifySlider should post the drag offset and unwrap the ticket", async () => {
+    const mockPost = vi.spyOn(apiClient, "post").mockResolvedValueOnce({
+      data: { code: 200, data: { ticket: "t-1", expires_in: 300 } },
+    });
+
+    const result = await authApi.verifySlider(7, 213);
+    expect(result).toEqual({ ticket: "t-1", expires_in: 300 });
+    expect(mockPost).toHaveBeenCalledWith("/auth/slider-captcha/verify", {
+      challenge_id: 7,
+      x: 213,
+    });
   });
 
   it("login should call post and normalize nested response", async () => {

@@ -6,8 +6,7 @@ import { authApi, getApiErrorMessage } from "@/api";
 import { useAuth } from "@/store/auth";
 import { stripLocalePrefix } from "@/i18n/locale";
 import { SEO } from "../components/SEO";
-import { CaptchaField } from "../components/CaptchaField";
-import { useCaptcha } from "../utils/useCaptcha";
+import { SliderCaptcha } from "../components/SliderCaptcha";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -28,13 +27,7 @@ export function Login() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
-  const {
-    captcha,
-    text: captchaText,
-    setText: setCaptchaText,
-    refresh: refreshCaptcha,
-  } = useCaptcha();
-  const { t: tCommon } = useTranslation("common");
+  const [sliderOpen, setSliderOpen] = useState(false);
 
   // `state.from` (set by AuthGuard's <Navigate>) is already basename-relative --
   // React Router's own location object never carries the /en prefix. The
@@ -64,20 +57,22 @@ export function Login() {
   const canSubmit =
     phonePattern.test(phone) && codePattern.test(code) && privacyAccepted && !submitting;
 
-  async function handleSendCode() {
+  // 点「发送验证码」先校验手机号，再弹出滑块拼图；通过后才真正发短信。
+  function handleSendCode() {
     setError("");
     setMessage("");
     if (!phonePattern.test(phone)) {
       setError(t("errors.invalidPhone"));
       return;
     }
-    if (!captcha || !captchaText) {
-      setError(tCommon("captcha.required"));
-      return;
-    }
+    setSliderOpen(true);
+  }
+
+  async function handleSliderPass(ticket: string) {
+    setSliderOpen(false);
     setSending(true);
     try {
-      await authApi.sendCode(phone, captcha.captcha_id, captchaText);
+      await authApi.sendCode(phone, ticket);
       setCooldown(60);
       setMessage(t("errors.codeSent"));
     } catch (err) {
@@ -92,8 +87,6 @@ export function Login() {
       }
     } finally {
       setSending(false);
-      // The challenge is consumed whether the send succeeded or not.
-      void refreshCaptcha();
     }
   }
 
@@ -156,13 +149,6 @@ export function Login() {
                 placeholder={t("phonePlaceholder")}
               />
             </div>
-            <CaptchaField
-              captcha={captcha}
-              text={captchaText}
-              onTextChange={setCaptchaText}
-              onRefresh={() => void refreshCaptcha()}
-              idPrefix="login"
-            />
             <div className="space-y-2">
               <label htmlFor="login-code" className="text-sm font-medium text-gray-700">
                 {t("codeLabel")}
@@ -224,6 +210,11 @@ export function Login() {
           </form>
         </CardContent>
       </Card>
+      <SliderCaptcha
+        open={sliderOpen}
+        onClose={() => setSliderOpen(false)}
+        onPass={handleSliderPass}
+      />
     </section>
   );
 }

@@ -1,11 +1,4 @@
 {
-  "captcha": {
-    "label": "图形验证码",
-    "placeholder": "4 位字符",
-    "refreshHint": "看不清？点击刷新",
-    "loading": "加载中...",
-    "required": "请输入图形验证码"
-  },
   "nav": {
     "home": "首页",
     "architecture": "全栈架构",
@@ -175,5 +168,15 @@
     "ctaHeading": "准备好加入社区了吗？",
     "ctaDescription": "从一个描述清楚的现场问题开始：设备与版本、现场现象、已经尝试的方法，以及仍待确认的边界。",
     "ctaButton": "前往论坛 →"
+  },
+  "slider": {
+    "title": "安全验证",
+    "hint": "按住滑块，拖动拼图完成验证",
+    "passed": "验证通过",
+    "failed": "未对齐，已换新图，请重试",
+    "loading": "加载中...",
+    "loadFailed": "加载失败，请点击刷新",
+    "refresh": "换一张",
+    "close": "关闭"
   }
 }
