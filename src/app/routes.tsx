@@ -19,6 +19,7 @@ import { detectLocale } from "@/i18n/locale";
 const load = {
   about: () => import("./pages/About").then((m) => m.About),
   account: () => import("./pages/AccountSettings").then((m) => m.AccountSettings),
+  mySubmissions: () => import("./pages/MySubmissions").then((m) => m.MySubmissions),
   architecture: () => import("./pages/Architecture").then((m) => m.Architecture),
   chat: () => import("./pages/ChatPage").then((m) => m.default),
   cookies: () => import("./pages/LegalPages").then((m) => m.CookiesPolicy),
@@ -80,6 +81,7 @@ export const router = createBrowserRouter(
         { path: "login", ...lazyPage(load.login) },
         { path: "register", element: <Navigate to="/login" replace /> },
         { path: "account", ...lazyPage(load.account) },
+        { path: "account/submissions", ...lazyPage(load.mySubmissions) },
         { path: "privacy", ...zhOnlyPage(load.privacy) },
         { path: "legal", ...zhOnlyPage(load.legalNotice) },
         { path: "cookies", ...zhOnlyPage(load.cookies) },

@@ -1,0 +1,75 @@
+{
+  "seo": {
+    "title": "My Submissions | openIndu",
+    "description": "Upload software and document submissions, and track their review status."
+  },
+  "header": {
+    "badge": "Account Center",
+    "title": "My Submissions",
+    "subtitle": "Upload software and documents for review. Approved entries appear in the resource center."
+  },
+  "back": "Back to Account Settings",
+  "tabs": { "software": "Software", "documents": "Documents" },
+  "status": {
+    "pending": "Pending review",
+    "published": "Published",
+    "rejected": "Rejected"
+  },
+  "pendingHint": "Will appear in the resource center once approved by an admin",
+  "publishedHint": "Live in the resource center",
+  "rejectedReasonLabel": "Reason for rejection",
+  "meta": { "version": "Version", "time": "Submitted", "description": "Description" },
+  "delete": {
+    "trigger": "Delete",
+    "title": "Delete this submission?",
+    "description": "The uploaded file will be removed as well. This cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "success": "Submission deleted",
+    "failed": "Failed to delete. Please try again later."
+  },
+  "empty": {
+    "software": "No software submissions yet",
+    "documents": "No document submissions yet"
+  },
+  "upload": {
+    "showSoftware": "Submit Software",
+    "hideSoftware": "Hide the upload form",
+    "showDocuments": "Submit a Document",
+    "hideDocuments": "Hide the upload form",
+    "softwareTitle": "Submit Software",
+    "softwareDescription": "Fill in the details and upload a package (up to 5GB, large files go straight to object storage). Entries appear publicly after review.",
+    "documentTitle": "Submit a Document",
+    "documentDescription": "Upload a PDF document (up to 50MB). Entries appear publicly after review.",
+    "brand": "Brand",
+    "brandPlaceholder": "Select a brand",
+    "category": "Category",
+    "categoryPlaceholder": "Select a category",
+    "series": "Series (optional)",
+    "seriesPlaceholder": "No series",
+    "version": "Version",
+    "versionPlaceholder": "e.g. V18 / 2.1.0",
+    "description": "Description",
+    "descriptionPlaceholder": "Briefly describe the content to speed up review (optional)",
+    "softwareFile": "Software package",
+    "documentFile": "PDF document",
+    "chooseSoftwareFile": "Click to choose a package (.zip/.exe/.msi/.rar/.7z/.pkg/.package)",
+    "chooseDocumentFile": "Click to choose a PDF document",
+    "submit": "Submit",
+    "uploading": "Uploading...",
+    "finalizing": "Processing...",
+    "cancel": "Cancel",
+    "cancelUpload": "Cancel upload",
+    "progressMerged": "File uploaded -- merging and saving to the database...",
+    "success": "Submitted -- awaiting admin review",
+    "errors": {
+      "brand": "Please select a brand",
+      "category": "Please select a category",
+      "version": "Please enter a version",
+      "file": "Please choose a file",
+      "loadTags": "Failed to load brand/category options. Please refresh and retry.",
+      "failed": "Upload failed. Please check the file and your network connection."
+    }
+  },
+  "errors": { "load": "Failed to load submissions", "retry": "Retry" }
+}
