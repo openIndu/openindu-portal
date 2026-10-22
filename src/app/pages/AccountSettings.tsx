@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { Navigate, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -8,6 +8,7 @@ import {
   LogOut,
   ShieldCheck,
   Trash2,
+  Upload,
   UserRound,
 } from "lucide-react";
 import {
@@ -309,6 +310,22 @@ export function AccountSettings() {
                 {applyError && <p className="mt-2 text-xs text-red-600">{applyError}</p>}
               </div>
             )}
+          </CardContent>
+        </Card>
+
+        {/* 我的投稿 - 独立卡片 */}
+        <Card className="border-sky-100 shadow-sm mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Upload className="h-5 w-5 text-sky-700" />
+              {t("submissions.cardTitle")}
+            </CardTitle>
+            <CardDescription>{t("submissions.cardDescription")}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="w-full bg-sky-700 hover:bg-[#085A90] sm:w-auto">
+              <Link to="/account/submissions">{t("submissions.action")}</Link>
+            </Button>
           </CardContent>
         </Card>
 
