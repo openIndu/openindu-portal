@@ -76,15 +76,10 @@ export function Login() {
       setCooldown(60);
       setMessage(t("errors.codeSent"));
     } catch (err) {
-      const msg = getApiErrorMessage(err, t("errors.sendFailed"));
-      // Backend rate-limit message is Chinese-only (backend not yet i18n'd);
-      // detection substring stays Chinese, only our appended guidance is localized.
-      if (msg.includes("过于频繁")) {
-        setCooldown(60);
-        setError(`${msg}${t("errors.rateLimitedSuffix")}`);
-      } else {
-        setError(msg);
-      }
+      // No cooldown on failure (incl. rate-limit): the backend 429 message
+      // carries the real remaining seconds, and a fake "sent"-style countdown
+      // reads as if the SMS went out when it did not.
+      setError(getApiErrorMessage(err, t("errors.sendFailed")));
     } finally {
       setSending(false);
     }

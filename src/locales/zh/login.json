@@ -20,7 +20,6 @@
     "invalidPhone": "请输入 11 位中国大陆手机号",
     "codeSent": "验证码已发送，请在 5 分钟内完成登录/注册",
     "sendFailed": "验证码发送失败",
-    "rateLimitedSuffix": "，请等待 60 秒后再试",
     "newUserCreated": "首次登录，已为你创建 openIndu 社区账号",
     "signInFailed": "登录/注册失败，请检查验证码",
     "privacyRequired": "请先阅读并同意隐私声明",
