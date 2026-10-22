@@ -9,6 +9,11 @@
     "subtitle": "Upload software and documents for review. Approved entries appear in the resource center."
   },
   "back": "Back to Account Settings",
+  "memberOnly": {
+    "title": "Members can submit resources",
+    "description": "Apply for membership to upload software and documents for review.",
+    "action": "Apply in Account Settings"
+  },
   "tabs": { "software": "Software", "documents": "Documents" },
   "status": {
     "pending": "Pending review",

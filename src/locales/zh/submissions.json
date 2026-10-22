@@ -9,6 +9,11 @@
     "subtitle": "上传软件和文档供官方审核，审核通过后将在资源中心公开。"
   },
   "back": "返回账号设置",
+  "memberOnly": {
+    "title": "会员可提交资源",
+    "description": "开通会员后，即可上传软件和文档供管理员审核。",
+    "action": "前往个人中心申请会员"
+  },
   "tabs": { "software": "软件投稿", "documents": "文档投稿" },
   "status": {
     "pending": "待审核",

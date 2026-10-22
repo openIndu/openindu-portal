@@ -808,7 +808,7 @@ function SubmissionRow({
 
 export function MySubmissions() {
   const { t } = useTranslation("submissions");
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, isMember } = useAuth();
   const [tab, setTab] = useState<Tab>("software");
   const [items, setItems] = useState<SubmissionItem[] | null>(null);
   const [loadError, setLoadError] = useState("");
@@ -829,11 +829,30 @@ export function MySubmissions() {
   }, [tab, t]);
 
   useEffect(() => {
-    if (isAuthenticated) void load();
-  }, [isAuthenticated, load]);
+    if (isAuthenticated && isMember) void load();
+  }, [isAuthenticated, isMember, load]);
 
   if (!isLoading && !isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: { pathname: "/account/submissions" } }} />;
+  }
+
+  if (!isLoading && isAuthenticated && !isMember) {
+    return (
+      <section className="min-h-[50vh] px-4 py-12 sm:px-6">
+        <SEO
+          title={t("seo.title")}
+          description={t("seo.description")}
+          canonicalPath="/account/submissions"
+        />
+        <div className="mx-auto max-w-3xl rounded-xl border border-sky-100 bg-white p-6 shadow-sm">
+          <h1 className="text-2xl font-bold text-gray-900">{t("memberOnly.title")}</h1>
+          <p className="mt-3 text-gray-600">{t("memberOnly.description")}</p>
+          <Button asChild className="mt-5 w-full bg-sky-700 hover:bg-[#085A90] sm:w-auto">
+            <Link to="/account">{t("memberOnly.action")}</Link>
+          </Button>
+        </div>
+      </section>
+    );
   }
 
   const tabs: Array<{ key: Tab; label: string }> = [
