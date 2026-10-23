@@ -20,7 +20,6 @@
     "published": "Published",
     "rejected": "Rejected"
   },
-  "publishedHint": "Live in the resource center",
   "rejectedReasonLabel": "Reason for rejection",
   "meta": { "version": "Version", "time": "Submitted", "description": "Description" },
   "delete": {

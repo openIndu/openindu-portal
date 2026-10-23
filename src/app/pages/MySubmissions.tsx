@@ -750,9 +750,6 @@ function SubmissionRow({
           <div className="mt-2">
             <StatusChip status={item.submission_status} reason={item.rejected_reason} />
           </div>
-          {item.submission_status === "published" ? (
-            <p className="mt-1.5 text-xs text-green-600">{t("publishedHint")}</p>
-          ) : null}
           {item.submission_status === "rejected" && item.rejected_reason ? (
             <div className="mt-2 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
               <span className="font-medium">{t("rejectedReasonLabel")}：</span>
