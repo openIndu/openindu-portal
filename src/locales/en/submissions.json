@@ -20,7 +20,6 @@
     "published": "Published",
     "rejected": "Rejected"
   },
-  "pendingHint": "Will appear in the resource center once approved by an admin",
   "publishedHint": "Live in the resource center",
   "rejectedReasonLabel": "Reason for rejection",
   "meta": { "version": "Version", "time": "Submitted", "description": "Description" },
