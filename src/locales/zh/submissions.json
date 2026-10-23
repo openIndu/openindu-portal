@@ -20,7 +20,6 @@
     "published": "已发布",
     "rejected": "已驳回"
   },
-  "pendingHint": "管理员审核通过后将在资源中心公开",
   "publishedHint": "已在资源中心公开",
   "rejectedReasonLabel": "驳回理由",
   "meta": { "version": "版本", "time": "投稿时间", "description": "说明" },

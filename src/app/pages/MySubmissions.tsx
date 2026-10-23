@@ -750,9 +750,6 @@ function SubmissionRow({
           <div className="mt-2">
             <StatusChip status={item.submission_status} reason={item.rejected_reason} />
           </div>
-          {item.submission_status === "pending" ? (
-            <p className="mt-1.5 text-xs text-amber-600">{t("pendingHint")}</p>
-          ) : null}
           {item.submission_status === "published" ? (
             <p className="mt-1.5 text-xs text-green-600">{t("publishedHint")}</p>
           ) : null}
