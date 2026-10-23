@@ -703,10 +703,12 @@ function SubmissionRow({
   item,
   tab,
   onDeleted,
+  highlighted = false,
 }: {
   item: SubmissionItem;
   tab: Tab;
   onDeleted: () => void;
+  highlighted?: boolean;
 }) {
   const { t } = useTranslation("submissions");
   const [deleting, setDeleting] = useState(false);
@@ -727,7 +729,11 @@ function SubmissionRow({
   }
 
   return (
-    <div className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+    <div
+      className={`rounded-xl border bg-white p-4 shadow-sm transition-colors ${
+        highlighted ? "border-sky-400 ring-2 ring-sky-200" : "border-gray-100"
+      }`}
+    >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
           <p className="break-all font-medium text-gray-900">{item.original_name}</p>
@@ -815,8 +821,11 @@ export function MySubmissions() {
   const [items, setItems] = useState<SubmissionItem[] | null>(null);
   const [loadError, setLoadError] = useState("");
   const [showUpload, setShowUpload] = useState(false);
+  const [highlight, setHighlight] = useState<{ tab: Tab; id: number } | null>(null);
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const highlightTimer = useRef<number | null>(null);
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (): Promise<SubmissionItem[]> => {
     setLoadError("");
     try {
       const list =
@@ -824,11 +833,26 @@ export function MySubmissions() {
           ? await submissionsApi.softwareList()
           : await submissionsApi.documentList();
       setItems(list);
+      return list;
     } catch (err) {
       setItems([]);
       setLoadError(requestError(err, t("errors.load")));
+      return [];
     }
   }, [tab, t]);
+
+  // After a successful upload: refresh, then scroll to the list and briefly
+  // highlight the new entry (first row — lists are newest-first) so it is
+  // easy to find.
+  const handleUploaded = useCallback(async () => {
+    const list = await load();
+    const first = list[0];
+    if (!first) return;
+    setHighlight({ tab, id: first.id });
+    listRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (highlightTimer.current !== null) window.clearTimeout(highlightTimer.current);
+    highlightTimer.current = window.setTimeout(() => setHighlight(null), 4000);
+  }, [load, tab]);
 
   useEffect(() => {
     if (isAuthenticated && isMember) void load();
@@ -932,13 +956,13 @@ export function MySubmissions() {
             {tab === "software" ? (
               <SoftwareUploadForm
                 onUploaded={() => {
-                  void load();
+                  void handleUploaded();
                 }}
               />
             ) : (
               <DocumentUploadForm
                 onUploaded={() => {
-                  void load();
+                  void handleUploaded();
                 }}
               />
             )}
@@ -968,12 +992,15 @@ export function MySubmissions() {
             {t(tab === "software" ? "empty.software" : "empty.documents")}
           </div>
         ) : (
-          <div className="space-y-3">
+          <div ref={listRef} className="space-y-3">
             {items.map((item) => (
               <SubmissionRow
                 key={item.id}
                 item={item}
                 tab={tab}
+                highlighted={
+                  highlight !== null && highlight.tab === tab && highlight.id === item.id
+                }
                 onDeleted={() => {
                   void load();
                 }}
