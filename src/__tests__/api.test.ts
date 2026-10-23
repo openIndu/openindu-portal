@@ -73,6 +73,7 @@ const {
   documentsApi,
   softwareApi,
   portalApi,
+  submissionsApi,
   visitsApi,
   apiClient,
   unwrap,
@@ -88,6 +89,7 @@ const {
   documentsApi: typeof apiModule.documentsApi;
   softwareApi: typeof apiModule.softwareApi;
   portalApi: typeof apiModule.portalApi;
+  submissionsApi: typeof apiModule.submissionsApi;
   visitsApi: typeof apiModule.visitsApi;
   apiClient: typeof apiModule.apiClient;
   unwrap: <T>(response: AxiosResponse<apiModule.ApiEnvelope<T> | T>) => T;
@@ -709,6 +711,54 @@ describe("portalApi", () => {
 
     const result = await portalApi.carousel();
     expect(result).toEqual([]);
+  });
+});
+
+// --- Submissions ---
+
+describe("submissionsApi", () => {
+  it("softwareList returns total and truncated from the backend", async () => {
+    vi.spyOn(apiClient, "get").mockResolvedValueOnce({
+      data: {
+        code: 200,
+        data: { items: [{ id: 2 }, { id: 1 }], total: 7, truncated: true },
+      },
+    });
+
+    const result = await submissionsApi.softwareList();
+    expect(result).toEqual({ items: [{ id: 2 }, { id: 1 }], total: 7, truncated: true });
+    expect(apiClient.get).toHaveBeenCalledWith("/software/my-submissions");
+  });
+
+  it("softwareList falls back when an older backend omits total/truncated", async () => {
+    vi.spyOn(apiClient, "get").mockResolvedValueOnce({
+      data: { code: 200, data: { items: [{ id: 1 }] } },
+    });
+
+    const result = await submissionsApi.softwareList();
+    expect(result).toEqual({ items: [{ id: 1 }], total: 1, truncated: false });
+  });
+
+  it("documentList returns total and truncated from the backend", async () => {
+    vi.spyOn(apiClient, "get").mockResolvedValueOnce({
+      data: {
+        code: 200,
+        data: { items: [{ id: 3 }], total: 2, truncated: false },
+      },
+    });
+
+    const result = await submissionsApi.documentList();
+    expect(result).toEqual({ items: [{ id: 3 }], total: 2, truncated: false });
+    expect(apiClient.get).toHaveBeenCalledWith("/documents/my-submissions");
+  });
+
+  it("documentList falls back when an older backend omits total/truncated", async () => {
+    vi.spyOn(apiClient, "get").mockResolvedValueOnce({
+      data: { code: 200, data: { items: [{ id: 1 }, { id: 2 }] } },
+    });
+
+    const result = await submissionsApi.documentList();
+    expect(result).toEqual({ items: [{ id: 1 }, { id: 2 }], total: 2, truncated: false });
   });
 });
 
