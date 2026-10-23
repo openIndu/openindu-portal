@@ -708,14 +708,18 @@ export function Layout() {
               The switcher used to be a seventh grid column, which squeezed every
               link column to 146px — narrow enough that "Privacy Statement" and
               its ZH marker wrapped, and "Community Admin" cleared it by 1px.
-              Moving it here leaves six tracks and 176px per column. */}
+              Moving it here leaves six tracks and 176px per column.
+              The filing and phone links are 44px touch targets, so the copyright line gets the
+              same minimum height, centred so it holds when the text wraps: the three rows then
+              sit on one 44px pitch, and the switcher is top-aligned with the copyright row
+              instead of centred on the block. */}
           <div className="border-t border-sky-800 mt-8 pt-8">
-            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="order-2 text-center sm:order-1 sm:text-left">
-                <p className="text-sky-100 text-sm">
+                <p className="text-sky-100 text-sm grid min-h-[44px] content-center">
                   {t("footer.copyright", { date: __BUILD_DATE__ })}
                 </p>
-                <p className="text-sky-100 text-sm mt-1">
+                <p className="text-sky-100 text-sm">
                   {`${t("footer.icpFiling")}: `}
                   <a
                     href="https://beian.miit.gov.cn/#/Integrated/index"
@@ -726,7 +730,7 @@ export function Layout() {
                     蜀ICP备2025160760号-1
                   </a>
                 </p>
-                <p className="text-sky-100 text-sm mt-1">
+                <p className="text-sky-100 text-sm">
                   {`${t("footer.contact")}: `}
                   <a
                     href="tel:17603095488"
