@@ -36,6 +36,7 @@
     "software": "No software submissions yet",
     "documents": "No document submissions yet"
   },
+  "truncatedHint": "Showing the {count} most recent submissions; delete some to see more",
   "upload": {
     "showSoftware": "Submit Software",
     "hideSoftware": "Hide the upload form",
