@@ -819,18 +819,22 @@ export function MySubmissions() {
   const [loadError, setLoadError] = useState("");
   const [showUpload, setShowUpload] = useState(false);
   const [highlight, setHighlight] = useState<{ tab: Tab; id: number } | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [truncated, setTruncated] = useState(false);
   const listRef = useRef<HTMLDivElement | null>(null);
   const highlightTimer = useRef<number | null>(null);
+  const noticeTimer = useRef<number | null>(null);
 
   const load = useCallback(async (): Promise<SubmissionItem[]> => {
     setLoadError("");
     try {
-      const list =
+      const page =
         tab === "software"
           ? await submissionsApi.softwareList()
           : await submissionsApi.documentList();
-      setItems(list);
-      return list;
+      setItems(page.items);
+      setTruncated(page.truncated);
+      return page.items;
     } catch (err) {
       setItems([]);
       setLoadError(requestError(err, t("errors.load")));
@@ -838,22 +842,40 @@ export function MySubmissions() {
     }
   }, [tab, t]);
 
-  // After a successful upload: refresh, then scroll to the list and briefly
-  // highlight the new entry (first row — lists are newest-first) so it is
-  // easy to find.
+  // After a successful upload: collapse the form, refresh, then scroll to the
+  // list and briefly highlight the new entry (first row — lists are
+  // newest-first) so it is easy to find. The success notice sits above the
+  // list, so the message and the new row end up on screen together.
   const handleUploaded = useCallback(async () => {
+    setShowUpload(false);
     const list = await load();
+    setNotice(t("upload.success"));
+    if (noticeTimer.current !== null) window.clearTimeout(noticeTimer.current);
+    noticeTimer.current = window.setTimeout(() => setNotice(null), 6000);
     const first = list[0];
     if (!first) return;
     setHighlight({ tab, id: first.id });
-    listRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Wait for the collapsed form to leave the layout before measuring.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        listRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
     if (highlightTimer.current !== null) window.clearTimeout(highlightTimer.current);
-    highlightTimer.current = window.setTimeout(() => setHighlight(null), 4000);
-  }, [load, tab]);
+    highlightTimer.current = window.setTimeout(() => setHighlight(null), 6000);
+  }, [load, tab, t]);
 
   useEffect(() => {
     if (isAuthenticated && isMember) void load();
   }, [isAuthenticated, isMember, load]);
+
+  useEffect(
+    () => () => {
+      if (highlightTimer.current !== null) window.clearTimeout(highlightTimer.current);
+      if (noticeTimer.current !== null) window.clearTimeout(noticeTimer.current);
+    },
+    [],
+  );
 
   if (!isLoading && !isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: { pathname: "/account/submissions" } }} />;
@@ -990,6 +1012,11 @@ export function MySubmissions() {
           </div>
         ) : (
           <div ref={listRef} className="space-y-3">
+            {notice ? (
+              <div className="rounded-xl border border-green-100 bg-green-50 px-4 py-3 text-sm text-green-800">
+                {notice}
+              </div>
+            ) : null}
             {items.map((item) => (
               <SubmissionRow
                 key={item.id}
@@ -1003,6 +1030,11 @@ export function MySubmissions() {
                 }}
               />
             ))}
+            {truncated ? (
+              <p className="pt-1 text-center text-xs text-gray-400">
+                {t("truncatedHint").replace("{count}", String(items.length))}
+              </p>
+            ) : null}
           </div>
         )}
       </div>

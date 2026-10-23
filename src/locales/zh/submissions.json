@@ -33,6 +33,7 @@
     "failed": "删除失败，请稍后重试"
   },
   "empty": { "software": "还没有软件投稿", "documents": "还没有文档投稿" },
+  "truncatedHint": "仅显示最近 {count} 条投稿，删除部分投稿后可查看更多",
   "upload": {
     "showSoftware": "上传软件投稿",
     "hideSoftware": "收起上传表单",

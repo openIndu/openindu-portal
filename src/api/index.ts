@@ -1025,17 +1025,29 @@ function uploadRequestConfig(onUploadProgress?: (e: AxiosProgressEvent) => void)
 }
 
 export const submissionsApi = {
-  async softwareList(): Promise<SubmissionItem[]> {
+  async softwareList(): Promise<{ items: SubmissionItem[]; total: number; truncated: boolean }> {
     const data = unwrap(
-      await apiClient.get<ApiEnvelope<{ items: SubmissionItem[] }>>("/software/my-submissions"),
+      await apiClient.get<
+        ApiEnvelope<{ items: SubmissionItem[]; total?: number; truncated?: boolean }>
+      >("/software/my-submissions"),
     );
-    return data.items;
+    return {
+      items: data.items,
+      total: data.total ?? data.items.length,
+      truncated: data.truncated ?? false,
+    };
   },
-  async documentList(): Promise<SubmissionItem[]> {
+  async documentList(): Promise<{ items: SubmissionItem[]; total: number; truncated: boolean }> {
     const data = unwrap(
-      await apiClient.get<ApiEnvelope<{ items: SubmissionItem[] }>>("/documents/my-submissions"),
+      await apiClient.get<
+        ApiEnvelope<{ items: SubmissionItem[]; total?: number; truncated?: boolean }>
+      >("/documents/my-submissions"),
     );
-    return data.items;
+    return {
+      items: data.items,
+      total: data.total ?? data.items.length,
+      truncated: data.truncated ?? false,
+    };
   },
   async deleteSoftware(id: number): Promise<void> {
     await apiClient.delete(`/software/my-submissions/${id}`);
